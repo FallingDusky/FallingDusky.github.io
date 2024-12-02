@@ -1,0 +1,797 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    pwn常见绕过 |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="常见绕过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn常见绕过">
+<meta property="og:url" content="https://fallingdusky.github.io/2023/12/02/%E5%B8%B8%E8%A7%81%E7%BB%95%E8%BF%87/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="常见绕过">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231202161139847-712100041.png">
+<meta property="article:published_time" content="2023-12-02T08:23:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:04:31.752Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231202161139847-712100041.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="pwn常见绕过">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">pwn常见绕过</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-常见绕过" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2023/12/02/%E5%B8%B8%E8%A7%81%E7%BB%95%E8%BF%87/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2023-12-02T08:23:00.000Z" itemprop="datePublished">2023-12-02</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-aos="zoom-in">网络安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <p>如题，总结一下我目前在pwn中常见的一些绕过，方便以后随时查阅</p>
+<h1 id="strlen"><a class="markdownIt-Anchor" href="#strlen"></a> strlen</h1>
+<p>这是<strong>检验字符串长度</strong>的函数，常见的形式是“当字符串个数＞number时，失败”，绕过它其实很简单，在<strong>输出的字符串开头加上’\x00’</strong>，这样strlen就不会检测后续字符串的个数了，就完成了绕过</p>
+<h1 id="strncmp"><a class="markdownIt-Anchor" href="#strncmp"></a> strncmp</h1>
+<p>指定比较size个字符串，有三个参数。前一二为比较的字符串，第三个参数为size</p>
+<pre><code> strncmp(string1,string2,size)
+</code></pre>
+<h2 id="比较规则"><a class="markdownIt-Anchor" href="#比较规则"></a> 比较规则</h2>
+<pre><code> 0 - 如果两个字符串相等
+&lt;0 - 如果 string1 小于 string2（负数）
+&gt;0 - 如果 string1 大于 string2  (正数)
+</code></pre>
+<h2 id="常见样式"><a class="markdownIt-Anchor" href="#常见样式"></a> 常见样式</h2>
+<pre><code>！strcmp(&amp;buf[j],&quot;flag&quot;/&quot;cat&quot;....,size)
+</code></pre>
+<p>这样的格式可以理解为“过滤”，这些字符串都不能用，如果用了这些字符串，就很有可能退出运行（如果该函数是这么定义的话）</p>
+<h2 id="过滤cat的方法"><a class="markdownIt-Anchor" href="#过滤cat的方法"></a> 过滤&quot;cat&quot;的方法</h2>
+<h3 id="1和cat有近乎相同作用的指令"><a class="markdownIt-Anchor" href="#1和cat有近乎相同作用的指令"></a> ①.和cat有近乎相同作用的指令</h3>
+<pre><code> tail / head / tac / nl / grep / more / less flag都可以查看flag文本内容
+</code></pre>
+<p>不过它们之间有一些细微的差别，如果想要了解更多，可以看这几篇博客</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38330025/article/details/114484231">https://blog.csdn.net/weixin_38330025/article/details/114484231</a> （tail,head,cat的区别和详细用法）<br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/u014314592/article/details/130252954">https://blog.csdn.net/u014314592/article/details/130252954</a> (cat,tail,head,more,grep的释义和基础用法)<br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_53202576/article/details/130995515">https://blog.csdn.net/weixin_53202576/article/details/130995515</a> （cat与tac）<br />
+<a target="_blank" rel="noopener" href="https://www.cnblogs.com/hsh96/p/17668897.html">https://www.cnblogs.com/hsh96/p/17668897.html</a> （nl的释义和用法）<br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/u012581020/article/details/131637698">https://blog.csdn.net/u012581020/article/details/131637698</a> （less的释义和用法详解）</p>
+</blockquote>
+<h3 id="2linux机制小trick稀里糊涂"><a class="markdownIt-Anchor" href="#2linux机制小trick稀里糊涂"></a> ②.linux机制小trick（稀里糊涂）</h3>
+<p>还有一个&quot;<strong>???/???/???</strong>&quot;的过滤方法，是<strong>跟linux机制有关</strong>的，但是博主没弄懂，也不确定这是不是有条件要求的。我个人理解就是cd /filename/filename后cat ./*，不知正确与否，这个方法在不懂的情况下能不用尽量别用，还<strong>有其它更好理解的方法，没必要用这个</strong>。</p>
+<h3 id="3编码拼接绕过有些繁琐但是有些时候意外有用"><a class="markdownIt-Anchor" href="#3编码拼接绕过有些繁琐但是有些时候意外有用"></a> ③.编码拼接绕过（有些繁琐，但是有些时候意外有用）</h3>
+<pre><code>a=c;b=at;c=f;d=lag.txt;
+$a$b $&#123;c&#125;$&#123;d&#125;
+</code></pre>
+<p>效果如图<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231202161139847-712100041.png" alt="image" /></p>
+<h3 id="4解码绕过这真的是鬼才还有这种方式"><a class="markdownIt-Anchor" href="#4解码绕过这真的是鬼才还有这种方式"></a> ④.解码绕过（这真的是鬼才，还有这种方式…）</h3>
+<pre><code>`echo 'Y2F0Cg==' | base64 -d`  flag.txt
+</code></pre>
+<blockquote>
+<p>了解自:<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42383069/article/details/130221725">https://blog.csdn.net/qq_42383069/article/details/130221725</a><br />
+后面好些也都是摘自这篇博主的博客，实在是太涨知识了</p>
+</blockquote>
+<h3 id="5反斜杠绕过"><a class="markdownIt-Anchor" href="#5反斜杠绕过"></a> ⑤.反斜杠绕过</h3>
+<pre><code>c/at fl/ag.txt
+</code></pre>
+<h3 id="6单双引号绕过"><a class="markdownIt-Anchor" href="#6单双引号绕过"></a> ⑥.单双引号绕过</h3>
+<pre><code>c'a't flag.txt
+c&quot;a&quot;t flag.txt
+</code></pre>
+<h2 id="过滤flag的方法"><a class="markdownIt-Anchor" href="#过滤flag的方法"></a> 过滤&quot;flag&quot;的方法</h2>
+<h3 id="1"><a class="markdownIt-Anchor" href="#1"></a> ①. ./*</h3>
+<pre><code> cat ./*
+</code></pre>
+<p>此命令相当于<strong>查看当前目录下所有文件的内容</strong>，当然，只能查看文本文档，文件夹是看不了的</p>
+<h3 id="2-f"><a class="markdownIt-Anchor" href="#2-f"></a> ②. f*</h3>
+<pre><code>cat f*
+</code></pre>
+<p>这个<strong>等效于cat flag</strong>，挺好的</p>
+<h2 id="过滤sh的方法"><a class="markdownIt-Anchor" href="#过滤sh的方法"></a> 过滤&quot;sh&quot;的方法</h2>
+<pre><code> $0
+</code></pre>
+<p>此指令作用<strong>等效于“sh”“bin/sh”</strong>，进行<strong>提权</strong></p>
+<h2 id="过滤-也就是空格的方法"><a class="markdownIt-Anchor" href="#过滤-也就是空格的方法"></a> 过滤’ '（也就是空格）的方法</h2>
+<p>使用下列字符代替</p>
+<pre><code>&lt;
+$&#123;IFS&#125;
+$IFS$9
+%09
+</code></pre>
+<hr />
+<p>$ IFS 在 <strong>linux 下表示分隔符</strong>，只有cat$IFSa.txt 的时候, bash 解释器会把整个 IFSa当做变量名，所以导致没有办法运行，然而如果<strong>加一个 {} 就固定了变量名</strong>，同理<strong>在后面加个 $ 可以起到截断的作用</strong>，而 <strong>$9 <strong>指的是当前系统shell 进程的第九个参数的持有者，就是一个</strong>空字符串</strong>，因此 $9 <strong>相当于没有加东西</strong>，等于做了一个<strong>前后隔离</strong>。</p>
+<blockquote>
+<p>这句话仍旧是摘自这篇博客：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42383069/article/details/130221725">https://blog.csdn.net/qq_42383069/article/details/130221725</a></p>
+</blockquote>
+<hr />
+<p>2023.12.2</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag">Pwn</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://s2.loli.net/2024/11/29/4t7CBySx1dHXcGV.png" data-sizes="auto" alt="ret2text进阶" class="lazyload">
+          
+        
+        <a href="/2023/12/19/ret2text%E8%BF%9B%E9%98%B6/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            ret2text进阶
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/11/29/pMQI8ntTbgfN6HE.jpg" data-sizes="auto" alt="格式化字符串漏洞" class="lazyload">
+        
+      
+      <a href="/2023/11/30/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          格式化字符串漏洞
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#strlen"><span class="toc-number">1.</span> <span class="toc-text"> strlen</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#strncmp"><span class="toc-number">2.</span> <span class="toc-text"> strncmp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E8%A7%84%E5%88%99"><span class="toc-number">2.1.</span> <span class="toc-text"> 比较规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%A0%B7%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text"> 常见样式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4cat%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text"> 过滤&quot;cat&quot;的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E5%92%8Ccat%E6%9C%89%E8%BF%91%E4%B9%8E%E7%9B%B8%E5%90%8C%E4%BD%9C%E7%94%A8%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">2.3.1.</span> <span class="toc-text"> ①.和cat有近乎相同作用的指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2linux%E6%9C%BA%E5%88%B6%E5%B0%8Ftrick%E7%A8%80%E9%87%8C%E7%B3%8A%E6%B6%82"><span class="toc-number">2.3.2.</span> <span class="toc-text"> ②.linux机制小trick（稀里糊涂）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E7%BC%96%E7%A0%81%E6%8B%BC%E6%8E%A5%E7%BB%95%E8%BF%87%E6%9C%89%E4%BA%9B%E7%B9%81%E7%90%90%E4%BD%86%E6%98%AF%E6%9C%89%E4%BA%9B%E6%97%B6%E5%80%99%E6%84%8F%E5%A4%96%E6%9C%89%E7%94%A8"><span class="toc-number">2.3.3.</span> <span class="toc-text"> ③.编码拼接绕过（有些繁琐，但是有些时候意外有用）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E8%A7%A3%E7%A0%81%E7%BB%95%E8%BF%87%E8%BF%99%E7%9C%9F%E7%9A%84%E6%98%AF%E9%AC%BC%E6%89%8D%E8%BF%98%E6%9C%89%E8%BF%99%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.4.</span> <span class="toc-text"> ④.解码绕过（这真的是鬼才，还有这种方式…）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E5%8F%8D%E6%96%9C%E6%9D%A0%E7%BB%95%E8%BF%87"><span class="toc-number">2.3.5.</span> <span class="toc-text"> ⑤.反斜杠绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87"><span class="toc-number">2.3.6.</span> <span class="toc-text"> ⑥.单双引号绕过</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4flag%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text"> 过滤&quot;flag&quot;的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">2.4.1.</span> <span class="toc-text"> ①. .&#x2F;*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-f"><span class="toc-number">2.4.2.</span> <span class="toc-text"> ②. f*</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4sh%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text"> 过滤&quot;sh&quot;的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4-%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%A9%BA%E6%A0%BC%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.6.</span> <span class="toc-text"> 过滤’ &#39;（也就是空格）的方法</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#strlen"><span class="toc-number">1.</span> <span class="toc-text"> strlen</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#strncmp"><span class="toc-number">2.</span> <span class="toc-text"> strncmp</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E8%A7%84%E5%88%99"><span class="toc-number">2.1.</span> <span class="toc-text"> 比较规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%A0%B7%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text"> 常见样式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4cat%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text"> 过滤&quot;cat&quot;的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E5%92%8Ccat%E6%9C%89%E8%BF%91%E4%B9%8E%E7%9B%B8%E5%90%8C%E4%BD%9C%E7%94%A8%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">2.3.1.</span> <span class="toc-text"> ①.和cat有近乎相同作用的指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2linux%E6%9C%BA%E5%88%B6%E5%B0%8Ftrick%E7%A8%80%E9%87%8C%E7%B3%8A%E6%B6%82"><span class="toc-number">2.3.2.</span> <span class="toc-text"> ②.linux机制小trick（稀里糊涂）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E7%BC%96%E7%A0%81%E6%8B%BC%E6%8E%A5%E7%BB%95%E8%BF%87%E6%9C%89%E4%BA%9B%E7%B9%81%E7%90%90%E4%BD%86%E6%98%AF%E6%9C%89%E4%BA%9B%E6%97%B6%E5%80%99%E6%84%8F%E5%A4%96%E6%9C%89%E7%94%A8"><span class="toc-number">2.3.3.</span> <span class="toc-text"> ③.编码拼接绕过（有些繁琐，但是有些时候意外有用）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E8%A7%A3%E7%A0%81%E7%BB%95%E8%BF%87%E8%BF%99%E7%9C%9F%E7%9A%84%E6%98%AF%E9%AC%BC%E6%89%8D%E8%BF%98%E6%9C%89%E8%BF%99%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.4.</span> <span class="toc-text"> ④.解码绕过（这真的是鬼才，还有这种方式…）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E5%8F%8D%E6%96%9C%E6%9D%A0%E7%BB%95%E8%BF%87"><span class="toc-number">2.3.5.</span> <span class="toc-text"> ⑤.反斜杠绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87"><span class="toc-number">2.3.6.</span> <span class="toc-text"> ⑥.单双引号绕过</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4flag%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text"> 过滤&quot;flag&quot;的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-number">2.4.1.</span> <span class="toc-text"> ①. .&#x2F;*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-f"><span class="toc-number">2.4.2.</span> <span class="toc-text"> ②. f*</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4sh%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text"> 过滤&quot;sh&quot;的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4-%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%A9%BA%E6%A0%BC%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.6.</span> <span class="toc-text"> 过滤’ &#39;（也就是空格）的方法</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+

