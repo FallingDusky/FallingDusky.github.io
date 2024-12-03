@@ -6,7 +6,7 @@
   <link href="https://fallingdusky.github.io/atom.xml" rel="self"/>
   
   <link href="https://fallingdusky.github.io/"/>
-  <updated>2024-11-29T13:05:17.849Z</updated>
+  <updated>2024-12-03T11:49:40.687Z</updated>
   <id>https://fallingdusky.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://fallingdusky.github.io/2024/11/25/DIR-815/"/>
     <id>https://fallingdusky.github.io/2024/11/25/DIR-815/</id>
     <published>2024-11-24T16:00:00.000Z</published>
-    <updated>2024-11-29T13:05:17.849Z</updated>
+    <updated>2024-12-03T11:49:40.687Z</updated>
     
     
     <summary type="html">DIR-815漏洞的复现路程</summary>
@@ -32,6 +32,8 @@
     
     
     <category term="IOT" scheme="https://fallingdusky.github.io/tags/IOT/"/>
+    
+    <category term="Stack" scheme="https://fallingdusky.github.io/tags/Stack/"/>
     
   </entry>
   
@@ -61,16 +63,10 @@
     <link href="https://fallingdusky.github.io/2024/06/07/LitCTF_wp/"/>
     <id>https://fallingdusky.github.io/2024/06/07/LitCTF_wp/</id>
     <published>2024-06-07T05:50:32.000Z</published>
-    <updated>2024-11-29T13:05:00.226Z</updated>
+    <updated>2024-12-03T11:52:12.876Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;导言&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#导言&quot;&gt;&lt;/a&gt;</summary>
-        
-      
+    <summary type="html">Heap 2.23,2.27,2.31,2.35,2.39的菜单题型，经典变换，挺有意思的。最后一道ATM更像是签到题，非常简单的栈溢出</summary>
     
     
     
@@ -80,6 +76,8 @@
     <category term="Pwn" scheme="https://fallingdusky.github.io/tags/Pwn/"/>
     
     <category term="wp" scheme="https://fallingdusky.github.io/tags/wp/"/>
+    
+    <category term="stack" scheme="https://fallingdusky.github.io/tags/stack/"/>
     
   </entry>
   
