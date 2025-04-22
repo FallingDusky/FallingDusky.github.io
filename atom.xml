@@ -6,7 +6,7 @@
   <link href="https://fallingdusky.github.io/atom.xml" rel="self"/>
   
   <link href="https://fallingdusky.github.io/"/>
-  <updated>2025-04-22T05:45:06.896Z</updated>
+  <updated>2025-04-22T05:44:47.694Z</updated>
   <id>https://fallingdusky.github.io/</id>
   
   <author>
@@ -15,27 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>玄机靶场_第一章_应急响应_webshell查杀</title>
-    <link href="https://fallingdusky.github.io/2025/04/16/%E7%8E%84%E6%9C%BA%E9%9D%B6%E5%9C%BA_%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94_webshell%E6%9F%A5%E6%9D%80/"/>
-    <id>https://fallingdusky.github.io/2025/04/16/%E7%8E%84%E6%9C%BA%E9%9D%B6%E5%9C%BA_%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94_webshell%E6%9F%A5%E6%9D%80/</id>
-    <published>2025-04-15T16:00:00.000Z</published>
-    <updated>2025-04-22T05:45:06.896Z</updated>
-    
-    
-    <summary type="html">玄机入门，简单的 webshell 查杀</summary>
-    
-    
-    
-    <category term="应急响应" scheme="https://fallingdusky.github.io/categories/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/"/>
-    
-    
-    <category term="wp" scheme="https://fallingdusky.github.io/tags/wp/"/>
-    
-    <category term="应急响应" scheme="https://fallingdusky.github.io/tags/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/"/>
-    
-  </entry>
   
   <entry>
     <title>DIR-815</title>
