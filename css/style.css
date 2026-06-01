@@ -561,7 +561,7 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   text-size-adjust: 100%;
-  font-family: 'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif';
+  font-family: 'Sthginkra', 'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif';
   transition: background 1s;
   text-autospace: normal;
   color: var(--color-default);
@@ -2205,7 +2205,7 @@ button {
 .article-entry .gist .gist-file .gist-meta {
   background: var(--highlight-background);
   color: var(--highlight-comment);
-  font: 0.85em  'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif';
+  font: 0.85em 'Sthginkra', 'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif';
   text-shadow: 0 0;
   padding: 0;
   margin-top: 1em;
@@ -2855,7 +2855,7 @@ pre .emphasis {
   color: var(--grey-9);
   font-size: 16px;
   vertical-align: middle;
-  font-family: 'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif';
+  font-family: 'Sthginkra', 'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif';
 }
 #reimu-search-input input[type=search]::-webkit-search-cancel-button {
   -webkit-appearance: none;
@@ -3370,7 +3370,7 @@ pre .emphasis {
   border-radius: 12px !important;
   background: var(--color-wrap) !important;
   transition: all 0.3s;
-  font-family: 'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif' !important;
+  font-family: 'Sthginkra', 'Mulish','Noto Serif SC', '-apple-system','PingFang SC','Microsoft YaHei','sans-serif' !important;
   box-shadow: none !important;
 }
 .aplayer button:hover path,
